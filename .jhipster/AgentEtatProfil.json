@@ -1,0 +1,49 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101736",
+  "dto": "mapstruct",
+  "entityTableName": "agent_etat_profil",
+  "fields": [
+    {
+      "fieldName": "profil",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "modifiedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "createdBy",
+      "fieldType": "String"
+    }
+  ],
+  "name": "AgentEtatProfil",
+  "relationships": [
+    {
+      "otherEntityName": "agent",
+      "relationshipName": "agent",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "etablissement",
+      "relationshipName": "etablissement",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

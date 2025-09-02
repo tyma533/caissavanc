@@ -1,0 +1,44 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101036",
+  "dto": "mapstruct",
+  "entityTableName": "piece_justificatif",
+  "fields": [
+    {
+      "fieldName": "libelle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "piece",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "PieceJustificatif",
+  "relationships": [
+    {
+      "otherEntityName": "operation",
+      "relationshipName": "operation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

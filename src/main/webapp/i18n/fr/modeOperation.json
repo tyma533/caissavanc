@@ -1,0 +1,28 @@
+{
+  "caissavance2App": {
+    "modeOperation": {
+      "home": {
+        "title": "ModeOperations",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Mode Operation",
+        "createOrEditLabel": "Créer ou éditer un Mode Operation",
+        "notFound": "Aucun Mode Operation trouvé"
+      },
+      "created": "Un nouveau Mode Operation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Mode Operation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Mode Operation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Mode Operation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Mode Operation"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie"
+    }
+  }
+}

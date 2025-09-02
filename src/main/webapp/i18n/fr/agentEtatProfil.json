@@ -1,0 +1,31 @@
+{
+  "caissavance2App": {
+    "agentEtatProfil": {
+      "home": {
+        "title": "AgentEtatProfils",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Agent Etat Profil",
+        "createOrEditLabel": "Créer ou éditer un Agent Etat Profil",
+        "notFound": "Aucun Agent Etat Profil trouvé"
+      },
+      "created": "Un nouveau Agent Etat Profil a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Agent Etat Profil avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Agent Etat Profil avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Agent Etat Profil {{ id }} ?"
+      },
+      "detail": {
+        "title": "Agent Etat Profil"
+      },
+      "id": "ID",
+      "profil": "Profil",
+      "actif": "Actif",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "modifiedBy": "Modified By",
+      "createdBy": "Created By",
+      "agent": "Agent",
+      "etablissement": "Etablissement"
+    }
+  }
+}

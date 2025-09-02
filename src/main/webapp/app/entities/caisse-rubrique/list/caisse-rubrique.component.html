@@ -1,0 +1,121 @@
+<div>
+  <h2 id="page-heading" data-cy="CaisseRubriqueHeading">
+    <span jhiTranslate="caissavance2App.caisseRubrique.home.title">Caisse Rubriques</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="caissavance2App.caisseRubrique.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-caisse-rubrique"
+        [routerLink]="['/caisse-rubrique/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="caissavance2App.caisseRubrique.home.createLabel">Create a new Caisse Rubrique</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="caisseRubriques?.length === 0">
+    <span jhiTranslate="caissavance2App.caisseRubrique.home.notFound">No Caisse Rubriques found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="caisseRubriques && caisseRubriques.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateHeureModification">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisseRubrique.dateHeureModification">Date Heure Modification</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateHeureCreation">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisseRubrique.dateHeureCreation">Date Heure Creation</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="utiCree">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisseRubrique.utiCree">Uti Cree</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="utiModifie">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisseRubrique.utiModifie">Uti Modifie</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="caisse.id">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisseRubrique.caisse">Caisse</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="rubrique.id">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisseRubrique.rubrique">Rubrique</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let caisseRubrique of caisseRubriques; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'view']">{{ caisseRubrique.id }}</a>
+          </td>
+          <td>{{ caisseRubrique.dateHeureModification | formatMediumDatetime }}</td>
+          <td>{{ caisseRubrique.dateHeureCreation | formatMediumDatetime }}</td>
+          <td>{{ caisseRubrique.utiCree }}</td>
+          <td>{{ caisseRubrique.utiModifie }}</td>
+          <td>
+            <div *ngIf="caisseRubrique.caisse">
+              <a [routerLink]="['/caisse', caisseRubrique.caisse.id, 'view']">{{ caisseRubrique.caisse.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="caisseRubrique.rubrique">
+              <a [routerLink]="['/rubrique', caisseRubrique.rubrique.id, 'view']">{{ caisseRubrique.rubrique.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
+
+              <a [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
+
+              <button type="submit" (click)="delete(caisseRubrique)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

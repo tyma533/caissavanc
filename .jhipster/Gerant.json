@@ -1,0 +1,47 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101236",
+  "dto": "mapstruct",
+  "entityTableName": "gerant",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateNomination",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateFin",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Gerant",
+  "relationships": [
+    {
+      "otherEntityName": "agentEtatProfil",
+      "relationshipName": "agentEtatProfil",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

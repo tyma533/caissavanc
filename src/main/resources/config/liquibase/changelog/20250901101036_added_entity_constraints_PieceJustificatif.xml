@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity PieceJustificatif.
+    -->
+    <changeSet id="20250901101036-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="operation_id"
+                                 baseTableName="piece_justificatif"
+                                 constraintName="fk_piece_justificatif__operation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="operation"
+                                 />
+    </changeSet>
+</databaseChangeLog>

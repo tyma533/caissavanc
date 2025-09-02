@@ -1,0 +1,59 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901100336",
+  "dto": "mapstruct",
+  "entityTableName": "caisse",
+  "fields": [
+    {
+      "fieldName": "libelle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateCreationCaisse",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateFermiture",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "solde",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "etat",
+      "fieldType": "EtatCaisse",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "OUVERTE,EN_CONTROLE,CLOTURE"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Caisse",
+  "relationships": [
+    {
+      "otherEntityName": "etablissement",
+      "relationshipName": "etablissement",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

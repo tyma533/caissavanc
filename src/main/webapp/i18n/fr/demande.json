@@ -1,0 +1,31 @@
+{
+  "caissavance2App": {
+    "demande": {
+      "home": {
+        "title": "Demandes",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Demande",
+        "createOrEditLabel": "Créer ou éditer un Demande",
+        "notFound": "Aucun Demande trouvé"
+      },
+      "created": "Un nouveau Demande a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Demande avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Demande avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Demande {{ id }} ?"
+      },
+      "detail": {
+        "title": "Demande"
+      },
+      "id": "ID",
+      "objet": "Objet",
+      "dateDemande": "Date Demande",
+      "motif": "Motif",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie",
+      "etablissement": "Etablissement"
+    }
+  }
+}

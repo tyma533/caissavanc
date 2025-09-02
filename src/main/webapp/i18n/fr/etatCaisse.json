@@ -1,0 +1,10 @@
+{
+  "caissavance2App": {
+    "EtatCaisse": {
+      "null": "",
+      "OUVERTE": "OUVERTE",
+      "EN_CONTROLE": "EN_CONTROLE",
+      "CLOTURE": "CLOTURE"
+    }
+  }
+}

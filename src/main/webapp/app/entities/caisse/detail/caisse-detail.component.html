@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="caisse">
+      <h2 data-cy="caisseDetailsHeading"><span jhiTranslate="caissavance2App.caisse.detail.title">Caisse</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ caisse.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.libelle">Libelle</span></dt>
+        <dd>
+          <span>{{ caisse.libelle }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.dateCreationCaisse">Date Creation Caisse</span></dt>
+        <dd>
+          <span>{{ caisse.dateCreationCaisse | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.dateFermiture">Date Fermiture</span></dt>
+        <dd>
+          <span>{{ caisse.dateFermiture | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.solde">Solde</span></dt>
+        <dd>
+          <span>{{ caisse.solde }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.etat">Etat</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'caissavance2App.EtatCaisse.' + caisse.etat }}">{{ caisse.etat }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ caisse.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ caisse.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ caisse.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ caisse.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.caisse.etablissement">Etablissement</span></dt>
+        <dd>
+          <div *ngIf="caisse.etablissement">
+            <a [routerLink]="['/etablissement', caisse.etablissement.id, 'view']">{{ caisse.etablissement.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

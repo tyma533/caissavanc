@@ -1,0 +1,146 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-piece-justificatif-heading"
+        data-cy="PieceJustificatifCreateUpdateHeading"
+        jhiTranslate="caissavance2App.pieceJustificatif.home.createOrEditLabel"
+      >
+        Create or edit a Piece Justificatif
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.libelle" for="field_libelle">Libelle</label>
+          <input type="text" class="form-control" name="libelle" id="field_libelle" data-cy="libelle" formControlName="libelle" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.piece" for="field_piece">Piece</label>
+          <div>
+            <div *ngIf="editForm.get('piece')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-start"
+                (click)="openFile(editForm.get('piece')!.value!, editForm.get('pieceContentType')!.value!)"
+                jhiTranslate="entity.action.open"
+                >Open</a
+              ><br />
+              <span class="pull-start">{{ editForm.get('pieceContentType')!.value }}, {{ byteSize(editForm.get('piece')!.value!) }}</span>
+              <button
+                type="button"
+                (click)="editForm.patchValue({ piece: undefined, pieceContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_piece"
+              data-cy="piece"
+              (change)="setFileData($event, 'piece', false)"
+              jhiTranslate="entity.action.addblob"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="piece" id="field_piece" data-cy="piece" formControlName="piece" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="pieceContentType"
+            id="field_pieceContentType"
+            formControlName="pieceContentType"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.dateHeureModification" for="field_dateHeureModification"
+            >Date Heure Modification</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureModification"
+              data-cy="dateHeureModification"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureModification"
+              formControlName="dateHeureModification"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.dateHeureCreation" for="field_dateHeureCreation"
+            >Date Heure Creation</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureCreation"
+              data-cy="dateHeureCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureCreation"
+              formControlName="dateHeureCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.utiCree" for="field_utiCree">Uti Cree</label>
+          <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.utiModifie" for="field_utiModifie">Uti Modifie</label>
+          <input
+            type="number"
+            class="form-control"
+            name="utiModifie"
+            id="field_utiModifie"
+            data-cy="utiModifie"
+            formControlName="utiModifie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.pieceJustificatif.operation" for="field_operation">Operation</label>
+          <select
+            class="form-control"
+            id="field_operation"
+            data-cy="operation"
+            name="operation"
+            formControlName="operation"
+            [compareWith]="compareOperation"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="operationOption" *ngFor="let operationOption of operationsSharedCollection">{{ operationOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

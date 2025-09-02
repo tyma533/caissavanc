@@ -1,0 +1,30 @@
+{
+  "caissavance2App": {
+    "pieceJustificatif": {
+      "home": {
+        "title": "PieceJustificatifs",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Piece Justificatif",
+        "createOrEditLabel": "Créer ou éditer un Piece Justificatif",
+        "notFound": "Aucun Piece Justificatif trouvé"
+      },
+      "created": "Un nouveau Piece Justificatif a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Piece Justificatif avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Piece Justificatif avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Piece Justificatif {{ id }} ?"
+      },
+      "detail": {
+        "title": "Piece Justificatif"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "piece": "Piece",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie",
+      "operation": "Operation"
+    }
+  }
+}

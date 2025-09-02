@@ -1,0 +1,107 @@
+<div>
+  <h2 id="page-heading" data-cy="RubriqueHeading">
+    <span jhiTranslate="caissavance2App.rubrique.home.title">Rubriques</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="caissavance2App.rubrique.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-rubrique"
+        [routerLink]="['/rubrique/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="caissavance2App.rubrique.home.createLabel">Create a new Rubrique</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="rubriques?.length === 0">
+    <span jhiTranslate="caissavance2App.rubrique.home.notFound">No Rubriques found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="rubriques && rubriques.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="libelle">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.rubrique.libelle">Libelle</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.rubrique.description">Description</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="code">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.rubrique.code">Code</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rubrique of rubriques; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/rubrique', rubrique.id, 'view']">{{ rubrique.id }}</a>
+          </td>
+          <td>{{ rubrique.libelle }}</td>
+          <td>{{ rubrique.description }}</td>
+          <td>{{ rubrique.code }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/rubrique', rubrique.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </a>
+
+              <a [routerLink]="['/rubrique', rubrique.id, 'edit']" class="btn btn-primary btn-sm mx-1" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </a>
+
+              <button type="submit" (click)="delete(rubrique)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="rubriques && rubriques.length > 0">
+    <div class="d-flex justify-content-end p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="applyFilterAndSort()"
+      >
+      </ngb-pagination>
+    </div>
+  </div>
+</div>

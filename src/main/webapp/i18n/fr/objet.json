@@ -1,0 +1,11 @@
+{
+  "caissavance2App": {
+    "Objet": {
+      "null": "",
+      "CREATION_CAISSE": "CREATION_CAISSE",
+      "ALIMENTATION_CAISSE": "ALIMENTATION_CAISSE",
+      "CLOTURE_CAISSE": "CLOTURE_CAISSE",
+      "REOUVERTURE_CAISSE": "REOUVERTURE_CAISSE"
+    }
+  }
+}

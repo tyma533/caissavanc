@@ -1,0 +1,43 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101536",
+  "dto": "mapstruct",
+  "entityTableName": "controle",
+  "fields": [
+    {
+      "fieldName": "dateControle",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "observation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Controle",
+  "relationships": [
+    {
+      "otherEntityName": "caisse",
+      "relationshipName": "caisse",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

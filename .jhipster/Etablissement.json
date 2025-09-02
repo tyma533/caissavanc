@@ -1,0 +1,38 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901100436",
+  "dto": "mapstruct",
+  "entityTableName": "etablissement",
+  "fields": [
+    {
+      "fieldName": "libelle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sigle",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Etablissement",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

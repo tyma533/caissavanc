@@ -1,0 +1,119 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-caisse-rubrique-heading"
+        data-cy="CaisseRubriqueCreateUpdateHeading"
+        jhiTranslate="caissavance2App.caisseRubrique.home.createOrEditLabel"
+      >
+        Create or edit a Caisse Rubrique
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.caisseRubrique.dateHeureModification" for="field_dateHeureModification"
+            >Date Heure Modification</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureModification"
+              data-cy="dateHeureModification"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureModification"
+              formControlName="dateHeureModification"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.caisseRubrique.dateHeureCreation" for="field_dateHeureCreation"
+            >Date Heure Creation</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureCreation"
+              data-cy="dateHeureCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureCreation"
+              formControlName="dateHeureCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.caisseRubrique.utiCree" for="field_utiCree">Uti Cree</label>
+          <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.caisseRubrique.utiModifie" for="field_utiModifie">Uti Modifie</label>
+          <input
+            type="number"
+            class="form-control"
+            name="utiModifie"
+            id="field_utiModifie"
+            data-cy="utiModifie"
+            formControlName="utiModifie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.caisseRubrique.caisse" for="field_caisse">Caisse</label>
+          <select
+            class="form-control"
+            id="field_caisse"
+            data-cy="caisse"
+            name="caisse"
+            formControlName="caisse"
+            [compareWith]="compareCaisse"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="caisseOption" *ngFor="let caisseOption of caissesSharedCollection">{{ caisseOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.caisseRubrique.rubrique" for="field_rubrique">Rubrique</label>
+          <select
+            class="form-control"
+            id="field_rubrique"
+            data-cy="rubrique"
+            name="rubrique"
+            formControlName="rubrique"
+            [compareWith]="compareRubrique"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="rubriqueOption" *ngFor="let rubriqueOption of rubriquesSharedCollection">{{ rubriqueOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

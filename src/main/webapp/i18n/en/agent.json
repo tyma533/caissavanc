@@ -1,0 +1,45 @@
+{
+  "caissavance2App": {
+    "agent": {
+      "home": {
+        "title": "Agents",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Agent",
+        "createOrEditLabel": "Create or edit a Agent",
+        "notFound": "No Agents found"
+      },
+      "created": "A new Agent is created with identifier {{ param }}",
+      "updated": "A Agent is updated with identifier {{ param }}",
+      "deleted": "A Agent is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Agent {{ id }}?"
+      },
+      "detail": {
+        "title": "Agent"
+      },
+      "id": "ID",
+      "codeMatrile": "Code Matrile",
+      "cni": "Cni",
+      "statutAgent": "Statut Agent",
+      "nom": "Nom",
+      "prenom": "Prenom",
+      "sexe": "Sexe",
+      "emailUcad": "Email Ucad",
+      "telephone": "Telephone",
+      "fonctionAgent": "Fonction Agent",
+      "typePersonnel": "Type Personnel",
+      "dateDeNaissance": "Date De Naissance",
+      "lieuNaissance": "Lieu Naissance",
+      "nationalite": "Nationalite",
+      "email": "Email",
+      "adresse": "Adresse",
+      "externe": "Externe",
+      "actif": "Actif",
+      "role": "Role",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "modifiedBy": "Modified By",
+      "createdBy": "Created By"
+    }
+  }
+}

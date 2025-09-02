@@ -1,0 +1,192 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-operation-heading" data-cy="OperationCreateUpdateHeading" jhiTranslate="caissavance2App.operation.home.createOrEditLabel">
+        Create or edit a Operation
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.numero" for="field_numero">Numero</label>
+          <input type="text" class="form-control" name="numero" id="field_numero" data-cy="numero" formControlName="numero" />
+          <div *ngIf="editForm.get('numero')!.invalid && (editForm.get('numero')!.dirty || editForm.get('numero')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('numero')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.commentaire" for="field_commentaire">Commentaire</label>
+          <input
+            type="text"
+            class="form-control"
+            name="commentaire"
+            id="field_commentaire"
+            data-cy="commentaire"
+            formControlName="commentaire"
+          />
+          <div *ngIf="editForm.get('commentaire')!.invalid && (editForm.get('commentaire')!.dirty || editForm.get('commentaire')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('commentaire')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.montant" for="field_montant">Montant</label>
+          <input type="number" class="form-control" name="montant" id="field_montant" data-cy="montant" formControlName="montant" />
+          <div *ngIf="editForm.get('montant')!.invalid && (editForm.get('montant')!.dirty || editForm.get('montant')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('montant')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small class="form-text text-danger" [hidden]="!editForm.get('montant')?.errors?.number" jhiTranslate="entity.validation.number"
+              >This field should be a number.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.dateOperation" for="field_dateOperation">Date Operation</label>
+          <div class="d-flex">
+            <input
+              id="field_dateOperation"
+              data-cy="dateOperation"
+              type="datetime-local"
+              class="form-control"
+              name="dateOperation"
+              formControlName="dateOperation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.dateHeureModification" for="field_dateHeureModification"
+            >Date Heure Modification</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureModification"
+              data-cy="dateHeureModification"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureModification"
+              formControlName="dateHeureModification"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.dateHeureCreation" for="field_dateHeureCreation"
+            >Date Heure Creation</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureCreation"
+              data-cy="dateHeureCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureCreation"
+              formControlName="dateHeureCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.utiCree" for="field_utiCree">Uti Cree</label>
+          <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.utiModifie" for="field_utiModifie">Uti Modifie</label>
+          <input
+            type="number"
+            class="form-control"
+            name="utiModifie"
+            id="field_utiModifie"
+            data-cy="utiModifie"
+            formControlName="utiModifie"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.caisse" for="field_caisse">Caisse</label>
+          <select
+            class="form-control"
+            id="field_caisse"
+            data-cy="caisse"
+            name="caisse"
+            formControlName="caisse"
+            [compareWith]="compareCaisse"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="caisseOption" *ngFor="let caisseOption of caissesSharedCollection">{{ caisseOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.typeOperation" for="field_typeOperation">Type Operation</label>
+          <select
+            class="form-control"
+            id="field_typeOperation"
+            data-cy="typeOperation"
+            name="typeOperation"
+            formControlName="typeOperation"
+            [compareWith]="compareTypeOperation"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="typeOperationOption" *ngFor="let typeOperationOption of typeOperationsSharedCollection">
+              {{ typeOperationOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.operation.modeOperation" for="field_modeOperation">Mode Operation</label>
+          <select
+            class="form-control"
+            id="field_modeOperation"
+            data-cy="modeOperation"
+            name="modeOperation"
+            formControlName="modeOperation"
+            [compareWith]="compareModeOperation"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="modeOperationOption" *ngFor="let modeOperationOption of modeOperationsSharedCollection">
+              {{ modeOperationOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

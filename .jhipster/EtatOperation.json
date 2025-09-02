@@ -1,0 +1,32 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901100936",
+  "dto": "mapstruct",
+  "entityTableName": "etat_operation",
+  "fields": [
+    {
+      "fieldName": "libelle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "EtatOperation",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

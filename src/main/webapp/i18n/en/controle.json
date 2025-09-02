@@ -1,0 +1,30 @@
+{
+  "caissavance2App": {
+    "controle": {
+      "home": {
+        "title": "Controles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Controle",
+        "createOrEditLabel": "Create or edit a Controle",
+        "notFound": "No Controles found"
+      },
+      "created": "A new Controle is created with identifier {{ param }}",
+      "updated": "A Controle is updated with identifier {{ param }}",
+      "deleted": "A Controle is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Controle {{ id }}?"
+      },
+      "detail": {
+        "title": "Controle"
+      },
+      "id": "ID",
+      "dateControle": "Date Controle",
+      "observation": "Observation",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie",
+      "caisse": "Caisse"
+    }
+  }
+}

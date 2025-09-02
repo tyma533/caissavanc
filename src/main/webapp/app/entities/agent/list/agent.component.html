@@ -1,0 +1,225 @@
+<div>
+  <h2 id="page-heading" data-cy="AgentHeading">
+    <span jhiTranslate="caissavance2App.agent.home.title">Agents</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="caissavance2App.agent.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-agent"
+        [routerLink]="['/agent/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="caissavance2App.agent.home.createLabel">Create a new Agent</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="agents?.length === 0">
+    <span jhiTranslate="caissavance2App.agent.home.notFound">No Agents found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="agents && agents.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="codeMatrile">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.codeMatrile">Code Matrile</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="cni">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.cni">Cni</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="statutAgent">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.statutAgent">Statut Agent</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nom">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.nom">Nom</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="prenom">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.prenom">Prenom</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sexe">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.sexe">Sexe</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="emailUcad">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.emailUcad">Email Ucad</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="telephone">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.telephone">Telephone</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="fonctionAgent">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.fonctionAgent">Fonction Agent</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="typePersonnel">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.typePersonnel">Type Personnel</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateDeNaissance">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.dateDeNaissance">Date De Naissance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="lieuNaissance">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.lieuNaissance">Lieu Naissance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nationalite">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.nationalite">Nationalite</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="email">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.email">Email</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="adresse">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.adresse">Adresse</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="externe">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.externe">Externe</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="actif">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.actif">Actif</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="role">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.role">Role</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateHeureModification">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.dateHeureModification">Date Heure Modification</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateHeureCreation">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.dateHeureCreation">Date Heure Creation</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="modifiedBy">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.modifiedBy">Modified By</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="createdBy">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.agent.createdBy">Created By</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let agent of agents; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/agent', agent.id, 'view']">{{ agent.id }}</a>
+          </td>
+          <td>{{ agent.codeMatrile }}</td>
+          <td>{{ agent.cni }}</td>
+          <td>{{ agent.statutAgent }}</td>
+          <td>{{ agent.nom }}</td>
+          <td>{{ agent.prenom }}</td>
+          <td>{{ agent.sexe }}</td>
+          <td>{{ agent.emailUcad }}</td>
+          <td>{{ agent.telephone }}</td>
+          <td>{{ agent.fonctionAgent }}</td>
+          <td>{{ agent.typePersonnel }}</td>
+          <td>{{ agent.dateDeNaissance | formatMediumDate }}</td>
+          <td>{{ agent.lieuNaissance }}</td>
+          <td>{{ agent.nationalite }}</td>
+          <td>{{ agent.email }}</td>
+          <td>{{ agent.adresse }}</td>
+          <td>{{ agent.externe }}</td>
+          <td>{{ agent.actif }}</td>
+          <td>{{ agent.role }}</td>
+          <td>{{ agent.dateHeureModification | formatMediumDatetime }}</td>
+          <td>{{ agent.dateHeureCreation | formatMediumDatetime }}</td>
+          <td>{{ agent.modifiedBy }}</td>
+          <td>{{ agent.createdBy }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/agent', agent.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
+
+              <a [routerLink]="['/agent', agent.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
+
+              <button type="submit" (click)="delete(agent)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

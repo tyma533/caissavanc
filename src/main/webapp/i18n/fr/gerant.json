@@ -1,0 +1,31 @@
+{
+  "caissavance2App": {
+    "gerant": {
+      "home": {
+        "title": "Gerants",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Gerant",
+        "createOrEditLabel": "Créer ou éditer un Gerant",
+        "notFound": "Aucun Gerant trouvé"
+      },
+      "created": "Un nouveau Gerant a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Gerant avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Gerant avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Gerant {{ id }} ?"
+      },
+      "detail": {
+        "title": "Gerant"
+      },
+      "id": "ID",
+      "nom": "Nom",
+      "dateNomination": "Date Nomination",
+      "dateFin": "Date Fin",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie",
+      "agentEtatProfil": "Agent Etat Profil"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101436",
+  "dto": "mapstruct",
+  "entityTableName": "caisse_rubrique",
+  "fields": [
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "CaisseRubrique",
+  "relationships": [
+    {
+      "otherEntityName": "caisse",
+      "relationshipName": "caisse",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "rubrique",
+      "relationshipName": "rubrique",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

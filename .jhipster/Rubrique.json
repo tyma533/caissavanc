@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101136",
+  "dto": "mapstruct",
+  "entityTableName": "rubrique",
+  "fields": [
+    {
+      "fieldName": "libelle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Rubrique",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

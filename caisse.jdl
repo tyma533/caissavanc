@@ -1,0 +1,185 @@
+entity Caisse {
+    libelle String required,
+    dateCreationCaisse Instant,
+    dateFermiture Instant,
+    solde Long required,
+    etat EtatCaisse required,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+enum EtatCaisse {
+    OUVERTE,
+    EN_CONTROLE,
+    CLOTURE
+}
+
+entity Etablissement {
+    libelle String required,
+    sigle String required,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity Demande {
+    objet Objet required,
+    dateDemande Instant,
+    motif String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+enum Objet {
+    CREATION_CAISSE,
+    ALIMENTATION_CAISSE,
+    CLOTURE_CAISSE,
+    REOUVERTURE_CAISSE
+}
+
+entity Operation {
+    numero String required,
+    commentaire String required,
+    montant Long required,
+    dateOperation Instant,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity TypeOperation {
+    libelle String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity ModeOperation {
+    libelle String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity EtatOperation {
+    libelle String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity PieceJustificatif {
+    libelle String,
+    piece Blob,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity Rubrique {
+    libelle String,
+    description String,
+    code String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity Gerant {
+    nom String,
+    dateNomination Instant,
+    dateFin Instant,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity GerantCaisse {
+    actif Boolean,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity CaisseRubrique {
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity Controle {
+    dateControle Instant,
+    observation String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    utiCree Long,
+    utiModifie Long
+}
+
+entity Agent {
+    codeMatrile String required unique,
+    cni String required maxlength(20),
+    statutAgent String,
+    nom String,
+    prenom String,
+    sexe String,
+    emailUcad String required,
+    telephone String,
+    fonctionAgent String,
+    typePersonnel String,
+    dateDeNaissance LocalDate,
+    lieuNaissance String,
+    nationalite String,
+    email String,
+    adresse String,
+    externe Boolean,
+    actif Boolean,
+    role String,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    modifiedBy String,
+    createdBy String
+}
+
+entity AgentEtatProfil {
+    profil String,
+    actif Boolean,
+    dateHeureModification Instant,
+    dateHeureCreation Instant,
+    modifiedBy String,
+    createdBy String
+}
+
+relationship ManyToOne {
+    Caisse{etablissement} to Etablissement,
+    Operation{caisse} to Caisse,
+    Operation{typeOperation} to TypeOperation,
+    Operation{modeOperation} to ModeOperation,
+    CaisseRubrique{caisse} to Caisse,
+    CaisseRubrique{rubrique} to Rubrique,
+    Demande{etablissement} to Etablissement,
+    Controle{caisse} to Caisse,
+    Gerant{agentEtatProfil} to AgentEtatProfil,
+    AgentEtatProfil{agent} to Agent,
+    AgentEtatProfil{etablissement} to Etablissement,
+    PieceJustificatif{operation} to Operation,
+    GerantCaisse{caisse} to Caisse,
+    GerantCaisse{gerant} to Gerant
+}
+
+service all with serviceImpl
+dto * with mapstruct

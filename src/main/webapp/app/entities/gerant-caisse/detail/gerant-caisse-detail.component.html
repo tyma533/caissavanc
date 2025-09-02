@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="gerantCaisse">
+      <h2 data-cy="gerantCaisseDetailsHeading"><span jhiTranslate="caissavance2App.gerantCaisse.detail.title">Gerant Caisse</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ gerantCaisse.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.actif">Actif</span></dt>
+        <dd>
+          <span>{{ gerantCaisse.actif }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ gerantCaisse.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ gerantCaisse.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ gerantCaisse.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ gerantCaisse.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.caisse">Caisse</span></dt>
+        <dd>
+          <div *ngIf="gerantCaisse.caisse">
+            <a [routerLink]="['/caisse', gerantCaisse.caisse.id, 'view']">{{ gerantCaisse.caisse.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerantCaisse.gerant">Gerant</span></dt>
+        <dd>
+          <div *ngIf="gerantCaisse.gerant">
+            <a [routerLink]="['/gerant', gerantCaisse.gerant.id, 'view']">{{ gerantCaisse.gerant.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/gerant-caisse', gerantCaisse.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

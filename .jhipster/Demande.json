@@ -1,0 +1,49 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901100536",
+  "dto": "mapstruct",
+  "entityTableName": "demande",
+  "fields": [
+    {
+      "fieldName": "objet",
+      "fieldType": "Objet",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CREATION_CAISSE,ALIMENTATION_CAISSE,CLOTURE_CAISSE,REOUVERTURE_CAISSE"
+    },
+    {
+      "fieldName": "dateDemande",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "motif",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "Demande",
+  "relationships": [
+    {
+      "otherEntityName": "etablissement",
+      "relationshipName": "etablissement",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

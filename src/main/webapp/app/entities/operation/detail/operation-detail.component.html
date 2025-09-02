@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="operation">
+      <h2 data-cy="operationDetailsHeading"><span jhiTranslate="caissavance2App.operation.detail.title">Operation</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ operation.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.numero">Numero</span></dt>
+        <dd>
+          <span>{{ operation.numero }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.commentaire">Commentaire</span></dt>
+        <dd>
+          <span>{{ operation.commentaire }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.montant">Montant</span></dt>
+        <dd>
+          <span>{{ operation.montant }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.dateOperation">Date Operation</span></dt>
+        <dd>
+          <span>{{ operation.dateOperation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ operation.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ operation.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ operation.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ operation.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.caisse">Caisse</span></dt>
+        <dd>
+          <div *ngIf="operation.caisse">
+            <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.typeOperation">Type Operation</span></dt>
+        <dd>
+          <div *ngIf="operation.typeOperation">
+            <a [routerLink]="['/type-operation', operation.typeOperation.id, 'view']">{{ operation.typeOperation.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.operation.modeOperation">Mode Operation</span></dt>
+        <dd>
+          <div *ngIf="operation.modeOperation">
+            <a [routerLink]="['/mode-operation', operation.modeOperation.id, 'view']">{{ operation.modeOperation.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/operation', operation.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

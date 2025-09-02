@@ -1,0 +1,28 @@
+{
+  "caissavance2App": {
+    "modeOperation": {
+      "home": {
+        "title": "Mode Operations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Mode Operation",
+        "createOrEditLabel": "Create or edit a Mode Operation",
+        "notFound": "No Mode Operations found"
+      },
+      "created": "A new Mode Operation is created with identifier {{ param }}",
+      "updated": "A Mode Operation is updated with identifier {{ param }}",
+      "deleted": "A Mode Operation is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Mode Operation {{ id }}?"
+      },
+      "detail": {
+        "title": "Mode Operation"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie"
+    }
+  }
+}

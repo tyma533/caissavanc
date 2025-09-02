@@ -1,0 +1,261 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-agent-heading" data-cy="AgentCreateUpdateHeading" jhiTranslate="caissavance2App.agent.home.createOrEditLabel">
+        Create or edit a Agent
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.codeMatrile" for="field_codeMatrile">Code Matrile</label>
+          <input
+            type="text"
+            class="form-control"
+            name="codeMatrile"
+            id="field_codeMatrile"
+            data-cy="codeMatrile"
+            formControlName="codeMatrile"
+          />
+          <div *ngIf="editForm.get('codeMatrile')!.invalid && (editForm.get('codeMatrile')!.dirty || editForm.get('codeMatrile')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('codeMatrile')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.cni" for="field_cni">Cni</label>
+          <input type="text" class="form-control" name="cni" id="field_cni" data-cy="cni" formControlName="cni" />
+          <div *ngIf="editForm.get('cni')!.invalid && (editForm.get('cni')!.dirty || editForm.get('cni')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('cni')?.errors?.required" jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('cni')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 20 }"
+              >This field cannot be longer than 20 characters.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.statutAgent" for="field_statutAgent">Statut Agent</label>
+          <input
+            type="text"
+            class="form-control"
+            name="statutAgent"
+            id="field_statutAgent"
+            data-cy="statutAgent"
+            formControlName="statutAgent"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.nom" for="field_nom">Nom</label>
+          <input type="text" class="form-control" name="nom" id="field_nom" data-cy="nom" formControlName="nom" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.prenom" for="field_prenom">Prenom</label>
+          <input type="text" class="form-control" name="prenom" id="field_prenom" data-cy="prenom" formControlName="prenom" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.sexe" for="field_sexe">Sexe</label>
+          <input type="text" class="form-control" name="sexe" id="field_sexe" data-cy="sexe" formControlName="sexe" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.emailUcad" for="field_emailUcad">Email Ucad</label>
+          <input type="text" class="form-control" name="emailUcad" id="field_emailUcad" data-cy="emailUcad" formControlName="emailUcad" />
+          <div *ngIf="editForm.get('emailUcad')!.invalid && (editForm.get('emailUcad')!.dirty || editForm.get('emailUcad')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('emailUcad')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+              >This field is required.</small
+            >
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.telephone" for="field_telephone">Telephone</label>
+          <input type="text" class="form-control" name="telephone" id="field_telephone" data-cy="telephone" formControlName="telephone" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.fonctionAgent" for="field_fonctionAgent">Fonction Agent</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fonctionAgent"
+            id="field_fonctionAgent"
+            data-cy="fonctionAgent"
+            formControlName="fonctionAgent"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.typePersonnel" for="field_typePersonnel">Type Personnel</label>
+          <input
+            type="text"
+            class="form-control"
+            name="typePersonnel"
+            id="field_typePersonnel"
+            data-cy="typePersonnel"
+            formControlName="typePersonnel"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.dateDeNaissance" for="field_dateDeNaissance"
+            >Date De Naissance</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dateDeNaissance"
+              data-cy="dateDeNaissance"
+              type="text"
+              class="form-control"
+              name="dateDeNaissance"
+              ngbDatepicker
+              #dateDeNaissanceDp="ngbDatepicker"
+              formControlName="dateDeNaissance"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateDeNaissanceDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.lieuNaissance" for="field_lieuNaissance">Lieu Naissance</label>
+          <input
+            type="text"
+            class="form-control"
+            name="lieuNaissance"
+            id="field_lieuNaissance"
+            data-cy="lieuNaissance"
+            formControlName="lieuNaissance"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.nationalite" for="field_nationalite">Nationalite</label>
+          <input
+            type="text"
+            class="form-control"
+            name="nationalite"
+            id="field_nationalite"
+            data-cy="nationalite"
+            formControlName="nationalite"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.email" for="field_email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.adresse" for="field_adresse">Adresse</label>
+          <input type="text" class="form-control" name="adresse" id="field_adresse" data-cy="adresse" formControlName="adresse" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.externe" for="field_externe">Externe</label>
+          <input type="checkbox" class="form-check" name="externe" id="field_externe" data-cy="externe" formControlName="externe" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.actif" for="field_actif">Actif</label>
+          <input type="checkbox" class="form-check" name="actif" id="field_actif" data-cy="actif" formControlName="actif" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.role" for="field_role">Role</label>
+          <input type="text" class="form-control" name="role" id="field_role" data-cy="role" formControlName="role" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.dateHeureModification" for="field_dateHeureModification"
+            >Date Heure Modification</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureModification"
+              data-cy="dateHeureModification"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureModification"
+              formControlName="dateHeureModification"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.dateHeureCreation" for="field_dateHeureCreation"
+            >Date Heure Creation</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureCreation"
+              data-cy="dateHeureCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureCreation"
+              formControlName="dateHeureCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.modifiedBy" for="field_modifiedBy">Modified By</label>
+          <input
+            type="text"
+            class="form-control"
+            name="modifiedBy"
+            id="field_modifiedBy"
+            data-cy="modifiedBy"
+            formControlName="modifiedBy"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agent.createdBy" for="field_createdBy">Created By</label>
+          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy" formControlName="createdBy" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

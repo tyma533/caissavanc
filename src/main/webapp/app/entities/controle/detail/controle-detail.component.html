@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="controle">
+      <h2 data-cy="controleDetailsHeading"><span jhiTranslate="caissavance2App.controle.detail.title">Controle</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ controle.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.dateControle">Date Controle</span></dt>
+        <dd>
+          <span>{{ controle.dateControle | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.observation">Observation</span></dt>
+        <dd>
+          <span>{{ controle.observation }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ controle.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ controle.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ controle.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ controle.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.controle.caisse">Caisse</span></dt>
+        <dd>
+          <div *ngIf="controle.caisse">
+            <a [routerLink]="['/caisse', controle.caisse.id, 'view']">{{ controle.caisse.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/controle', controle.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

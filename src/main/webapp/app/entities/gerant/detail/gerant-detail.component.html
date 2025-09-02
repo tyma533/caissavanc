@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="gerant">
+      <h2 data-cy="gerantDetailsHeading"><span jhiTranslate="caissavance2App.gerant.detail.title">Gerant</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ gerant.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.nom">Nom</span></dt>
+        <dd>
+          <span>{{ gerant.nom }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.dateNomination">Date Nomination</span></dt>
+        <dd>
+          <span>{{ gerant.dateNomination | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.dateFin">Date Fin</span></dt>
+        <dd>
+          <span>{{ gerant.dateFin | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ gerant.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ gerant.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ gerant.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ gerant.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.gerant.agentEtatProfil">Agent Etat Profil</span></dt>
+        <dd>
+          <div *ngIf="gerant.agentEtatProfil">
+            <a [routerLink]="['/agent-etat-profil', gerant.agentEtatProfil.id, 'view']">{{ gerant.agentEtatProfil.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/gerant', gerant.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

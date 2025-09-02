@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pieceJustificatif">
+      <h2 data-cy="pieceJustificatifDetailsHeading">
+        <span jhiTranslate="caissavance2App.pieceJustificatif.detail.title">Piece Justificatif</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ pieceJustificatif.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.libelle">Libelle</span></dt>
+        <dd>
+          <span>{{ pieceJustificatif.libelle }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.piece">Piece</span></dt>
+        <dd>
+          <div *ngIf="pieceJustificatif.piece">
+            <a (click)="openFile(pieceJustificatif.piece, pieceJustificatif.pieceContentType)" jhiTranslate="entity.action.open">Open</a>
+            {{ pieceJustificatif.pieceContentType }}, {{ byteSize(pieceJustificatif.piece) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ pieceJustificatif.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ pieceJustificatif.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ pieceJustificatif.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ pieceJustificatif.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.operation">Operation</span></dt>
+        <dd>
+          <div *ngIf="pieceJustificatif.operation">
+            <a [routerLink]="['/operation', pieceJustificatif.operation.id, 'view']">{{ pieceJustificatif.operation.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/piece-justificatif', pieceJustificatif.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

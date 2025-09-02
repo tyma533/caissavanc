@@ -1,0 +1,28 @@
+{
+  "caissavance2App": {
+    "etatOperation": {
+      "home": {
+        "title": "EtatOperations",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Etat Operation",
+        "createOrEditLabel": "Créer ou éditer un Etat Operation",
+        "notFound": "Aucun Etat Operation trouvé"
+      },
+      "created": "Un nouveau Etat Operation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Etat Operation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Etat Operation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Etat Operation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Etat Operation"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie"
+    }
+  }
+}

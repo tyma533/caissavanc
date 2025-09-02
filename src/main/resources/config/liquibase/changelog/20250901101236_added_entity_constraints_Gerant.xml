@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity Gerant.
+    -->
+    <changeSet id="20250901101236-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="agent_etat_profil_id"
+                                 baseTableName="gerant"
+                                 constraintName="fk_gerant__agent_etat_profil_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="agent_etat_profil"
+                                 />
+    </changeSet>
+</databaseChangeLog>

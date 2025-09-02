@@ -1,0 +1,29 @@
+{
+  "caissavance2App": {
+    "caisseRubrique": {
+      "home": {
+        "title": "CaisseRubriques",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Caisse Rubrique",
+        "createOrEditLabel": "Créer ou éditer un Caisse Rubrique",
+        "notFound": "Aucun Caisse Rubrique trouvé"
+      },
+      "created": "Un nouveau Caisse Rubrique a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Caisse Rubrique avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Caisse Rubrique avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Caisse Rubrique {{ id }} ?"
+      },
+      "detail": {
+        "title": "Caisse Rubrique"
+      },
+      "id": "ID",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie",
+      "caisse": "Caisse",
+      "rubrique": "Rubrique"
+    }
+  }
+}

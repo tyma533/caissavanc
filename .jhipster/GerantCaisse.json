@@ -1,0 +1,45 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901101336",
+  "dto": "mapstruct",
+  "entityTableName": "gerant_caisse",
+  "fields": [
+    {
+      "fieldName": "actif",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "GerantCaisse",
+  "relationships": [
+    {
+      "otherEntityName": "caisse",
+      "relationshipName": "caisse",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "gerant",
+      "relationshipName": "gerant",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

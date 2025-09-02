@@ -1,0 +1,33 @@
+{
+  "caissavance2App": {
+    "caisse": {
+      "home": {
+        "title": "Caisses",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Caisse",
+        "createOrEditLabel": "Create or edit a Caisse",
+        "notFound": "No Caisses found"
+      },
+      "created": "A new Caisse is created with identifier {{ param }}",
+      "updated": "A Caisse is updated with identifier {{ param }}",
+      "deleted": "A Caisse is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Caisse {{ id }}?"
+      },
+      "detail": {
+        "title": "Caisse"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "dateCreationCaisse": "Date Creation Caisse",
+      "dateFermiture": "Date Fermiture",
+      "solde": "Solde",
+      "etat": "Etat",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie",
+      "etablissement": "Etablissement"
+    }
+  }
+}

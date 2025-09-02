@@ -1,0 +1,126 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-agent-etat-profil-heading"
+        data-cy="AgentEtatProfilCreateUpdateHeading"
+        jhiTranslate="caissavance2App.agentEtatProfil.home.createOrEditLabel"
+      >
+        Create or edit a Agent Etat Profil
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.profil" for="field_profil">Profil</label>
+          <input type="text" class="form-control" name="profil" id="field_profil" data-cy="profil" formControlName="profil" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.actif" for="field_actif">Actif</label>
+          <input type="checkbox" class="form-check" name="actif" id="field_actif" data-cy="actif" formControlName="actif" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.dateHeureModification" for="field_dateHeureModification"
+            >Date Heure Modification</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureModification"
+              data-cy="dateHeureModification"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureModification"
+              formControlName="dateHeureModification"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.dateHeureCreation" for="field_dateHeureCreation"
+            >Date Heure Creation</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateHeureCreation"
+              data-cy="dateHeureCreation"
+              type="datetime-local"
+              class="form-control"
+              name="dateHeureCreation"
+              formControlName="dateHeureCreation"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.modifiedBy" for="field_modifiedBy">Modified By</label>
+          <input
+            type="text"
+            class="form-control"
+            name="modifiedBy"
+            id="field_modifiedBy"
+            data-cy="modifiedBy"
+            formControlName="modifiedBy"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.createdBy" for="field_createdBy">Created By</label>
+          <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy" formControlName="createdBy" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.agent" for="field_agent">Agent</label>
+          <select class="form-control" id="field_agent" data-cy="agent" name="agent" formControlName="agent" [compareWith]="compareAgent">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="agentOption" *ngFor="let agentOption of agentsSharedCollection">{{ agentOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="caissavance2App.agentEtatProfil.etablissement" for="field_etablissement"
+            >Etablissement</label
+          >
+          <select
+            class="form-control"
+            id="field_etablissement"
+            data-cy="etablissement"
+            name="etablissement"
+            formControlName="etablissement"
+            [compareWith]="compareEtablissement"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="etablissementOption" *ngFor="let etablissementOption of etablissementsSharedCollection">
+              {{ etablissementOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

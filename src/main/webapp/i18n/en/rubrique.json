@@ -1,0 +1,30 @@
+{
+  "caissavance2App": {
+    "rubrique": {
+      "home": {
+        "title": "Rubriques",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Rubrique",
+        "createOrEditLabel": "Create or edit a Rubrique",
+        "notFound": "No Rubriques found"
+      },
+      "created": "A new Rubrique is created with identifier {{ param }}",
+      "updated": "A Rubrique is updated with identifier {{ param }}",
+      "deleted": "A Rubrique is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Rubrique {{ id }}?"
+      },
+      "detail": {
+        "title": "Rubrique"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "description": "Description",
+      "code": "Code",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie"
+    }
+  }
+}

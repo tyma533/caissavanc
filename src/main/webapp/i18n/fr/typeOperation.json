@@ -1,0 +1,28 @@
+{
+  "caissavance2App": {
+    "typeOperation": {
+      "home": {
+        "title": "TypeOperations",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Type Operation",
+        "createOrEditLabel": "Créer ou éditer un Type Operation",
+        "notFound": "Aucun Type Operation trouvé"
+      },
+      "created": "Un nouveau Type Operation a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Type Operation avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Type Operation avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Type Operation {{ id }} ?"
+      },
+      "detail": {
+        "title": "Type Operation"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "dateHeureModification": "Date Heure Modification",
+      "dateHeureCreation": "Date Heure Creation",
+      "utiCree": "Uti Cree",
+      "utiModifie": "Uti Modifie"
+    }
+  }
+}

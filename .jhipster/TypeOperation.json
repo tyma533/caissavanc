@@ -1,0 +1,32 @@
+{
+  "applications": "*",
+  "changelogDate": "20250901100736",
+  "dto": "mapstruct",
+  "entityTableName": "type_operation",
+  "fields": [
+    {
+      "fieldName": "libelle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateHeureModification",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "dateHeureCreation",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "utiCree",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "utiModifie",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "TypeOperation",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

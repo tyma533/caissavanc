@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="demande">
+      <h2 data-cy="demandeDetailsHeading"><span jhiTranslate="caissavance2App.demande.detail.title">Demande</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ demande.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.objet">Objet</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'caissavance2App.Objet.' + demande.objet }}">{{ demande.objet }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.dateDemande">Date Demande</span></dt>
+        <dd>
+          <span>{{ demande.dateDemande | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.motif">Motif</span></dt>
+        <dd>
+          <span>{{ demande.motif }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ demande.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ demande.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ demande.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ demande.utiModifie }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.demande.etablissement">Etablissement</span></dt>
+        <dd>
+          <div *ngIf="demande.etablissement">
+            <a [routerLink]="['/etablissement', demande.etablissement.id, 'view']">{{ demande.etablissement.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/demande', demande.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

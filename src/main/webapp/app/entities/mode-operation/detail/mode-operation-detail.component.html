@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="modeOperation">
+      <h2 data-cy="modeOperationDetailsHeading"><span jhiTranslate="caissavance2App.modeOperation.detail.title">Mode Operation</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ modeOperation.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.modeOperation.libelle">Libelle</span></dt>
+        <dd>
+          <span>{{ modeOperation.libelle }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.modeOperation.dateHeureModification">Date Heure Modification</span></dt>
+        <dd>
+          <span>{{ modeOperation.dateHeureModification | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.modeOperation.dateHeureCreation">Date Heure Creation</span></dt>
+        <dd>
+          <span>{{ modeOperation.dateHeureCreation | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.modeOperation.utiCree">Uti Cree</span></dt>
+        <dd>
+          <span>{{ modeOperation.utiCree }}</span>
+        </dd>
+        <dt><span jhiTranslate="caissavance2App.modeOperation.utiModifie">Uti Modifie</span></dt>
+        <dd>
+          <span>{{ modeOperation.utiModifie }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/mode-operation', modeOperation.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

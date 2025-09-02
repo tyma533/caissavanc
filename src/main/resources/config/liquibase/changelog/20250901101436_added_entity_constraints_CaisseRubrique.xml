@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity CaisseRubrique.
+    -->
+    <changeSet id="20250901101436-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="caisse_id"
+                                 baseTableName="caisse_rubrique"
+                                 constraintName="fk_caisse_rubrique__caisse_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="caisse"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="rubrique_id"
+                                 baseTableName="caisse_rubrique"
+                                 constraintName="fk_caisse_rubrique__rubrique_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="rubrique"
+                                 />
+    </changeSet>
+</databaseChangeLog>

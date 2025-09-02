@@ -1,0 +1,160 @@
+<div>
+  <h2 id="page-heading" data-cy="OperationHeading">
+    <span jhiTranslate="caissavance2App.operation.home.title">Operations</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="caissavance2App.operation.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-operation"
+        [routerLink]="['/operation/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="caissavance2App.operation.home.createLabel">Create a new Operation</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="operations?.length === 0">
+    <span jhiTranslate="caissavance2App.operation.home.notFound">No Operations found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="operations && operations.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="numero">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.numero">Numero</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="commentaire">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.commentaire">Commentaire</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="montant">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.montant">Montant</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateOperation">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.dateOperation">Date Operation</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateHeureModification">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.dateHeureModification">Date Heure Modification</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateHeureCreation">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.dateHeureCreation">Date Heure Creation</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="utiCree">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.utiCree">Uti Cree</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="utiModifie">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.utiModifie">Uti Modifie</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="caisse.id">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.caisse">Caisse</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="typeOperation.id">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.typeOperation">Type Operation</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="modeOperation.id">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.operation.modeOperation">Mode Operation</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let operation of operations; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/operation', operation.id, 'view']">{{ operation.id }}</a>
+          </td>
+          <td>{{ operation.numero }}</td>
+          <td>{{ operation.commentaire }}</td>
+          <td>{{ operation.montant }}</td>
+          <td>{{ operation.dateOperation | formatMediumDatetime }}</td>
+          <td>{{ operation.dateHeureModification | formatMediumDatetime }}</td>
+          <td>{{ operation.dateHeureCreation | formatMediumDatetime }}</td>
+          <td>{{ operation.utiCree }}</td>
+          <td>{{ operation.utiModifie }}</td>
+          <td>
+            <div *ngIf="operation.caisse">
+              <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="operation.typeOperation">
+              <a [routerLink]="['/type-operation', operation.typeOperation.id, 'view']">{{ operation.typeOperation.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="operation.modeOperation">
+              <a [routerLink]="['/mode-operation', operation.modeOperation.id, 'view']">{{ operation.modeOperation.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a [routerLink]="['/operation', operation.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </a>
+
+              <a [routerLink]="['/operation', operation.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </a>
+
+              <button type="submit" (click)="delete(operation)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
