@@ -24,6 +24,12 @@
 
   <jhi-alert></jhi-alert>
 
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
+
   <div class="alert alert-warning" id="no-result" *ngIf="caisses?.length === 0">
     <span jhiTranslate="caissavance2App.caisse.home.notFound">No Caisses found</span>
   </div>
@@ -101,7 +107,7 @@
                 <span class="d-none d-md-inline"></span>
               </a>
 
-              <a [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <a [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary btn-sm mx-1" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline"></span>
               </a>
@@ -116,7 +122,7 @@
       </tbody>
     </table>
   </div>
-  <div *ngIf="rubriques && rubriques.length > 0">
+  <div *ngIf="caisses && caisses.length > 0">
     <div class="d-flex justify-content-end p-2">
       <ngb-pagination
         [collectionSize]="collectionSize"

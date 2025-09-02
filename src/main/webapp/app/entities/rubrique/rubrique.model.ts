@@ -1,7 +1,6 @@
 import dayjs from 'dayjs/esm';
 
 export interface IRubrique {
-  libelleLong: any;
   id: number;
   libelle?: string | null;
   description?: string | null;

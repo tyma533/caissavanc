@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IGerant } from '../gerant.model';
@@ -26,14 +26,21 @@ import { GerantDeleteDialogComponent } from '../delete/gerant-delete-dialog.comp
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class GerantComponent implements OnInit {
   gerants?: IGerant[];
   isLoading = false;
-
+  tranchesSharedCollection: IGerant[] = [];
   predicate = 'id';
   ascending = true;
+
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected gerantService: GerantService,
@@ -47,6 +54,23 @@ export class GerantComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+  applyFilterAndSort(): void {
+    let filteredGerants: IGerant[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredGerants = this.tranchesSharedCollection.filter(t => t.nom?.toLowerCase().includes(term));
+    } else {
+      filteredGerants = [...this.tranchesSharedCollection];
+    }
+
+    const sortedRubriques = this.refineData(filteredGerants);
+    this.collectionSize = sortedRubriques.length;
+    this.gerants = sortedRubriques.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(gerant: IGerant): void {
@@ -90,9 +114,14 @@ export class GerantComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.gerants = this.refineData(dataFromBody);
+  // }
+
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.gerants = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IGerant[]): IGerant[] {

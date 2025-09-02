@@ -24,6 +24,12 @@
 
   <jhi-alert></jhi-alert>
 
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
+
   <div class="alert alert-warning" id="no-result" *ngIf="gerants?.length === 0">
     <span jhiTranslate="caissavance2App.gerant.home.notFound">No Gerants found</span>
   </div>
@@ -56,30 +62,7 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateHeureModification">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.gerant.dateHeureModification">Date Heure Modification</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureCreation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.gerant.dateHeureCreation">Date Heure Creation</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiCree">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.gerant.utiCree">Uti Cree</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiModifie">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.gerant.utiModifie">Uti Modifie</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+
           <th scope="col" jhiSortBy="agentEtatProfil.id">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.gerant.agentEtatProfil">Agent Etat Profil</span>
@@ -97,10 +80,7 @@
           <td>{{ gerant.nom }}</td>
           <td>{{ gerant.dateNomination | formatMediumDatetime }}</td>
           <td>{{ gerant.dateFin | formatMediumDatetime }}</td>
-          <td>{{ gerant.dateHeureModification | formatMediumDatetime }}</td>
-          <td>{{ gerant.dateHeureCreation | formatMediumDatetime }}</td>
-          <td>{{ gerant.utiCree }}</td>
-          <td>{{ gerant.utiModifie }}</td>
+
           <td>
             <div *ngIf="gerant.agentEtatProfil">
               <a [routerLink]="['/agent-etat-profil', gerant.agentEtatProfil.id, 'view']">{{ gerant.agentEtatProfil.id }}</a>
@@ -110,22 +90,36 @@
             <div class="btn-group">
               <a [routerLink]="['/gerant', gerant.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
-              <a [routerLink]="['/gerant', gerant.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <a [routerLink]="['/gerant', gerant.id, 'edit']" class="btn btn-primary btn-sm ms-1" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <button type="submit" (click)="delete(gerant)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div *ngIf="rubriques && rubriques.length > 0">
+    <div class="d-flex justify-content-end p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="applyFilterAndSort()"
+      >
+      </ngb-pagination>
+    </div>
   </div>
 </div>
