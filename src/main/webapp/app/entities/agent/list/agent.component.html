@@ -23,7 +23,11 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
-
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
   <div class="alert alert-warning" id="no-result" *ngIf="agents?.length === 0">
     <span jhiTranslate="caissavance2App.agent.home.notFound">No Agents found</span>
   </div>
@@ -34,7 +38,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="id">
             <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
+              <span jhiTranslate="global.field.id"></span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -146,30 +150,7 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateHeureModification">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agent.dateHeureModification">Date Heure Modification</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureCreation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agent.dateHeureCreation">Date Heure Creation</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="modifiedBy">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agent.modifiedBy">Modified By</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="createdBy">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agent.createdBy">Created By</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+
           <th scope="col"></th>
         </tr>
       </thead>
@@ -196,30 +177,41 @@
           <td>{{ agent.externe }}</td>
           <td>{{ agent.actif }}</td>
           <td>{{ agent.role }}</td>
-          <td>{{ agent.dateHeureModification | formatMediumDatetime }}</td>
-          <td>{{ agent.dateHeureCreation | formatMediumDatetime }}</td>
-          <td>{{ agent.modifiedBy }}</td>
-          <td>{{ agent.createdBy }}</td>
+
           <td class="text-end">
             <div class="btn-group">
               <a [routerLink]="['/agent', agent.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
-              <a [routerLink]="['/agent', agent.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <a [routerLink]="['/agent', agent.id, 'edit']" class="btn btn-primary btn-sm mx-1" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <button type="submit" (click)="delete(agent)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div *ngIf="agents && agents.length > 0">
+    <div class="d-flex justify-content-end p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="applyFilterAndSort()"
+      >
+      </ngb-pagination>
+    </div>
   </div>
 </div>

@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IAgent } from '../agent.model';
@@ -26,14 +26,20 @@ import { AgentDeleteDialogComponent } from '../delete/agent-delete-dialog.compon
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class AgentComponent implements OnInit {
   agents?: IAgent[];
   isLoading = false;
-
+  tranchesSharedCollection: IAgent[] = [];
   predicate = 'id';
   ascending = true;
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected agentService: AgentService,
@@ -47,6 +53,23 @@ export class AgentComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+  applyFilterAndSort(): void {
+    let filteredAgents: IAgent[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredAgents = this.tranchesSharedCollection.filter(t => t.codeMatrile?.toLowerCase().includes(term));
+    } else {
+      filteredAgents = [...this.tranchesSharedCollection];
+    }
+
+    const sortedAgents = this.refineData(filteredAgents);
+    this.collectionSize = sortedAgents.length;
+    this.agents = sortedAgents.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(agent: IAgent): void {
@@ -90,9 +113,13 @@ export class AgentComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.agents = this.refineData(dataFromBody);
+  // }
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.agents = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IAgent[]): IAgent[] {

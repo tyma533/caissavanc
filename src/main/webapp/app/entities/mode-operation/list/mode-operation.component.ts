@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IModeOperation } from '../mode-operation.model';
@@ -26,14 +26,20 @@ import { ModeOperationDeleteDialogComponent } from '../delete/mode-operation-del
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class ModeOperationComponent implements OnInit {
   modeOperations?: IModeOperation[];
   isLoading = false;
-
+  tranchesSharedCollection: IModeOperation[] = [];
   predicate = 'id';
   ascending = true;
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected modeOperationService: ModeOperationService,
@@ -47,6 +53,24 @@ export class ModeOperationComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+
+  applyFilterAndSort(): void {
+    let filteredModeOperations: IModeOperation[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredModeOperations = this.tranchesSharedCollection.filter(t => t.libelle?.toLowerCase().includes(term));
+    } else {
+      filteredModeOperations = [...this.tranchesSharedCollection];
+    }
+
+    const sortedModeOperations = this.refineData(filteredModeOperations);
+    this.collectionSize = sortedModeOperations.length;
+    this.modeOperations = sortedModeOperations.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(modeOperation: IModeOperation): void {
@@ -90,9 +114,14 @@ export class ModeOperationComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.modeOperations = this.refineData(dataFromBody);
+  // }
+
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.modeOperations = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IModeOperation[]): IModeOperation[] {

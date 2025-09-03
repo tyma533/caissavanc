@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IEtablissement } from '../etablissement.model';
@@ -26,14 +26,21 @@ import { EtablissementDeleteDialogComponent } from '../delete/etablissement-dele
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class EtablissementComponent implements OnInit {
   etablissements?: IEtablissement[];
   isLoading = false;
+  tranchesSharedCollection: IEtablissement[] = [];
 
   predicate = 'id';
   ascending = true;
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected etablissementService: EtablissementService,
@@ -47,6 +54,24 @@ export class EtablissementComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+
+  applyFilterAndSort(): void {
+    let filteredEtablissements: IEtablissement[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredEtablissements = this.tranchesSharedCollection.filter(t => t.libelle?.toLowerCase().includes(term));
+    } else {
+      filteredEtablissements = [...this.tranchesSharedCollection];
+    }
+
+    const sortedEtablissements = this.refineData(filteredEtablissements);
+    this.collectionSize = sortedEtablissements.length;
+    this.etablissements = sortedEtablissements.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(etablissement: IEtablissement): void {
@@ -90,9 +115,14 @@ export class EtablissementComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.etablissements = this.refineData(dataFromBody);
+  // }
+
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.etablissements = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IEtablissement[]): IEtablissement[] {

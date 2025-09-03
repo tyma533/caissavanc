@@ -23,6 +23,11 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
 
   <div class="alert alert-warning" id="no-result" *ngIf="typeOperations?.length === 0">
     <span jhiTranslate="caissavance2App.typeOperation.home.notFound">No Type Operations found</span>
@@ -34,7 +39,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="id">
             <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
+              <span jhiTranslate="global.field.id"></span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -44,30 +49,7 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateHeureModification">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.typeOperation.dateHeureModification">Date Heure Modification</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureCreation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.typeOperation.dateHeureCreation">Date Heure Creation</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiCree">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.typeOperation.utiCree">Uti Cree</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiModifie">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.typeOperation.utiModifie">Uti Modifie</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+
           <th scope="col"></th>
         </tr>
       </thead>
@@ -77,25 +59,22 @@
             <a [routerLink]="['/type-operation', typeOperation.id, 'view']">{{ typeOperation.id }}</a>
           </td>
           <td>{{ typeOperation.libelle }}</td>
-          <td>{{ typeOperation.dateHeureModification | formatMediumDatetime }}</td>
-          <td>{{ typeOperation.dateHeureCreation | formatMediumDatetime }}</td>
-          <td>{{ typeOperation.utiCree }}</td>
-          <td>{{ typeOperation.utiModifie }}</td>
+
           <td class="text-end">
             <div class="btn-group">
               <a [routerLink]="['/type-operation', typeOperation.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <a [routerLink]="['/type-operation', typeOperation.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <button type="submit" (click)="delete(typeOperation)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>

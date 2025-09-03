@@ -23,7 +23,11 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
-
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
   <div class="alert alert-warning" id="no-result" *ngIf="agentEtatProfils?.length === 0">
     <span jhiTranslate="caissavance2App.agentEtatProfil.home.notFound">No Agent Etat Profils found</span>
   </div>
@@ -50,30 +54,7 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateHeureModification">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agentEtatProfil.dateHeureModification">Date Heure Modification</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureCreation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agentEtatProfil.dateHeureCreation">Date Heure Creation</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="modifiedBy">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agentEtatProfil.modifiedBy">Modified By</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="createdBy">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.agentEtatProfil.createdBy">Created By</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+
           <th scope="col" jhiSortBy="agent.id">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.agentEtatProfil.agent">Agent</span>
@@ -96,10 +77,7 @@
           </td>
           <td>{{ agentEtatProfil.profil }}</td>
           <td>{{ agentEtatProfil.actif }}</td>
-          <td>{{ agentEtatProfil.dateHeureModification | formatMediumDatetime }}</td>
-          <td>{{ agentEtatProfil.dateHeureCreation | formatMediumDatetime }}</td>
-          <td>{{ agentEtatProfil.modifiedBy }}</td>
-          <td>{{ agentEtatProfil.createdBy }}</td>
+
           <td>
             <div *ngIf="agentEtatProfil.agent">
               <a [routerLink]="['/agent', agentEtatProfil.agent.id, 'view']">{{ agentEtatProfil.agent.id }}</a>
@@ -118,26 +96,40 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <a
                 [routerLink]="['/agent-etat-profil', agentEtatProfil.id, 'edit']"
-                class="btn btn-primary btn-sm"
+                class="btn btn-primary btn-sm mx-1"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <button type="submit" (click)="delete(agentEtatProfil)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div *ngIf="agentEtatProfils && agentEtatProfils.length > 0">
+    <div class="d-flex justify-content-end p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="applyFilterAndSort()"
+      >
+      </ngb-pagination>
+    </div>
   </div>
 </div>

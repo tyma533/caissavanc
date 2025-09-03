@@ -40,7 +40,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="id">
             <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
+              <span jhiTranslate="global.field.id"></span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -108,7 +108,7 @@
       </tbody>
     </table>
   </div>
-  <div *ngIf="rubriques && rubriques.length > 0">
+  <div *ngIf="gerants && gerants.length > 0">
     <div class="d-flex justify-content-end p-2">
       <ngb-pagination
         [collectionSize]="collectionSize"

@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IOperation } from '../operation.model';
@@ -26,14 +26,21 @@ import { OperationDeleteDialogComponent } from '../delete/operation-delete-dialo
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class OperationComponent implements OnInit {
   operations?: IOperation[];
   isLoading = false;
-
+  tranchesSharedCollection: IOperation[] = [];
   predicate = 'id';
   ascending = true;
+
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected operationService: OperationService,
@@ -47,6 +54,24 @@ export class OperationComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+
+  applyFilterAndSort(): void {
+    let filteredOperations: IOperation[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredOperations = this.tranchesSharedCollection.filter(t => t.numero?.toLowerCase().includes(term));
+    } else {
+      filteredOperations = [...this.tranchesSharedCollection];
+    }
+
+    const sortedOperations = this.refineData(filteredOperations);
+    this.collectionSize = sortedOperations.length;
+    this.operations = sortedOperations.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(operation: IOperation): void {
@@ -90,9 +115,14 @@ export class OperationComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.operations = this.refineData(dataFromBody);
+  // }
+
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.operations = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IOperation[]): IOperation[] {

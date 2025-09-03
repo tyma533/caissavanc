@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { SortService } from 'app/shared/sort/sort.service';
@@ -27,14 +27,20 @@ import { PieceJustificatifDeleteDialogComponent } from '../delete/piece-justific
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class PieceJustificatifComponent implements OnInit {
   pieceJustificatifs?: IPieceJustificatif[];
   isLoading = false;
-
+  tranchesSharedCollection: IPieceJustificatif[] = [];
   predicate = 'id';
   ascending = true;
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected pieceJustificatifService: PieceJustificatifService,
@@ -49,6 +55,26 @@ export class PieceJustificatifComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+  applyFilterAndSort(): void {
+    let filteredPieceJustificatifs: IPieceJustificatif[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredPieceJustificatifs = this.tranchesSharedCollection.filter(t => t.libelle?.toLowerCase().includes(term));
+    } else {
+      filteredPieceJustificatifs = [...this.tranchesSharedCollection];
+    }
+
+    const sortedPiecejustificatifs = this.refineData(filteredPieceJustificatifs);
+    this.collectionSize = sortedPiecejustificatifs.length;
+    this.pieceJustificatifs = sortedPiecejustificatifs.slice(
+      (this.page - 1) * this.pageSize,
+      (this.page - 1) * this.pageSize + this.pageSize,
+    );
   }
 
   byteSize(base64String: string): string {
@@ -100,9 +126,14 @@ export class PieceJustificatifComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.pieceJustificatifs = this.refineData(dataFromBody);
+  // }
+
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.pieceJustificatifs = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IPieceJustificatif[]): IPieceJustificatif[] {

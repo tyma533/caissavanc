@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IEtatOperation } from '../etat-operation.model';
@@ -26,14 +26,20 @@ import { EtatOperationDeleteDialogComponent } from '../delete/etat-operation-del
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class EtatOperationComponent implements OnInit {
   etatOperations?: IEtatOperation[];
   isLoading = false;
-
+  tranchesSharedCollection: IEtatOperation[] = [];
   predicate = 'id';
   ascending = true;
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected etatOperationService: EtatOperationService,
@@ -47,6 +53,23 @@ export class EtatOperationComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+  applyFilterAndSort(): void {
+    let filteredEtatOperations: IEtatOperation[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredEtatOperations = this.tranchesSharedCollection.filter(t => t.libelle?.toLowerCase().includes(term));
+    } else {
+      filteredEtatOperations = [...this.tranchesSharedCollection];
+    }
+
+    const sortedEtatOperations = this.refineData(filteredEtatOperations);
+    this.collectionSize = sortedEtatOperations.length;
+    this.etatOperations = sortedEtatOperations.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(etatOperation: IEtatOperation): void {
@@ -90,11 +113,14 @@ export class EtatOperationComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.etatOperations = this.refineData(dataFromBody);
+  // }
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.etatOperations = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
-
   protected refineData(data: IEtatOperation[]): IEtatOperation[] {
     return data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1));
   }

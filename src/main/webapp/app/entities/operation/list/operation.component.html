@@ -23,6 +23,11 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
 
   <div class="alert alert-warning" id="no-result" *ngIf="operations?.length === 0">
     <span jhiTranslate="caissavance2App.operation.home.notFound">No Operations found</span>
@@ -34,7 +39,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="id">
             <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
+              <span jhiTranslate="global.field.id"></span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -62,30 +67,7 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateHeureModification">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.operation.dateHeureModification">Date Heure Modification</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureCreation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.operation.dateHeureCreation">Date Heure Creation</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiCree">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.operation.utiCree">Uti Cree</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiModifie">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.operation.utiModifie">Uti Modifie</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+
           <th scope="col" jhiSortBy="caisse.id">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.operation.caisse">Caisse</span>
@@ -116,10 +98,7 @@
           <td>{{ operation.commentaire }}</td>
           <td>{{ operation.montant }}</td>
           <td>{{ operation.dateOperation | formatMediumDatetime }}</td>
-          <td>{{ operation.dateHeureModification | formatMediumDatetime }}</td>
-          <td>{{ operation.dateHeureCreation | formatMediumDatetime }}</td>
-          <td>{{ operation.utiCree }}</td>
-          <td>{{ operation.utiModifie }}</td>
+
           <td>
             <div *ngIf="operation.caisse">
               <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.id }}</a>
@@ -156,5 +135,19 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <div *ngIf="operations && operations.length > 0">
+    <div class="d-flex justify-content-end p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="applyFilterAndSort()"
+      >
+      </ngb-pagination>
+    </div>
   </div>
 </div>

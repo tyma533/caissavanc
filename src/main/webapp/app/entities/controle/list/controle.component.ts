@@ -6,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { SortService } from 'app/shared/sort/sort.service';
 import { IControle } from '../controle.model';
@@ -26,14 +26,21 @@ import { ControleDeleteDialogComponent } from '../delete/controle-delete-dialog.
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    ReactiveFormsModule,
   ],
 })
 export class ControleComponent implements OnInit {
   controles?: IControle[];
   isLoading = false;
-
+  tranchesSharedCollection: IControle[] = [];
   predicate = 'id';
   ascending = true;
+
+  filter = new FormControl('', { nonNullable: true });
+
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
 
   constructor(
     protected controleService: ControleService,
@@ -47,6 +54,24 @@ export class ControleComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    this.filter.valueChanges.subscribe(() => {
+      this.applyFilterAndSort();
+    });
+  }
+
+  applyFilterAndSort(): void {
+    let filteredControles: IControle[];
+
+    const term = this.filter.value.toLowerCase();
+    if (term) {
+      filteredControles = this.tranchesSharedCollection.filter(t => t.dateControle?.format('YYYY-MM-DD').toLowerCase().includes(term));
+    } else {
+      filteredControles = [...this.tranchesSharedCollection];
+    }
+
+    const sortedControles = this.refineData(filteredControles);
+    this.collectionSize = sortedControles.length;
+    this.controles = sortedControles.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(controle: IControle): void {
@@ -90,9 +115,13 @@ export class ControleComponent implements OnInit {
     this.ascending = sort[1] === ASC;
   }
 
+  // protected onResponseSuccess(response: EntityArrayResponseType): void {
+  //   const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+  //   this.controles = this.refineData(dataFromBody);
+  // }
   protected onResponseSuccess(response: EntityArrayResponseType): void {
-    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.controles = this.refineData(dataFromBody);
+    this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    this.applyFilterAndSort();
   }
 
   protected refineData(data: IControle[]): IControle[] {

@@ -23,6 +23,11 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
+  <form class="mb-3 col-md-3">
+    <div class="input-group">
+      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    </div>
+  </form>
 
   <div class="alert alert-warning" id="no-result" *ngIf="caisseRubriques?.length === 0">
     <span jhiTranslate="caissavance2App.caisseRubrique.home.notFound">No Caisse Rubriques found</span>
@@ -34,31 +39,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="id">
             <div class="d-flex">
-              <span jhiTranslate="global.field.id">ID</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureModification">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisseRubrique.dateHeureModification">Date Heure Modification</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateHeureCreation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisseRubrique.dateHeureCreation">Date Heure Creation</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiCree">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisseRubrique.utiCree">Uti Cree</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="utiModifie">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisseRubrique.utiModifie">Uti Modifie</span>
+              <span jhiTranslate="global.field.id"></span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -82,10 +63,7 @@
           <td>
             <a [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'view']">{{ caisseRubrique.id }}</a>
           </td>
-          <td>{{ caisseRubrique.dateHeureModification | formatMediumDatetime }}</td>
-          <td>{{ caisseRubrique.dateHeureCreation | formatMediumDatetime }}</td>
-          <td>{{ caisseRubrique.utiCree }}</td>
-          <td>{{ caisseRubrique.utiModifie }}</td>
+
           <td>
             <div *ngIf="caisseRubrique.caisse">
               <a [routerLink]="['/caisse', caisseRubrique.caisse.id, 'view']">{{ caisseRubrique.caisse.id }}</a>
@@ -100,22 +78,40 @@
             <div class="btn-group">
               <a [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
-              <a [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <a
+                [routerLink]="['/caisse-rubrique', caisseRubrique.id, 'edit']"
+                class="btn btn-primary btn-sm mx-1"
+                data-cy="entityEditButton"
+              >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <span class="d-none d-md-inline"></span>
               </a>
 
               <button type="submit" (click)="delete(caisseRubrique)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+  <div *ngIf="caisseRubriques && caisseRubriques.length > 0">
+    <div class="d-flex justify-content-end p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="applyFilterAndSort()"
+      >
+      </ngb-pagination>
+    </div>
   </div>
 </div>
