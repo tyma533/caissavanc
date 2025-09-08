@@ -14,6 +14,7 @@ import { DemandeService } from '../service/demande.service';
 import { IDemande } from '../demande.model';
 import { DemandeFormService, DemandeFormGroup } from './demande-form.service';
 import { ICaisse } from 'app/entities/caisse/caisse.model';
+import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 
 @Component({
   standalone: true,
@@ -28,6 +29,7 @@ export class DemandeUpdateComponent implements OnInit {
 
   etablissementsSharedCollection: IEtablissement[] = [];
   caissesSharedCollection: ICaisse[] = [];
+  filteredCaisses: ICaisse[] = []; // caisses disponibles pour l'établissement choisi
 
   editForm: DemandeFormGroup = this.demandeFormService.createDemandeFormGroup();
 
@@ -35,6 +37,7 @@ export class DemandeUpdateComponent implements OnInit {
     protected demandeService: DemandeService,
     protected demandeFormService: DemandeFormService,
     protected etablissementService: EtablissementService,
+    protected caisseService: CaisseService,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
@@ -42,13 +45,36 @@ export class DemandeUpdateComponent implements OnInit {
     this.etablissementService.compareEtablissement(o1, o2);
 
   ngOnInit(): void {
+    // Charger la demande si modification
     this.activatedRoute.data.subscribe(({ demande }) => {
       this.demande = demande;
       if (demande) {
         this.updateForm(demande);
       }
+    });
 
-      this.loadRelationshipsOptions();
+    // Charger tous les établissements depuis l'API
+    this.etablissementService.query().subscribe((res: HttpResponse<IEtablissement[]>) => {
+      this.etablissementsSharedCollection = res.body ?? [];
+    });
+
+    this.caisseService.query().subscribe(res => {
+      this.caissesSharedCollection = res.body ?? [];
+    });
+
+    // Réagir au changement de l'établissement pour filtrer les caisses
+    this.editForm.get('etablissement')?.valueChanges.subscribe(etab => {
+      if (etab) {
+        // Filtrer les caisses par établissement
+        this.filteredCaisses = this.caissesSharedCollection.filter(caisse => caisse.etablissement?.id === etab.id);
+      } else {
+        this.filteredCaisses = [];
+      }
+
+      // Réinitialiser la caisse sélectionnée si elle ne fait plus partie de la liste filtrée
+      if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+        this.editForm.get('caisseId')?.setValue(null);
+      }
     });
   }
 
@@ -78,7 +104,7 @@ export class DemandeUpdateComponent implements OnInit {
   }
 
   protected onSaveError(): void {
-    // Api for inheritance.
+    // Api pour héritage
   }
 
   protected onSaveFinalize(): void {
@@ -105,5 +131,14 @@ export class DemandeUpdateComponent implements OnInit {
         ),
       )
       .subscribe((etablissements: IEtablissement[]) => (this.etablissementsSharedCollection = etablissements));
+  }
+
+  protected loadCaisses(): void {
+    this.caisseService
+      .query()
+      .pipe(map((res: HttpResponse<ICaisse[]>) => res.body ?? []))
+      .subscribe((caisses: ICaisse[]) => {
+        this.caissesSharedCollection = caisses;
+      });
   }
 }

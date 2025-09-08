@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { map } from 'rxjs/operators';
@@ -135,5 +135,13 @@ export class DemandeService {
     return res.clone({
       body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
     });
+  }
+
+  traiter(id: number, accepte: boolean, motifRefus?: string): Observable<HttpResponse<IDemande>> {
+    let params = new HttpParams().set('accepte', String(accepte));
+    if (motifRefus) {
+      params = params.set('motifRefus', motifRefus);
+    }
+    return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, null, { params, observe: 'response' });
   }
 }

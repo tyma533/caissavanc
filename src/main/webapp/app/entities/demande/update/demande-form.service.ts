@@ -26,7 +26,6 @@ type FormValueOf<T extends IDemande | NewDemande> = Omit<T, 'dateDemande' | 'dat
 };
 
 type DemandeFormRawValue = FormValueOf<IDemande>;
-
 type NewDemandeFormRawValue = FormValueOf<NewDemande>;
 
 type DemandeFormDefaults = Pick<NewDemande, 'id' | 'dateDemande' | 'dateHeureModification' | 'dateHeureCreation'>;
@@ -41,6 +40,9 @@ type DemandeFormGroupContent = {
   utiCree: FormControl<DemandeFormRawValue['utiCree']>;
   utiModifie: FormControl<DemandeFormRawValue['utiModifie']>;
   etablissement: FormControl<DemandeFormRawValue['etablissement']>;
+  libelle: FormControl<DemandeFormRawValue['libelle']>;
+  montant: FormControl<DemandeFormRawValue['montant']>;
+  caisseId: FormControl<number | null>;
 };
 
 export type DemandeFormGroup = FormGroup<DemandeFormGroupContent>;
@@ -52,17 +54,10 @@ export class DemandeFormService {
       ...this.getFormDefaults(),
       ...demande,
     });
+
     return new FormGroup<DemandeFormGroupContent>({
-      id: new FormControl(
-        { value: demandeRawValue.id, disabled: true },
-        {
-          nonNullable: true,
-          validators: [Validators.required],
-        },
-      ),
-      objet: new FormControl(demandeRawValue.objet, {
-        validators: [Validators.required],
-      }),
+      id: new FormControl({ value: demandeRawValue.id, disabled: true }, { nonNullable: true, validators: [Validators.required] }),
+      objet: new FormControl(demandeRawValue.objet, { validators: [Validators.required] }),
       dateDemande: new FormControl(demandeRawValue.dateDemande),
       motif: new FormControl(demandeRawValue.motif),
       dateHeureModification: new FormControl(demandeRawValue.dateHeureModification),
@@ -70,6 +65,9 @@ export class DemandeFormService {
       utiCree: new FormControl(demandeRawValue.utiCree),
       utiModifie: new FormControl(demandeRawValue.utiModifie),
       etablissement: new FormControl(demandeRawValue.etablissement),
+      libelle: new FormControl(demandeRawValue.libelle),
+      montant: new FormControl(demandeRawValue.montant),
+      caisseId: new FormControl(demandeRawValue.caisseId ?? null),
     });
   }
 
@@ -89,7 +87,6 @@ export class DemandeFormService {
 
   private getFormDefaults(): DemandeFormDefaults {
     const currentTime = dayjs();
-
     return {
       id: null,
       dateDemande: currentTime,

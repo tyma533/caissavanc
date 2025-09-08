@@ -14,6 +14,7 @@ export interface IDemande {
   etablissement?: Pick<IEtablissement, 'id'> | null;
   libelle?: string | null;
   montant?: number | null;
+  caisseId?: number | null;
 }
 
 export type NewDemande = Omit<IDemande, 'id'> & { id: null };

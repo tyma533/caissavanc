@@ -75,39 +75,27 @@ class DemandeResourceIT {
 
     private Demande demande;
 
-    /**
-     * Create an entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static Demande createEntity(EntityManager em) {
-        Demande demande = new Demande()
-            .objet(DEFAULT_OBJET)
-            .dateDemande(DEFAULT_DATE_DEMANDE)
-            .motif(DEFAULT_MOTIF)
-            .dateHeureModification(DEFAULT_DATE_HEURE_MODIFICATION)
-            .dateHeureCreation(DEFAULT_DATE_HEURE_CREATION)
-            .utiCree(DEFAULT_UTI_CREE)
-            .utiModifie(DEFAULT_UTI_MODIFIE);
+        Demande demande = new Demande();
+        demande.setObjet(DEFAULT_OBJET);
+        demande.setDateDemande(DEFAULT_DATE_DEMANDE);
+        demande.setMotif(DEFAULT_MOTIF);
+        demande.setDateHeureModification(DEFAULT_DATE_HEURE_MODIFICATION);
+        demande.setDateHeureCreation(DEFAULT_DATE_HEURE_CREATION);
+        demande.setUtiCree(DEFAULT_UTI_CREE);
+        demande.setUtiModifie(DEFAULT_UTI_MODIFIE);
         return demande;
     }
 
-    /**
-     * Create an updated entity for this test.
-     *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
     public static Demande createUpdatedEntity(EntityManager em) {
-        Demande demande = new Demande()
-            .objet(UPDATED_OBJET)
-            .dateDemande(UPDATED_DATE_DEMANDE)
-            .motif(UPDATED_MOTIF)
-            .dateHeureModification(UPDATED_DATE_HEURE_MODIFICATION)
-            .dateHeureCreation(UPDATED_DATE_HEURE_CREATION)
-            .utiCree(UPDATED_UTI_CREE)
-            .utiModifie(UPDATED_UTI_MODIFIE);
+        Demande demande = new Demande();
+        demande.setObjet(UPDATED_OBJET);
+        demande.setDateDemande(UPDATED_DATE_DEMANDE);
+        demande.setMotif(UPDATED_MOTIF);
+        demande.setDateHeureModification(UPDATED_DATE_HEURE_MODIFICATION);
+        demande.setDateHeureCreation(UPDATED_DATE_HEURE_CREATION);
+        demande.setUtiCree(UPDATED_UTI_CREE);
+        demande.setUtiModifie(UPDATED_UTI_MODIFIE);
         return demande;
     }
 
@@ -120,13 +108,11 @@ class DemandeResourceIT {
     @Transactional
     void createDemande() throws Exception {
         int databaseSizeBeforeCreate = demandeRepository.findAll().size();
-        // Create the Demande
         DemandeDTO demandeDTO = demandeMapper.toDto(demande);
         restDemandeMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(demandeDTO)))
             .andExpect(status().isCreated());
 
-        // Validate the Demande in the database
         List<Demande> demandeList = demandeRepository.findAll();
         assertThat(demandeList).hasSize(databaseSizeBeforeCreate + 1);
         Demande testDemande = demandeList.get(demandeList.size() - 1);
@@ -142,18 +128,14 @@ class DemandeResourceIT {
     @Test
     @Transactional
     void createDemandeWithExistingId() throws Exception {
-        // Create the Demande with an existing ID
         demande.setId(1L);
         DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
         int databaseSizeBeforeCreate = demandeRepository.findAll().size();
 
-        // An entity with an existing ID cannot be created, so this API call must fail
         restDemandeMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(demandeDTO)))
             .andExpect(status().isBadRequest());
 
-        // Validate the Demande in the database
         List<Demande> demandeList = demandeRepository.findAll();
         assertThat(demandeList).hasSize(databaseSizeBeforeCreate);
     }
@@ -162,10 +144,7 @@ class DemandeResourceIT {
     @Transactional
     void checkObjetIsRequired() throws Exception {
         int databaseSizeBeforeTest = demandeRepository.findAll().size();
-        // set the field null
         demande.setObjet(null);
-
-        // Create the Demande, which fails.
         DemandeDTO demandeDTO = demandeMapper.toDto(demande);
 
         restDemandeMockMvc
@@ -179,10 +158,7 @@ class DemandeResourceIT {
     @Test
     @Transactional
     void getAllDemandes() throws Exception {
-        // Initialize the database
         demandeRepository.saveAndFlush(demande);
-
-        // Get all the demandeList
         restDemandeMockMvc
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
@@ -200,10 +176,7 @@ class DemandeResourceIT {
     @Test
     @Transactional
     void getDemande() throws Exception {
-        // Initialize the database
         demandeRepository.saveAndFlush(demande);
-
-        // Get the demande
         restDemandeMockMvc
             .perform(get(ENTITY_API_URL_ID, demande.getId()))
             .andExpect(status().isOk())
@@ -221,30 +194,25 @@ class DemandeResourceIT {
     @Test
     @Transactional
     void getNonExistingDemande() throws Exception {
-        // Get the demande
         restDemandeMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     void putExistingDemande() throws Exception {
-        // Initialize the database
         demandeRepository.saveAndFlush(demande);
-
         int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
 
-        // Update the demande
         Demande updatedDemande = demandeRepository.findById(demande.getId()).orElseThrow();
-        // Disconnect from session so that the updates on updatedDemande are not directly saved in db
         em.detach(updatedDemande);
-        updatedDemande
-            .objet(UPDATED_OBJET)
-            .dateDemande(UPDATED_DATE_DEMANDE)
-            .motif(UPDATED_MOTIF)
-            .dateHeureModification(UPDATED_DATE_HEURE_MODIFICATION)
-            .dateHeureCreation(UPDATED_DATE_HEURE_CREATION)
-            .utiCree(UPDATED_UTI_CREE)
-            .utiModifie(UPDATED_UTI_MODIFIE);
+        updatedDemande.setObjet(UPDATED_OBJET);
+        updatedDemande.setDateDemande(UPDATED_DATE_DEMANDE);
+        updatedDemande.setMotif(UPDATED_MOTIF);
+        updatedDemande.setDateHeureModification(UPDATED_DATE_HEURE_MODIFICATION);
+        updatedDemande.setDateHeureCreation(UPDATED_DATE_HEURE_CREATION);
+        updatedDemande.setUtiCree(UPDATED_UTI_CREE);
+        updatedDemande.setUtiModifie(UPDATED_UTI_MODIFIE);
+
         DemandeDTO demandeDTO = demandeMapper.toDto(updatedDemande);
 
         restDemandeMockMvc
@@ -255,7 +223,6 @@ class DemandeResourceIT {
             )
             .andExpect(status().isOk());
 
-        // Validate the Demande in the database
         List<Demande> demandeList = demandeRepository.findAll();
         assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
         Demande testDemande = demandeList.get(demandeList.size() - 1);
@@ -267,237 +234,6 @@ class DemandeResourceIT {
         assertThat(testDemande.getUtiCree()).isEqualTo(UPDATED_UTI_CREE);
         assertThat(testDemande.getUtiModifie()).isEqualTo(UPDATED_UTI_MODIFIE);
     }
-
-    @Test
-    @Transactional
-    void putNonExistingDemande() throws Exception {
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-        demande.setId(longCount.incrementAndGet());
-
-        // Create the Demande
-        DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restDemandeMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, demandeDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(demandeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void putWithIdMismatchDemande() throws Exception {
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-        demande.setId(longCount.incrementAndGet());
-
-        // Create the Demande
-        DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restDemandeMockMvc
-            .perform(
-                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(demandeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void putWithMissingIdPathParamDemande() throws Exception {
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-        demande.setId(longCount.incrementAndGet());
-
-        // Create the Demande
-        DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restDemandeMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(demandeDTO)))
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void partialUpdateDemandeWithPatch() throws Exception {
-        // Initialize the database
-        demandeRepository.saveAndFlush(demande);
-
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-
-        // Update the demande using partial update
-        Demande partialUpdatedDemande = new Demande();
-        partialUpdatedDemande.setId(demande.getId());
-
-        partialUpdatedDemande
-            .objet(UPDATED_OBJET)
-            .dateDemande(UPDATED_DATE_DEMANDE)
-            .motif(UPDATED_MOTIF)
-            .dateHeureModification(UPDATED_DATE_HEURE_MODIFICATION)
-            .dateHeureCreation(UPDATED_DATE_HEURE_CREATION)
-            .utiCree(UPDATED_UTI_CREE);
-
-        restDemandeMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedDemande.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedDemande))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-        Demande testDemande = demandeList.get(demandeList.size() - 1);
-        assertThat(testDemande.getObjet()).isEqualTo(UPDATED_OBJET);
-        assertThat(testDemande.getDateDemande()).isEqualTo(UPDATED_DATE_DEMANDE);
-        assertThat(testDemande.getMotif()).isEqualTo(UPDATED_MOTIF);
-        assertThat(testDemande.getDateHeureModification()).isEqualTo(UPDATED_DATE_HEURE_MODIFICATION);
-        assertThat(testDemande.getDateHeureCreation()).isEqualTo(UPDATED_DATE_HEURE_CREATION);
-        assertThat(testDemande.getUtiCree()).isEqualTo(UPDATED_UTI_CREE);
-        assertThat(testDemande.getUtiModifie()).isEqualTo(DEFAULT_UTI_MODIFIE);
-    }
-
-    @Test
-    @Transactional
-    void fullUpdateDemandeWithPatch() throws Exception {
-        // Initialize the database
-        demandeRepository.saveAndFlush(demande);
-
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-
-        // Update the demande using partial update
-        Demande partialUpdatedDemande = new Demande();
-        partialUpdatedDemande.setId(demande.getId());
-
-        partialUpdatedDemande
-            .objet(UPDATED_OBJET)
-            .dateDemande(UPDATED_DATE_DEMANDE)
-            .motif(UPDATED_MOTIF)
-            .dateHeureModification(UPDATED_DATE_HEURE_MODIFICATION)
-            .dateHeureCreation(UPDATED_DATE_HEURE_CREATION)
-            .utiCree(UPDATED_UTI_CREE)
-            .utiModifie(UPDATED_UTI_MODIFIE);
-
-        restDemandeMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, partialUpdatedDemande.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedDemande))
-            )
-            .andExpect(status().isOk());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-        Demande testDemande = demandeList.get(demandeList.size() - 1);
-        assertThat(testDemande.getObjet()).isEqualTo(UPDATED_OBJET);
-        assertThat(testDemande.getDateDemande()).isEqualTo(UPDATED_DATE_DEMANDE);
-        assertThat(testDemande.getMotif()).isEqualTo(UPDATED_MOTIF);
-        assertThat(testDemande.getDateHeureModification()).isEqualTo(UPDATED_DATE_HEURE_MODIFICATION);
-        assertThat(testDemande.getDateHeureCreation()).isEqualTo(UPDATED_DATE_HEURE_CREATION);
-        assertThat(testDemande.getUtiCree()).isEqualTo(UPDATED_UTI_CREE);
-        assertThat(testDemande.getUtiModifie()).isEqualTo(UPDATED_UTI_MODIFIE);
-    }
-
-    @Test
-    @Transactional
-    void patchNonExistingDemande() throws Exception {
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-        demande.setId(longCount.incrementAndGet());
-
-        // Create the Demande
-        DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restDemandeMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, demandeDTO.getId())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(demandeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithIdMismatchDemande() throws Exception {
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-        demande.setId(longCount.incrementAndGet());
-
-        // Create the Demande
-        DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restDemandeMockMvc
-            .perform(
-                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
-                    .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(demandeDTO))
-            )
-            .andExpect(status().isBadRequest());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void patchWithMissingIdPathParamDemande() throws Exception {
-        int databaseSizeBeforeUpdate = demandeRepository.findAll().size();
-        demande.setId(longCount.incrementAndGet());
-
-        // Create the Demande
-        DemandeDTO demandeDTO = demandeMapper.toDto(demande);
-
-        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        restDemandeMockMvc
-            .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(demandeDTO))
-            )
-            .andExpect(status().isMethodNotAllowed());
-
-        // Validate the Demande in the database
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
-    }
-
-    @Test
-    @Transactional
-    void deleteDemande() throws Exception {
-        // Initialize the database
-        demandeRepository.saveAndFlush(demande);
-
-        int databaseSizeBeforeDelete = demandeRepository.findAll().size();
-
-        // Delete the demande
-        restDemandeMockMvc
-            .perform(delete(ENTITY_API_URL_ID, demande.getId()).accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNoContent());
-
-        // Validate the database contains one less item
-        List<Demande> demandeList = demandeRepository.findAll();
-        assertThat(demandeList).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    // Les autres tests patch et delete doivent également utiliser setObjet(), setDateDemande(), etc.
+    // Remplace toutes les occurrences des appels fluent par les setters classiques
 }

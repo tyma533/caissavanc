@@ -46,6 +46,47 @@
         </dd>
       </dl>
 
+      <div class="mt-3">
+        <button class="btn btn-primary" (click)="ouvrirModalTraitement()"><fa-icon icon="tasks"></fa-icon>&nbsp;Traiter la demande</button>
+      </div>
+
+      <!-- Modal traitement -->
+      <div class="modal" tabindex="-1" [ngClass]="{ show: showModalTraitement }" style="display: block" *ngIf="showModalTraitement">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Choisir une action</h5>
+              <button type="button" class="btn-close" (click)="fermerModalTraitement()"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+              <button class="btn btn-success" (click)="traiter(true)"><fa-icon icon="check"></fa-icon>&nbsp;Accepter</button>
+              <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">
+                <fa-icon icon="times"></fa-icon>&nbsp;Refuser
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal refus -->
+      <div class="modal" tabindex="-1" [ngClass]="{ show: showModal }" style="display: block" *ngIf="showModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Motif du refus</h5>
+              <button type="button" class="btn-close" (click)="fermerModal()"></button>
+            </div>
+            <div class="modal-body">
+              <textarea [(ngModel)]="motifRefus" class="form-control" placeholder="Saisir le motif..."></textarea>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" (click)="fermerModal()">Annuler</button>
+              <button class="btn btn-danger" (click)="traiter(false)">Refuser</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
