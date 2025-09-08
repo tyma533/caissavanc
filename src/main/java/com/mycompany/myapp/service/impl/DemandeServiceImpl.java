@@ -1,10 +1,16 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Demande;
+import com.mycompany.myapp.domain.enumeration.EtatCaisse;
+import com.mycompany.myapp.domain.enumeration.Objet;
 import com.mycompany.myapp.repository.DemandeRepository;
+import com.mycompany.myapp.service.CaisseService;
 import com.mycompany.myapp.service.DemandeService;
+import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.DemandeDTO;
 import com.mycompany.myapp.service.mapper.DemandeMapper;
+import jakarta.persistence.EntityNotFoundException;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +33,71 @@ public class DemandeServiceImpl implements DemandeService {
 
     private final DemandeMapper demandeMapper;
 
-    public DemandeServiceImpl(DemandeRepository demandeRepository, DemandeMapper demandeMapper) {
+    private final CaisseService caisseService;
+
+    public DemandeServiceImpl(DemandeRepository demandeRepository, DemandeMapper demandeMapper, CaisseService caisseService) {
         this.demandeRepository = demandeRepository;
         this.demandeMapper = demandeMapper;
+        this.caisseService = caisseService;
+    }
+
+    @Override
+    public DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus) {
+        Optional<Demande> demandeOpt = demandeRepository.findById(id);
+        if (demandeOpt.isEmpty()) {
+            throw new RuntimeException("Demande non trouvée");
+        }
+        Demande demande = demandeOpt.get();
+
+        if (!accepte) {
+            demande.setMotif(motifRefus);
+            // ...autres champs pour refus...
+        } else {
+            if (demande.getObjet() == Objet.CREATION_CAISSE && demande.getEtablissement() != null) {
+                List<CaisseDTO> caisses = caisseService
+                    .findAll()
+                    .stream()
+                    .filter(c ->
+                        c.getEtablissement() != null &&
+                        c.getEtablissement().getId().equals(demande.getEtablissement().getId()) &&
+                        c.getLibelle() != null &&
+                        c.getLibelle().equalsIgnoreCase(demande.getLibelle())
+                    )
+                    .toList();
+                if (caisses.isEmpty()) {
+                    CaisseDTO caisse = new CaisseDTO();
+                    caisse.setLibelle(demande.getLibelle());
+                    caisse.setDateCreationCaisse(Instant.now());
+                    caisse.setSolde(0L);
+                    caisse.setEtat(EtatCaisse.OUVERTE);
+                    caisse.setEtablissement(demande.getEtablissement());
+                    caisseService.save(caisse);
+                } else {
+                    throw new RuntimeException("Une caisse avec ce libellé existe déjà pour cet établissement");
+                }
+            }
+            // if (demande.getObjet() == Objet.ALIMENTATION_CAISSE && demande.getEtablissement() != null) {
+            //     List<CaisseDTO> caisses = caisseService.findAll().stream()
+            //         .filter(c -> c.getEtablissement() != null && c.getEtablissement().getId().equals(demande.getEtablissement().getId()))
+            //         .toList();
+            //     if (!caisses.isEmpty()) {
+            //         CaisseDTO caisse = caisses.get(0);
+            //         Long montant = demande.getMontant();
+            //         caisse.setSolde(caisse.getSolde() + montant);
+            //         caisseService.update(caisse);
+            //              }
+            // }
+            if (demande.getObjet() == Objet.ALIMENTATION_CAISSE && demande.getCaisseId() != null && demande.getMontant() != null) {
+                Optional<CaisseDTO> caisseOpt = caisseService.findOne(demande.getCaisseId());
+                if (caisseOpt.isPresent()) {
+                    CaisseDTO caisse = caisseOpt.get();
+                    caisse.setSolde(caisse.getSolde() + demande.getMontant());
+                    caisseService.update(caisse);
+                }
+            }
+        }
+        demandeRepository.save(demande);
+        return demandeMapper.toDto(demande);
     }
 
     @Override

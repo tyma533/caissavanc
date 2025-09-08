@@ -12,7 +12,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface DemandeMapper extends EntityMapper<DemandeDTO, Demande> {
     @Mapping(target = "etablissement", source = "etablissement", qualifiedByName = "etablissementId")
-    DemandeDTO toDto(Demande s);
+    DemandeDTO toDto(Demande demande);
+
+    Demande toEntity(DemandeDTO dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void partialUpdate(@MappingTarget Demande entity, DemandeDTO dto);
 
     @Named("etablissementId")
     @BeanMapping(ignoreByDefault = true)

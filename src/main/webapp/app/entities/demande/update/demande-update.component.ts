@@ -13,6 +13,7 @@ import { Objet } from 'app/entities/enumerations/objet.model';
 import { DemandeService } from '../service/demande.service';
 import { IDemande } from '../demande.model';
 import { DemandeFormService, DemandeFormGroup } from './demande-form.service';
+import { ICaisse } from 'app/entities/caisse/caisse.model';
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ export class DemandeUpdateComponent implements OnInit {
   objetValues = Object.keys(Objet);
 
   etablissementsSharedCollection: IEtablissement[] = [];
+  caissesSharedCollection: ICaisse[] = [];
 
   editForm: DemandeFormGroup = this.demandeFormService.createDemandeFormGroup();
 

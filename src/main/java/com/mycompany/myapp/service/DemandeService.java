@@ -53,4 +53,6 @@ public interface DemandeService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus);
 }

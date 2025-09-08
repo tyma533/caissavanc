@@ -62,6 +62,17 @@ public class DemandeResource {
             .body(result);
     }
 
+    @PostMapping("/{id}/traiter")
+    public ResponseEntity<DemandeDTO> traiterDemande(
+        @PathVariable Long id,
+        @RequestParam boolean accepte,
+        @RequestParam(required = false) String motifRefus
+    ) {
+        log.debug("REST request to traiter Demande : {}, accepte={}, motifRefus={}", id, accepte, motifRefus);
+        DemandeDTO result = demandeService.traiterDemande(id, accepte, motifRefus);
+        return ResponseEntity.ok(result);
+    }
+
     /**
      * {@code PUT  /demandes/:id} : Updates an existing demande.
      *

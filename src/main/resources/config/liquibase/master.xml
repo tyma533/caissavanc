@@ -32,6 +32,7 @@
     <include file="config/liquibase/changelog/20250901101536_added_entity_Controle.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250901101636_added_entity_Agent.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250901101736_added_entity_AgentEtatProfil.xml" relativeToChangelogFile="false"/>
+   
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250901100336_added_entity_constraints_Caisse.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250901100536_added_entity_constraints_Demande.xml" relativeToChangelogFile="false"/>
@@ -42,6 +43,10 @@
     <include file="config/liquibase/changelog/20250901101436_added_entity_constraints_CaisseRubrique.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250901101536_added_entity_constraints_Controle.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250901101736_added_entity_constraints_AgentEtatProfil.xml" relativeToChangelogFile="false"/>
+     <include file="config/liquibase/changelog/20250904170000_add_libelle_montant_to_demande.xml"/>
+      <include file="config/liquibase/changelog/20250908_add_caisse_id_to_demande.xml" relativeToChangelogFile="false"/>
+
+    
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

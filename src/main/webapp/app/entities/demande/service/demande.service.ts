@@ -30,6 +30,10 @@ export type EntityArrayResponseType = HttpResponse<IDemande[]>;
 
 @Injectable({ providedIn: 'root' })
 export class DemandeService {
+  traiterDemande(id: number, accepte: boolean, motif: string): Observable<IDemande> {
+    return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, { accepte, motif });
+  }
+
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/demandes');
 
   constructor(

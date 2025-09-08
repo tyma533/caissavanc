@@ -1,6 +1,7 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Demande;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DemandeRepository extends JpaRepository<Demande, Long> {}
+public interface DemandeRepository extends JpaRepository<Demande, Long> {
+    @EntityGraph(attributePaths = "etablissement")
+    Optional<Demande> findById(Long id);
+}

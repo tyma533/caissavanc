@@ -31,6 +31,46 @@ public class DemandeDTO implements Serializable {
 
     private EtablissementDTO etablissement;
 
+    private String libelle;
+
+    public String getLibelle() {
+        return this.libelle;
+    }
+
+    public DemandeDTO libelle(String libelle) {
+        this.setLibelle(libelle);
+        return this;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    private Long montant;
+
+    public Long getMontant() {
+        return this.montant;
+    }
+
+    public DemandeDTO montant(Long montant) {
+        this.setMontant(montant);
+        return this;
+    }
+
+    public void setMontant(Long montant) {
+        this.montant = montant;
+    }
+
+    private Long caisseId;
+
+    public Long getCaisseId() {
+        return caisseId;
+    }
+
+    public void setCaisseId(Long caisseId) {
+        this.caisseId = caisseId;
+    }
+
     public Long getId() {
         return id;
     }

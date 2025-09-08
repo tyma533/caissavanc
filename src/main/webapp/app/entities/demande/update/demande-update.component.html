@@ -26,6 +26,37 @@
           </div>
         </div>
 
+        <!-- Champ libelle pour création caisse -->
+        <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'CREATION_CAISSE'">
+          <label class="form-label" for="field_libelle">Libellé de la caisse</label>
+          <input
+            type="text"
+            class="form-control"
+            name="libelle"
+            id="field_libelle"
+            formControlName="motif"
+            placeholder="Libellé de la caisse"
+          />
+        </div>
+
+        <!-- Champ montant pour alimentation caisse -->
+        <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
+          <label class="form-label" for="field_montant">Montant à alimenter</label>
+          <input type="number" class="form-control" name="montant" id="field_montant" formControlName="motif" placeholder="Montant" />
+        </div>
+
+        <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
+          <label class="form-label" for="field_caisseId">Caisse à alimenter</label>
+          <select class="form-control" name="caisseId" id="field_caisseId" formControlName="caisseId">
+            <option [ngValue]="null">Sélectionner une caisse</option>
+            <option *ngFor="let caisse of caissesSharedCollection" [value]="caisse.id">{{ caisse.libelle }}</option>
+          </select>
+        </div>
+        <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
+          <label class="form-label" for="field_montant">Montant à alimenter</label>
+          <input type="number" class="form-control" name="montant" id="field_montant" formControlName="montant" placeholder="Montant" />
+        </div>
+        <!-- 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.dateDemande" for="field_dateDemande">Date Demande</label>
           <div class="d-flex">
@@ -39,14 +70,14 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.motif" for="field_motif">Motif</label>
           <input type="text" class="form-control" name="motif" id="field_motif" data-cy="motif" formControlName="motif" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.dateHeureModification" for="field_dateHeureModification"
             >Date Heure Modification</label
           >
@@ -61,9 +92,9 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.dateHeureCreation" for="field_dateHeureCreation"
             >Date Heure Creation</label
           >
@@ -78,14 +109,14 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.utiCree" for="field_utiCree">Uti Cree</label>
           <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.utiModifie" for="field_utiModifie">Uti Modifie</label>
           <input
             type="number"
@@ -95,7 +126,7 @@
             data-cy="utiModifie"
             formControlName="utiModifie"
           />
-        </div>
+        </div> -->
 
         <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.demande.etablissement" for="field_etablissement">Etablissement</label>
@@ -109,7 +140,7 @@
           >
             <option [ngValue]="null"></option>
             <option [ngValue]="etablissementOption" *ngFor="let etablissementOption of etablissementsSharedCollection">
-              {{ etablissementOption.id }}
+              {{ etablissementOption.libelle }}
             </option>
           </select>
         </div>

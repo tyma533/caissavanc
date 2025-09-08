@@ -48,18 +48,22 @@ public class Demande implements Serializable {
     @Column(name = "uti_modifie")
     private Long utiModifie;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "libelle")
+    private String libelle;
+
+    @Column(name = "montant")
+    private Long montant;
+
+    @Column(name = "caisse_id")
+    private Long caisseId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private Etablissement etablissement;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // Getters et setters
 
     public Long getId() {
         return this.id;
-    }
-
-    public Demande id(Long id) {
-        this.setId(id);
-        return this;
     }
 
     public void setId(Long id) {
@@ -70,22 +74,12 @@ public class Demande implements Serializable {
         return this.objet;
     }
 
-    public Demande objet(Objet objet) {
-        this.setObjet(objet);
-        return this;
-    }
-
     public void setObjet(Objet objet) {
         this.objet = objet;
     }
 
     public Instant getDateDemande() {
         return this.dateDemande;
-    }
-
-    public Demande dateDemande(Instant dateDemande) {
-        this.setDateDemande(dateDemande);
-        return this;
     }
 
     public void setDateDemande(Instant dateDemande) {
@@ -96,22 +90,28 @@ public class Demande implements Serializable {
         return this.motif;
     }
 
-    public Demande motif(String motif) {
-        this.setMotif(motif);
-        return this;
-    }
-
     public void setMotif(String motif) {
         this.motif = motif;
     }
 
-    public Instant getDateHeureModification() {
-        return this.dateHeureModification;
+    public String getLibelle() {
+        return this.libelle;
     }
 
-    public Demande dateHeureModification(Instant dateHeureModification) {
-        this.setDateHeureModification(dateHeureModification);
-        return this;
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public Long getMontant() {
+        return this.montant;
+    }
+
+    public void setMontant(Long montant) {
+        this.montant = montant;
+    }
+
+    public Instant getDateHeureModification() {
+        return this.dateHeureModification;
     }
 
     public void setDateHeureModification(Instant dateHeureModification) {
@@ -122,22 +122,12 @@ public class Demande implements Serializable {
         return this.dateHeureCreation;
     }
 
-    public Demande dateHeureCreation(Instant dateHeureCreation) {
-        this.setDateHeureCreation(dateHeureCreation);
-        return this;
-    }
-
     public void setDateHeureCreation(Instant dateHeureCreation) {
         this.dateHeureCreation = dateHeureCreation;
     }
 
     public Long getUtiCree() {
         return this.utiCree;
-    }
-
-    public Demande utiCree(Long utiCree) {
-        this.setUtiCree(utiCree);
-        return this;
     }
 
     public void setUtiCree(Long utiCree) {
@@ -148,13 +138,16 @@ public class Demande implements Serializable {
         return this.utiModifie;
     }
 
-    public Demande utiModifie(Long utiModifie) {
-        this.setUtiModifie(utiModifie);
-        return this;
-    }
-
     public void setUtiModifie(Long utiModifie) {
         this.utiModifie = utiModifie;
+    }
+
+    public Long getCaisseId() {
+        return this.caisseId;
+    }
+
+    public void setCaisseId(Long caisseId) {
+        this.caisseId = caisseId;
     }
 
     public Etablissement getEtablissement() {
@@ -165,12 +158,7 @@ public class Demande implements Serializable {
         this.etablissement = etablissement;
     }
 
-    public Demande etablissement(Etablissement etablissement) {
-        this.setEtablissement(etablissement);
-        return this;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // equals, hashCode et toString
 
     @Override
     public boolean equals(Object o) {
@@ -185,22 +173,42 @@ public class Demande implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
-        return "Demande{" +
-            "id=" + getId() +
-            ", objet='" + getObjet() + "'" +
-            ", dateDemande='" + getDateDemande() + "'" +
-            ", motif='" + getMotif() + "'" +
-            ", dateHeureModification='" + getDateHeureModification() + "'" +
-            ", dateHeureCreation='" + getDateHeureCreation() + "'" +
-            ", utiCree=" + getUtiCree() +
-            ", utiModifie=" + getUtiModifie() +
-            "}";
+        return (
+            "Demande{" +
+            "id=" +
+            getId() +
+            ", objet='" +
+            getObjet() +
+            "'" +
+            ", dateDemande='" +
+            getDateDemande() +
+            "'" +
+            ", motif='" +
+            getMotif() +
+            "'" +
+            ", dateHeureModification='" +
+            getDateHeureModification() +
+            "'" +
+            ", dateHeureCreation='" +
+            getDateHeureCreation() +
+            "'" +
+            ", utiCree=" +
+            getUtiCree() +
+            ", utiModifie=" +
+            getUtiModifie() +
+            ", libelle='" +
+            getLibelle() +
+            "'" +
+            ", montant=" +
+            getMontant() +
+            ", caisseId=" +
+            getCaisseId() +
+            "}"
+        );
     }
 }

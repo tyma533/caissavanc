@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.Etablissement;
 import com.mycompany.myapp.domain.enumeration.EtatCaisse;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -35,7 +36,7 @@ public class CaisseDTO implements Serializable {
 
     private Long utiModifie;
 
-    private EtablissementDTO etablissement;
+    private Etablissement etablissement;
 
     public Long getId() {
         return id;
@@ -117,11 +118,11 @@ public class CaisseDTO implements Serializable {
         this.utiModifie = utiModifie;
     }
 
-    public EtablissementDTO getEtablissement() {
+    public Etablissement getEtablissement() {
         return etablissement;
     }
 
-    public void setEtablissement(EtablissementDTO etablissement) {
+    public void setEtablissement(Etablissement etablissement) {
         this.etablissement = etablissement;
     }
 

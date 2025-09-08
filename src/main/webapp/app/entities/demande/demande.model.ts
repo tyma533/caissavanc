@@ -12,6 +12,8 @@ export interface IDemande {
   utiCree?: number | null;
   utiModifie?: number | null;
   etablissement?: Pick<IEtablissement, 'id'> | null;
+  libelle?: string | null;
+  montant?: number | null;
 }
 
 export type NewDemande = Omit<IDemande, 'id'> & { id: null };

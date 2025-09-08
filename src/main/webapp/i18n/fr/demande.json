@@ -25,7 +25,9 @@
       "dateHeureCreation": "Date Heure Creation",
       "utiCree": "Uti Cree",
       "utiModifie": "Uti Modifie",
-      "etablissement": "Etablissement"
+      "etablissement": "Etablissement",
+      "libelle": "Libelle",
+      "montant": "Montant"
     }
   }
 }
