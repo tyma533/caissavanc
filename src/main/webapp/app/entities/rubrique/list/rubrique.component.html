@@ -38,13 +38,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-
           <th scope="col" jhiSortBy="libelle">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.rubrique.libelle">Libelle</span>
@@ -69,9 +62,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let rubrique of rubriques; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/rubrique', rubrique.id, 'view']">{{ rubrique.id }}</a>
-          </td>
           <td>{{ rubrique.libelle }}</td>
           <td>{{ rubrique.description }}</td>
           <td>{{ rubrique.code }}</td>

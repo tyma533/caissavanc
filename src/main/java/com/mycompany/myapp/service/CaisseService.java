@@ -1,6 +1,8 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.CaisseDTO;
+import com.mycompany.myapp.service.dto.CaisseRubriqueDTO;
+import com.mycompany.myapp.service.dto.RubriqueDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +47,7 @@ public interface CaisseService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<CaisseDTO> findOne(Long id);
+    Optional<CaisseDTO> findOne(Object id);
 
     /**
      * Delete the "id" caisse.
@@ -53,4 +55,18 @@ public interface CaisseService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<CaisseDTO> findByEtablissementId(Long id);
+
+    Optional<CaisseDTO> findOne(Long caisseId);
+
+    void affecterRubrique(Long caisseId, Long rubriqueId);
+
+    void desaffecterRubrique(Long caisseId, Long rubriqueId);
+
+    List<RubriqueDTO> getRubriquesAffectees(Long caisseId);
+
+    List<RubriqueDTO> getRubriquesNonAffectees(Long caisseId);
+
+    CaisseRubriqueDTO affecterRubriqueALaCaisse(Long caisseId, Long rubriqueId);
 }

@@ -37,24 +37,13 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="objet">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.demande.objet">Objet</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateDemande">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.demande.dateDemande">Date Demande</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
+
           <th scope="col" jhiSortBy="motif">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.demande.motif">Motif</span>
@@ -73,11 +62,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let demande of demandes; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/demande', demande.id, 'view']">{{ demande.id }}</a>
-          </td>
           <td jhiTranslate="{{ 'caissavance2App.Objet.' + demande.objet }}">{{ demande.objet }}</td>
-          <td>{{ demande.dateDemande | formatMediumDatetime }}</td>
           <td>{{ demande.motif }}</td>
           <td>
             <div *ngIf="demande.etablissement">

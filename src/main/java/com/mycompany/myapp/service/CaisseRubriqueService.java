@@ -53,4 +53,6 @@ public interface CaisseRubriqueService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    CaisseRubriqueDTO affecterRubriqueALaCaisse(Long caisseId, Long rubriqueId);
 }

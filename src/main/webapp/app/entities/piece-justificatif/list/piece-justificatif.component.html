@@ -36,12 +36,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="libelle">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.pieceJustificatif.libelle">Libelle</span>
@@ -66,9 +60,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let pieceJustificatif of pieceJustificatifs; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/piece-justificatif', pieceJustificatif.id, 'view']">{{ pieceJustificatif.id }}</a>
-          </td>
           <td>{{ pieceJustificatif.libelle }}</td>
           <td>
             <a

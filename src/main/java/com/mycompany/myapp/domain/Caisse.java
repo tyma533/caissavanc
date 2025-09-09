@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -58,6 +60,22 @@ public class Caisse implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Etablissement etablissement;
+
+    @ManyToMany
+    @JoinTable(
+        name = "caisse_rubrique",
+        joinColumns = @JoinColumn(name = "caisse_id"),
+        inverseJoinColumns = @JoinColumn(name = "rubrique_id")
+    )
+    private Set<Rubrique> rubriques = new HashSet<>();
+
+    public Set<Rubrique> getRubriques() {
+        return rubriques;
+    }
+
+    public void setRubriques(Set<Rubrique> rubriques) {
+        this.rubriques = rubriques;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

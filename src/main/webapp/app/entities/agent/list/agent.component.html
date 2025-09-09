@@ -36,12 +36,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="codeMatrile">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.agent.codeMatrile">Code Matrile</span>
@@ -156,9 +150,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let agent of agents; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/agent', agent.id, 'view']">{{ agent.id }}</a>
-          </td>
           <td>{{ agent.codeMatrile }}</td>
           <td>{{ agent.cni }}</td>
           <td>{{ agent.statutAgent }}</td>

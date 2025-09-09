@@ -58,15 +58,10 @@ export class DemandeUpdateComponent implements OnInit {
       this.etablissementsSharedCollection = res.body ?? [];
     });
 
-    this.caisseService.query().subscribe(res => {
-      this.caissesSharedCollection = res.body ?? [];
-    });
-
     // Réagir au changement de l'établissement pour filtrer les caisses
-    this.editForm.get('etablissement')?.valueChanges.subscribe(etab => {
-      if (etab) {
-        // Filtrer les caisses par établissement
-        this.filteredCaisses = this.caissesSharedCollection.filter(caisse => caisse.etablissement?.id === etab.id);
+    this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
+      if (etablissement?.id) {
+        this.filteredCaisses = this.caissesSharedCollection.filter(c => c.etablissement?.id === etablissement.id);
       } else {
         this.filteredCaisses = [];
       }

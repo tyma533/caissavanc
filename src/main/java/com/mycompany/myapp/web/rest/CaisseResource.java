@@ -1,8 +1,11 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.CaisseRepository;
+import com.mycompany.myapp.service.CaisseRubriqueService;
 import com.mycompany.myapp.service.CaisseService;
 import com.mycompany.myapp.service.dto.CaisseDTO;
+import com.mycompany.myapp.service.dto.CaisseRubriqueDTO;
+import com.mycompany.myapp.service.dto.RubriqueDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -37,9 +40,12 @@ public class CaisseResource {
 
     private final CaisseRepository caisseRepository;
 
-    public CaisseResource(CaisseService caisseService, CaisseRepository caisseRepository) {
+    private final CaisseRubriqueService caisseRubriqueService;
+
+    public CaisseResource(CaisseService caisseService, CaisseRepository caisseRepository, CaisseRubriqueService caisseRubriqueService) {
         this.caisseService = caisseService;
         this.caisseRepository = caisseRepository;
+        this.caisseRubriqueService = caisseRubriqueService;
     }
 
     /**
@@ -60,6 +66,27 @@ public class CaisseResource {
             .created(new URI("/api/caisses/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    //    @PostMapping("/{caisseId}/affecter/{rubriqueId}")
+    // public ResponseEntity<Void> affecterRubrique(@PathVariable Long caisseId, @PathVariable Long rubriqueId) {
+    //     caisseService.affecterRubrique(caisseId, rubriqueId);
+    //     return ResponseEntity.ok().build();
+    // }
+
+    @PostMapping("/{caisseId}/desaffecter/{rubriqueId}")
+    public ResponseEntity<Void> desaffecterRubrique(@PathVariable Long caisseId, @PathVariable Long rubriqueId) {
+        caisseService.desaffecterRubrique(caisseId, rubriqueId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{caisseId}/affecter/{rubriqueId}")
+    public ResponseEntity<CaisseRubriqueDTO> affecterRubriqueALaCaisse(
+        @PathVariable("caisseId") Long caisseId,
+        @PathVariable("rubriqueId") Long rubriqueId
+    ) {
+        CaisseRubriqueDTO result = caisseRubriqueService.affecterRubriqueALaCaisse(caisseId, rubriqueId);
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -154,6 +181,18 @@ public class CaisseResource {
         log.debug("REST request to get Caisse : {}", id);
         Optional<CaisseDTO> caisseDTO = caisseService.findOne(id);
         return ResponseUtil.wrapOrNotFound(caisseDTO);
+    }
+
+    @GetMapping("/{caisseId}/rubriques/affectees")
+    public List<RubriqueDTO> getRubriquesAffectees(@PathVariable Long caisseId) {
+        log.debug("REST request to get rubriques affectées for Caisse {}", caisseId);
+        return caisseService.getRubriquesAffectees(caisseId);
+    }
+
+    @GetMapping("/{caisseId}/rubriques/non-affectees")
+    public List<RubriqueDTO> getRubriquesNonAffectees(@PathVariable Long caisseId) {
+        log.debug("REST request to get rubriques non affectées for Caisse {}", caisseId);
+        return caisseService.getRubriquesNonAffectees(caisseId);
     }
 
     /**

@@ -37,12 +37,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="dateControle">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.controle.dateControle">Date Controle</span>
@@ -67,9 +61,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let controle of controles; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/controle', controle.id, 'view']">{{ controle.id }}</a>
-          </td>
           <td>{{ controle.dateControle | formatMediumDatetime }}</td>
           <td>{{ controle.observation }}</td>
 

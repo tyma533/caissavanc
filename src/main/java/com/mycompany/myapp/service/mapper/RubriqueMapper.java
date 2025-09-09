@@ -8,4 +8,7 @@ import org.mapstruct.*;
  * Mapper for the entity {@link Rubrique} and its DTO {@link RubriqueDTO}.
  */
 @Mapper(componentModel = "spring")
-public interface RubriqueMapper extends EntityMapper<RubriqueDTO, Rubrique> {}
+public interface RubriqueMapper extends EntityMapper<RubriqueDTO, Rubrique> {
+    RubriqueDTO toDto(Rubrique rubrique);
+    Rubrique toEntity(RubriqueDTO rubriqueDTO);
+}

@@ -17,6 +17,10 @@ public interface CaisseRubriqueMapper extends EntityMapper<CaisseRubriqueDTO, Ca
     @Mapping(target = "rubrique", source = "rubrique", qualifiedByName = "rubriqueId")
     CaisseRubriqueDTO toDto(CaisseRubrique s);
 
+    @Mapping(target = "caisse", source = "caisse.id", qualifiedByName = "caisseFromId")
+    @Mapping(target = "rubrique", source = "rubrique.id", qualifiedByName = "rubriqueFromId")
+    CaisseRubrique toEntity(CaisseRubriqueDTO dto);
+
     @Named("caisseId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
@@ -26,4 +30,20 @@ public interface CaisseRubriqueMapper extends EntityMapper<CaisseRubriqueDTO, Ca
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     RubriqueDTO toDtoRubriqueId(Rubrique rubrique);
+
+    @Named("caisseFromId")
+    default Caisse fromIdCaisse(Long id) {
+        if (id == null) return null;
+        Caisse caisse = new Caisse();
+        caisse.setId(id);
+        return caisse;
+    }
+
+    @Named("rubriqueFromId")
+    default Rubrique fromIdRubrique(Long id) {
+        if (id == null) return null;
+        Rubrique rubrique = new Rubrique();
+        rubrique.setId(id);
+        return rubrique;
+    }
 }

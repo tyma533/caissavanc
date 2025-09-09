@@ -10,6 +10,8 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { ICaisse, NewCaisse } from '../caisse.model';
+import { IRubrique } from 'app/entities/rubrique/rubrique.model';
+import { ICaisseRubrique } from 'app/entities/caisse-rubrique/caisse-rubrique.model';
 
 export type PartialUpdateCaisse = Partial<ICaisse> & Pick<ICaisse, 'id'>;
 
@@ -34,6 +36,9 @@ export type EntityArrayResponseType = HttpResponse<ICaisse[]>;
 
 @Injectable({ providedIn: 'root' })
 export class CaisseService {
+  // getCaisse(caisseId: number) {
+  //   throw new Error('Method not implemented.');
+  // }
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/caisses');
 
   constructor(
@@ -137,5 +142,31 @@ export class CaisseService {
     return res.clone({
       body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
     });
+  }
+
+  getCaisse(id: number): Observable<ICaisse> {
+    return this.http.get<ICaisse>(`${this.resourceUrl}/${id}`);
+  }
+  getRubriquesAffectees(caisseId: number): Observable<IRubrique[]> {
+    return this.http.get<IRubrique[]>(`${this.resourceUrl}/${caisseId}/rubriques/affectees`);
+  }
+
+  getRubriquesNonAffectees(caisseId: number): Observable<IRubrique[]> {
+    return this.http.get<IRubrique[]>(`${this.resourceUrl}/${caisseId}/rubriques/non-affectees`);
+  }
+
+  // affecterRubrique(caisseId: number, rubriqueId: number): Observable<any> {
+  //   return this.http.post(`${this.resourceUrl}/${caisseId}/affecter/${rubriqueId}`, {});
+  // }
+
+  affecterRubrique(caisseId: number, rubriqueId: number): Observable<ICaisseRubrique> {
+    return this.http.post<ICaisseRubrique>(
+      `${this.resourceUrl}/${caisseId}/affecter/${rubriqueId}`,
+      {}, // corps vide car tout est dans l'URL
+    );
+  }
+
+  desaffecterRubrique(caisseId: number, rubriqueId: number): Observable<any> {
+    return this.http.post(`${this.resourceUrl}/${caisseId}/desaffecter/${rubriqueId}`, {});
   }
 }

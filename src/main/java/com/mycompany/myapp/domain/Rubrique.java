@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -43,6 +45,17 @@ public class Rubrique implements Serializable {
 
     @Column(name = "uti_modifie")
     private Long utiModifie;
+
+    @ManyToMany(mappedBy = "rubriques")
+    private Set<Caisse> caisses = new HashSet<>();
+
+    public Set<Caisse> getCaisses() {
+        return caisses;
+    }
+
+    public void setCaisses(Set<Caisse> caisses) {
+        this.caisses = caisses;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

@@ -37,12 +37,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="numero">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.operation.numero">Numero</span>
@@ -58,12 +52,6 @@
           <th scope="col" jhiSortBy="montant">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.operation.montant">Montant</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateOperation">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.operation.dateOperation">Date Operation</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -91,13 +79,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let operation of operations; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/operation', operation.id, 'view']">{{ operation.id }}</a>
-          </td>
           <td>{{ operation.numero }}</td>
           <td>{{ operation.commentaire }}</td>
           <td>{{ operation.montant }}</td>
-          <td>{{ operation.dateOperation | formatMediumDatetime }}</td>
 
           <td>
             <div *ngIf="operation.caisse">

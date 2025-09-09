@@ -38,12 +38,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="nom">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.gerant.nom">Nom</span>
@@ -74,9 +68,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let gerant of gerants; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/gerant', gerant.id, 'view']">{{ gerant.id }}</a>
-          </td>
           <td>{{ gerant.nom }}</td>
           <td>{{ gerant.dateNomination | formatMediumDatetime }}</td>
           <td>{{ gerant.dateFin | formatMediumDatetime }}</td>

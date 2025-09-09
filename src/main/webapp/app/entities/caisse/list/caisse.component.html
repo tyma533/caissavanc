@@ -38,27 +38,16 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id"></span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="libelle">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.caisse.libelle">Libelle</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="dateCreationCaisse">
+
+          <th scope="col" jhiSortBy="etablissement.id">
             <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisse.dateCreationCaisse">Date Creation Caisse</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="dateFermiture">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisse.dateFermiture">Date Fermiture</span>
+              <span jhiTranslate="caissavance2App.caisse.etablissement">Etablissement</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -75,31 +64,21 @@
             </div>
           </th>
 
-          <th scope="col" jhiSortBy="etablissement.id">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.caisse.etablissement">Etablissement</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let caisse of caisses; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/caisse', caisse.id, 'view']">{{ caisse.id }}</a>
-          </td>
           <td>{{ caisse.libelle }}</td>
-          <td>{{ caisse.dateCreationCaisse | formatMediumDatetime }}</td>
-          <td>{{ caisse.dateFermiture | formatMediumDatetime }}</td>
-          <td>{{ caisse.solde }}</td>
-          <td jhiTranslate="{{ 'caissavance2App.EtatCaisse.' + caisse.etat }}">{{ caisse.etat }}</td>
-
           <td>
             <div *ngIf="caisse.etablissement">
               <a [routerLink]="['/etablissement', caisse.etablissement.id, 'view']">{{ caisse.etablissement.id }}</a>
             </div>
           </td>
+
+          <td>{{ caisse.solde }}</td>
+          <td jhiTranslate="{{ 'caissavance2App.EtatCaisse.' + caisse.etat }}">{{ caisse.etat }}</td>
+
           <td class="text-end">
             <div class="btn-group">
               <a [routerLink]="['/caisse', caisse.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

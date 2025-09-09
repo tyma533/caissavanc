@@ -1,6 +1,7 @@
 import dayjs from 'dayjs/esm';
 
 export interface IRubrique {
+  selected?: boolean;
   id: number;
   libelle?: string | null;
   description?: string | null;

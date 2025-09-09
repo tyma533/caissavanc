@@ -3,8 +3,11 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.CaisseRubrique;
 import com.mycompany.myapp.repository.CaisseRubriqueRepository;
 import com.mycompany.myapp.service.CaisseRubriqueService;
+import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.CaisseRubriqueDTO;
+import com.mycompany.myapp.service.dto.RubriqueDTO;
 import com.mycompany.myapp.service.mapper.CaisseRubriqueMapper;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +38,35 @@ public class CaisseRubriqueServiceImpl implements CaisseRubriqueService {
     @Override
     public CaisseRubriqueDTO save(CaisseRubriqueDTO caisseRubriqueDTO) {
         log.debug("Request to save CaisseRubrique : {}", caisseRubriqueDTO);
+        // CaisseRubrique caisseRubrique = caisseRubriqueMapper.toEntity(caisseRubriqueDTO);
+        // caisseRubrique = caisseRubriqueRepository.save(caisseRubrique);
         CaisseRubrique caisseRubrique = caisseRubriqueMapper.toEntity(caisseRubriqueDTO);
+
+        // optionnel : remplir les dates et utilisateurs si nécessaire
+        if (caisseRubrique.getDateHeureCreation() == null) {
+            caisseRubrique.setDateHeureCreation(Instant.now());
+        }
+        caisseRubrique.setDateHeureModification(Instant.now());
+
+        // sauvegarde
         caisseRubrique = caisseRubriqueRepository.save(caisseRubrique);
+
         return caisseRubriqueMapper.toDto(caisseRubrique);
+    }
+
+    @Override
+    public CaisseRubriqueDTO affecterRubriqueALaCaisse(Long caisseId, Long rubriqueId) {
+        CaisseRubriqueDTO dto = new CaisseRubriqueDTO();
+
+        CaisseDTO caisseDTO = new CaisseDTO();
+        caisseDTO.setId(caisseId);
+        dto.setCaisse(caisseDTO);
+
+        RubriqueDTO rubriqueDTO = new RubriqueDTO();
+        rubriqueDTO.setId(rubriqueId);
+        dto.setRubrique(rubriqueDTO);
+
+        return save(dto); // utilise la méthode save existante
     }
 
     @Override
