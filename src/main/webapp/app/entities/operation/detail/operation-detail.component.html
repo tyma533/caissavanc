@@ -30,22 +30,7 @@
         <dd>
           <span>{{ operation.dateOperation | formatMediumDatetime }}</span>
         </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.dateHeureModification">Date Heure Modification</span></dt>
-        <dd>
-          <span>{{ operation.dateHeureModification | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.dateHeureCreation">Date Heure Creation</span></dt>
-        <dd>
-          <span>{{ operation.dateHeureCreation | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.utiCree">Uti Cree</span></dt>
-        <dd>
-          <span>{{ operation.utiCree }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.utiModifie">Uti Modifie</span></dt>
-        <dd>
-          <span>{{ operation.utiModifie }}</span>
-        </dd>
+
         <dt><span jhiTranslate="caissavance2App.operation.caisse">Caisse</span></dt>
         <dd>
           <div *ngIf="operation.caisse">

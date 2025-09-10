@@ -44,6 +44,35 @@ export class DemandeUpdateComponent implements OnInit {
   compareEtablissement = (o1: IEtablissement | null, o2: IEtablissement | null): boolean =>
     this.etablissementService.compareEtablissement(o1, o2);
 
+  // ngOnInit(): void {
+  //   // Charger la demande si modification
+  //   this.activatedRoute.data.subscribe(({ demande }) => {
+  //     this.demande = demande;
+  //     if (demande) {
+  //       this.updateForm(demande);
+  //     }
+  //   });
+
+  //   // Charger tous les établissements depuis l'API
+  //   this.etablissementService.query().subscribe((res: HttpResponse<IEtablissement[]>) => {
+  //     this.etablissementsSharedCollection = res.body ?? [];
+  //   });
+
+  //   // Réagir au changement de l'établissement pour filtrer les caisses
+  //   this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
+  //     if (etablissement?.id) {
+  //       this.filteredCaisses = this.caissesSharedCollection.filter(c => c.etablissement?.id === etablissement.id);
+  //     } else {
+  //       this.filteredCaisses = [];
+  //     }
+
+  //     // Réinitialiser la caisse sélectionnée si elle ne fait plus partie de la liste filtrée
+  //     if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+  //       this.editForm.get('caisseId')?.setValue(null);
+  //     }
+  //   });
+  // }
+
   ngOnInit(): void {
     // Charger la demande si modification
     this.activatedRoute.data.subscribe(({ demande }) => {
@@ -58,16 +87,27 @@ export class DemandeUpdateComponent implements OnInit {
       this.etablissementsSharedCollection = res.body ?? [];
     });
 
+    // Charger toutes les caisses
+    this.loadCaisses();
+
     // Réagir au changement de l'établissement pour filtrer les caisses
+    // this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
+    //   if (etablissement?.id) {
+    //     this.filteredCaisses = this.caissesSharedCollection.filter(c => c.etablissement?.id === etablissement.id);
+    //   } else {
+    //     this.filteredCaisses = [];
+    //   }
+
+    // Réinitialiser la caisse sélectionnée si elle ne fait plus partie de la liste filtrée
+    //   if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+    //     this.editForm.get('caisseId')?.setValue(null);
+    //   }
+    // });
     this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
       if (etablissement?.id) {
-        this.filteredCaisses = this.caissesSharedCollection.filter(c => c.etablissement?.id === etablissement.id);
+        this.loadCaisses(etablissement.id);
       } else {
         this.filteredCaisses = [];
-      }
-
-      // Réinitialiser la caisse sélectionnée si elle ne fait plus partie de la liste filtrée
-      if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
         this.editForm.get('caisseId')?.setValue(null);
       }
     });
@@ -128,12 +168,28 @@ export class DemandeUpdateComponent implements OnInit {
       .subscribe((etablissements: IEtablissement[]) => (this.etablissementsSharedCollection = etablissements));
   }
 
-  protected loadCaisses(): void {
-    this.caisseService
-      .query()
-      .pipe(map((res: HttpResponse<ICaisse[]>) => res.body ?? []))
-      .subscribe((caisses: ICaisse[]) => {
+  // protected loadCaisses(): void {
+  //   this.caisseService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<ICaisse[]>) => res.body ?? []))
+  //     .subscribe((caisses: ICaisse[]) => {
+  //       this.caissesSharedCollection = caisses;
+  //     });
+  // }
+  protected loadCaisses(etablissementId?: number): void {
+    if (etablissementId) {
+      this.caisseService.findByEtablissementId(etablissementId).subscribe((caisses: ICaisse[]) => {
         this.caissesSharedCollection = caisses;
+        this.filteredCaisses = this.caissesSharedCollection;
+
+        // Réinitialiser la caisse sélectionnée si nécessaire
+        if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+          this.editForm.get('caisseId')?.setValue(null);
+        }
       });
+    } else {
+      this.filteredCaisses = [];
+      this.editForm.get('caisseId')?.setValue(null);
+    }
   }
 }

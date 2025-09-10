@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.ModeOperation;
 import com.mycompany.myapp.domain.enumeration.Objet;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -32,6 +33,21 @@ public class DemandeDTO implements Serializable {
     private EtablissementDTO etablissement;
 
     private String libelle;
+
+    private ModeOperation modeOperation;
+
+    public ModeOperation getModeOperation() {
+        return this.modeOperation;
+    }
+
+    public DemandeDTO modeOperation(ModeOperation modeOperation) {
+        this.setModeOperation(modeOperation);
+        return this;
+    }
+
+    public void setModeOperation(ModeOperation modeOperation) {
+        this.modeOperation = modeOperation;
+    }
 
     public String getLibelle() {
         return this.libelle;

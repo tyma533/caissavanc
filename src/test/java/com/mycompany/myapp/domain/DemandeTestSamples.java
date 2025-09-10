@@ -7,21 +7,32 @@ import java.util.concurrent.atomic.AtomicLong;
 public class DemandeTestSamples {
 
     private static final Random random = new Random();
-    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     public static Demande getDemandeSample1() {
-        return new Demande().id(1L).motif("motif1").utiCree(1L).utiModifie(1L);
+        Demande demande = new Demande();
+        demande.setId(1L);
+        demande.setMotif("motif1");
+        demande.setUtiCree(1L);
+        demande.setUtiModifie(1L);
+        return demande;
     }
 
     public static Demande getDemandeSample2() {
-        return new Demande().id(2L).motif("motif2").utiCree(2L).utiModifie(2L);
+        Demande demande = new Demande();
+        demande.setId(2L);
+        demande.setMotif("motif2");
+        demande.setUtiCree(2L);
+        demande.setUtiModifie(2L);
+        return demande;
     }
 
     public static Demande getDemandeRandomSampleGenerator() {
-        return new Demande()
-            .id(longCount.incrementAndGet())
-            .motif(UUID.randomUUID().toString())
-            .utiCree(longCount.incrementAndGet())
-            .utiModifie(longCount.incrementAndGet());
+        Demande demande = new Demande();
+        demande.setId(longCount.incrementAndGet());
+        demande.setMotif(UUID.randomUUID().toString());
+        demande.setUtiCree(longCount.incrementAndGet());
+        demande.setUtiModifie(longCount.incrementAndGet());
+        return demande;
     }
 }

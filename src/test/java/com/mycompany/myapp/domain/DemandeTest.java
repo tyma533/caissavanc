@@ -31,7 +31,7 @@ class DemandeTest {
         demande.setEtablissement(etablissementBack);
         assertThat(demande.getEtablissement()).isEqualTo(etablissementBack);
 
-        demande.etablissement(null);
+        demande.setEtablissement(null);
         assertThat(demande.getEtablissement()).isNull();
     }
 }

@@ -18,22 +18,6 @@
         <dd>
           <span>{{ etatOperation.libelle }}</span>
         </dd>
-        <dt><span jhiTranslate="caissavance2App.etatOperation.dateHeureModification">Date Heure Modification</span></dt>
-        <dd>
-          <span>{{ etatOperation.dateHeureModification | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etatOperation.dateHeureCreation">Date Heure Creation</span></dt>
-        <dd>
-          <span>{{ etatOperation.dateHeureCreation | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etatOperation.utiCree">Uti Cree</span></dt>
-        <dd>
-          <span>{{ etatOperation.utiCree }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etatOperation.utiModifie">Uti Modifie</span></dt>
-        <dd>
-          <span>{{ etatOperation.utiModifie }}</span>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

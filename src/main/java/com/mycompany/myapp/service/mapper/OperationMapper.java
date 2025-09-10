@@ -15,10 +15,17 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface OperationMapper extends EntityMapper<OperationDTO, Operation> {
+    @Named("modeOperationId")
+    default Long mapModeOperationToId(ModeOperation modeOperation) {
+        return modeOperation != null ? modeOperation.getId() : null;
+    }
+
     @Mapping(target = "caisse", source = "caisse", qualifiedByName = "caisseId")
     @Mapping(target = "typeOperation", source = "typeOperation", qualifiedByName = "typeOperationId")
-    @Mapping(target = "modeOperation", source = "modeOperation", qualifiedByName = "modeOperationId")
+    @Mapping(target = "modeOperationId", source = "modeOperation", qualifiedByName = "modeOperationId")
     OperationDTO toDto(Operation s);
+
+    Operation toEntity(OperationDTO operationDTO);
 
     @Named("caisseId")
     @BeanMapping(ignoreByDefault = true)
@@ -29,9 +36,4 @@ public interface OperationMapper extends EntityMapper<OperationDTO, Operation> {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     TypeOperationDTO toDtoTypeOperationId(TypeOperation typeOperation);
-
-    @Named("modeOperationId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ModeOperationDTO toDtoModeOperationId(ModeOperation modeOperation);
 }

@@ -10,6 +10,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IDemande, NewDemande } from '../demande.model';
+import { ICaisse } from 'app/entities/caisse/caisse.model';
 
 export type PartialUpdateDemande = Partial<IDemande> & Pick<IDemande, 'id'>;
 
@@ -30,9 +31,9 @@ export type EntityArrayResponseType = HttpResponse<IDemande[]>;
 
 @Injectable({ providedIn: 'root' })
 export class DemandeService {
-  traiterDemande(id: number, accepte: boolean, motif: string): Observable<IDemande> {
-    return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, { accepte, motif });
-  }
+  // traiterDemande(id: number, accepte: boolean, motif: string): Observable<IDemande> {
+  //   return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, { accepte, motif });
+  // }
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/demandes');
 
@@ -137,11 +138,23 @@ export class DemandeService {
     });
   }
 
-  traiter(id: number, accepte: boolean, motifRefus?: string): Observable<HttpResponse<IDemande>> {
-    let params = new HttpParams().set('accepte', String(accepte));
+  // traiter(id: number, accepte: boolean, motifRefus?: string): Observable<HttpResponse<IDemande>> {
+  //   let params = new HttpParams().set('accepte', String(accepte));
+  //   if (motifRefus) {
+  //     params = params.set('motifRefus', motifRefus);
+  //   }
+  //   return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, null, { params, observe: 'response' });
+  // }
+  traiterDemande(demandeId: number, accepte: boolean, motifRefus?: string): Observable<IDemande> {
+    let params = new HttpParams().set('accepte', accepte.toString());
     if (motifRefus) {
       params = params.set('motifRefus', motifRefus);
     }
-    return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, null, { params, observe: 'response' });
+    return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, null, { params });
   }
+
+  //   traiterDemande(demandeId: number, accepte: boolean): Observable<IDemande> {
+  //   const params = new HttpParams().set('accepte', accepte.toString());
+  //   return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, null, { params });
+  // }
 }

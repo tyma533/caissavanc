@@ -163,9 +163,8 @@ public class CaisseServiceImpl implements CaisseService {
     }
 
     @Override
-    public List<CaisseDTO> findByEtablissementId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByEtablissementId'");
+    public List<CaisseDTO> findByEtablissementId(Long etablissementId) {
+        return caisseRepository.findByEtablissementId(etablissementId).stream().map(caisseMapper::toDto).toList();
     }
 
     @Override

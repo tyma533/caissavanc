@@ -60,6 +60,14 @@ public class Demande implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Etablissement etablissement;
 
+    @ManyToOne
+    @JoinColumn(name = "mode_operation_id")
+    private ModeOperation modeOperation;
+
+    @ManyToOne
+    @JoinColumn(name = "type_operation_id")
+    private TypeOperation typeOperation;
+
     // Getters et setters
 
     public Long getId() {
@@ -158,6 +166,22 @@ public class Demande implements Serializable {
         this.etablissement = etablissement;
     }
 
+    public ModeOperation getModeOperation() {
+        return this.modeOperation;
+    }
+
+    public void setModeOperation(ModeOperation modeOperation) {
+        this.modeOperation = modeOperation;
+    }
+
+    public TypeOperation getTypeOperation() {
+        return this.typeOperation;
+    }
+
+    public void setTypeOperation(TypeOperation typeOperation) {
+        this.typeOperation = typeOperation;
+    }
+
     // equals, hashCode et toString
 
     @Override
@@ -210,5 +234,10 @@ public class Demande implements Serializable {
             getCaisseId() +
             "}"
         );
+    }
+
+    public Object id(long incrementAndGet) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'id'");
     }
 }

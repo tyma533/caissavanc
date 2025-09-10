@@ -56,7 +56,7 @@ public interface CaisseService {
      */
     void delete(Long id);
 
-    List<CaisseDTO> findByEtablissementId(Long id);
+    List<CaisseDTO> findByEtablissementId(Long etablissementId);
 
     Optional<CaisseDTO> findOne(Long caisseId);
 

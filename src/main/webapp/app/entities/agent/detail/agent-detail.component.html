@@ -86,22 +86,6 @@
         <dd>
           <span>{{ agent.role }}</span>
         </dd>
-        <dt><span jhiTranslate="caissavance2App.agent.dateHeureModification">Date Heure Modification</span></dt>
-        <dd>
-          <span>{{ agent.dateHeureModification | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.agent.dateHeureCreation">Date Heure Creation</span></dt>
-        <dd>
-          <span>{{ agent.dateHeureCreation | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.agent.modifiedBy">Modified By</span></dt>
-        <dd>
-          <span>{{ agent.modifiedBy }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.agent.createdBy">Created By</span></dt>
-        <dd>
-          <span>{{ agent.createdBy }}</span>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

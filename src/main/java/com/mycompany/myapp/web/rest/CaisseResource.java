@@ -195,6 +195,12 @@ public class CaisseResource {
         return caisseService.getRubriquesNonAffectees(caisseId);
     }
 
+    @GetMapping("/by-etablissement/{etablissementId}")
+    public ResponseEntity<List<CaisseDTO>> getByEtablissement(@PathVariable Long etablissementId) {
+        List<CaisseDTO> caisses = caisseService.findByEtablissementId(etablissementId);
+        return ResponseEntity.ok().body(caisses);
+    }
+
     /**
      * {@code DELETE  /caisses/:id} : delete the "id" caisse.
      *

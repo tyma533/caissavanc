@@ -11,28 +11,10 @@
         </select>
       </div>
 
-      <!-- Création caisse
+      <!-- Création caisse -->
       <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'CREATION_CAISSE'">
         <label for="field_libelle">Libellé de la caisse</label>
         <input type="text" formControlName="motif" class="form-control" placeholder="Libellé de la caisse" />
-      </div> -->
-
-      <!-- Création caisse -->
-      <div *ngIf="editForm.get('objet')?.value === 'CREATION_CAISSE'">
-        <div class="mb-3">
-          <label for="field_etablissement">Établissement</label>
-          <select formControlName="etablissement" class="form-control">
-            <option [ngValue]="null">Sélectionner un établissement</option>
-            <option *ngFor="let etab of etablissementsSharedCollection" [ngValue]="etab">
-              {{ etab.libelle }}
-            </option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="field_libelle">Libellé de la caisse</label>
-          <input type="text" formControlName="libelle" class="form-control" placeholder="Libellé de la caisse" />
-        </div>
       </div>
 
       <!-- Alimentation caisse -->
@@ -50,6 +32,8 @@
           <option [ngValue]="null">Sélectionner une caisse</option>
           <option *ngFor="let caisse of filteredCaisses" [ngValue]="caisse.id">{{ caisse.libelle }}</option>
         </select>
+
+        <div *ngIf="filteredCaisses.length === 0" class="text-muted mt-1">⚠️ Aucun caisse disponible pour cet établissement</div>
       </div>
 
       <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">

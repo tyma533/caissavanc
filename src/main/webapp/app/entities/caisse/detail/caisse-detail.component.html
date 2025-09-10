@@ -22,10 +22,7 @@
         <dd>
           <span>{{ caisse.dateCreationCaisse | formatMediumDatetime }}</span>
         </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.dateFermiture">Date Fermiture</span></dt>
-        <dd>
-          <span>{{ caisse.dateFermiture | formatMediumDatetime }}</span>
-        </dd>
+
         <dt><span jhiTranslate="caissavance2App.caisse.solde">Solde</span></dt>
         <dd>
           <span>{{ caisse.solde }}</span>
@@ -34,22 +31,7 @@
         <dd>
           <span jhiTranslate="{{ 'caissavance2App.EtatCaisse.' + caisse.etat }}">{{ caisse.etat }}</span>
         </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.dateHeureModification">Date Heure Modification</span></dt>
-        <dd>
-          <span>{{ caisse.dateHeureModification | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.dateHeureCreation">Date Heure Creation</span></dt>
-        <dd>
-          <span>{{ caisse.dateHeureCreation | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.utiCree">Uti Cree</span></dt>
-        <dd>
-          <span>{{ caisse.utiCree }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.utiModifie">Uti Modifie</span></dt>
-        <dd>
-          <span>{{ caisse.utiModifie }}</span>
-        </dd>
+
         <dt><span jhiTranslate="caissavance2App.caisse.etablissement">Etablissement</span></dt>
         <dd>
           <div *ngIf="caisse.etablissement">

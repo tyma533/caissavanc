@@ -7,7 +7,7 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IDemande } from '../demande.model';
 import { DemandeService } from '../service/demande.service';
 import { CaisseService } from 'app/entities/caisse/service/caisse.service';
-import { NewCaisse } from 'app/entities/caisse/caisse.model';
+import { ICaisse, NewCaisse } from 'app/entities/caisse/caisse.model';
 import { EtatCaisse } from 'app/entities/enumerations/etat-caisse.model';
 import { Objet } from 'app/entities/enumerations/objet.model';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,7 @@ export class DemandeDetailComponent {
   showModal = false;
   showModalTraitement = false;
   motifRefus = '';
+  caisses: ICaisse[] = [];
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -121,6 +122,15 @@ export class DemandeDetailComponent {
         this.fermerModalTraitement();
       },
       error: (err: any) => alert('Erreur lors du traitement'),
+    });
+  }
+
+  onEtablissementChange(etablissementId: number): void {
+    this.caisseService.findByEtablissementId(etablissementId).subscribe({
+      next: res => {
+        this.caisses = res;
+      },
+      error: () => alert('Erreur lors de la récupération des caisses'),
     });
   }
 }

@@ -149,4 +149,19 @@ public class TypeOperation implements Serializable {
             ", utiModifie=" + getUtiModifie() +
             "}";
     }
+
+    public void setCaisseId(Long id2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setCaisseId'");
+    }
+
+    public void setMontant(Long montant) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setMontant'");
+    }
+
+    public void setType(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setType'");
+    }
 }

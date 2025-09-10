@@ -169,4 +169,8 @@ export class CaisseService {
   desaffecterRubrique(caisseId: number, rubriqueId: number): Observable<any> {
     return this.http.post(`${this.resourceUrl}/${caisseId}/desaffecter/${rubriqueId}`, {});
   }
+
+  findByEtablissementId(etablissementId: number): Observable<ICaisse[]> {
+    return this.http.get<ICaisse[]>(`${this.resourceUrl}/by-etablissement/${etablissementId}`);
+  }
 }

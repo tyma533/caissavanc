@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.ModeOperation;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -36,7 +37,7 @@ public class OperationDTO implements Serializable {
 
     private TypeOperationDTO typeOperation;
 
-    private ModeOperationDTO modeOperation;
+    private Long modeOperationId;
 
     public Long getId() {
         return id;
@@ -126,12 +127,12 @@ public class OperationDTO implements Serializable {
         this.typeOperation = typeOperation;
     }
 
-    public ModeOperationDTO getModeOperation() {
-        return modeOperation;
+    public Long getModeOperationId() {
+        return modeOperationId;
     }
 
-    public void setModeOperation(ModeOperationDTO modeOperation) {
-        this.modeOperation = modeOperation;
+    public void setModeOperationId(Long modeOperationId) {
+        this.modeOperationId = modeOperationId;
     }
 
     @Override
@@ -170,7 +171,7 @@ public class OperationDTO implements Serializable {
             ", utiModifie=" + getUtiModifie() +
             ", caisse=" + getCaisse() +
             ", typeOperation=" + getTypeOperation() +
-            ", modeOperation=" + getModeOperation() +
+            ", modeOperation=" + getModeOperationId() +
             "}";
     }
 }

@@ -22,22 +22,6 @@
         <dd>
           <span>{{ etablissement.sigle }}</span>
         </dd>
-        <dt><span jhiTranslate="caissavance2App.etablissement.dateHeureModification">Date Heure Modification</span></dt>
-        <dd>
-          <span>{{ etablissement.dateHeureModification | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etablissement.dateHeureCreation">Date Heure Creation</span></dt>
-        <dd>
-          <span>{{ etablissement.dateHeureCreation | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etablissement.utiCree">Uti Cree</span></dt>
-        <dd>
-          <span>{{ etablissement.utiCree }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etablissement.utiModifie">Uti Modifie</span></dt>
-        <dd>
-          <span>{{ etablissement.utiModifie }}</span>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
