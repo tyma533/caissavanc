@@ -1,15 +1,21 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Demande;
+import com.mycompany.myapp.domain.Operation;
+import com.mycompany.myapp.domain.TypeOperation;
 import com.mycompany.myapp.domain.enumeration.EtatCaisse;
 import com.mycompany.myapp.domain.enumeration.Objet;
 import com.mycompany.myapp.repository.DemandeRepository;
+import com.mycompany.myapp.repository.ModeOperationRepository;
+import com.mycompany.myapp.repository.OperationRepository;
+import com.mycompany.myapp.repository.TypeOperationRepository;
 import com.mycompany.myapp.service.CaisseService;
 import com.mycompany.myapp.service.DemandeService;
 import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.DemandeDTO;
 import com.mycompany.myapp.service.mapper.DemandeMapper;
 import jakarta.persistence.EntityNotFoundException;
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,36 +41,61 @@ public class DemandeServiceImpl implements DemandeService {
 
     private final CaisseService caisseService;
 
-    public DemandeServiceImpl(DemandeRepository demandeRepository, DemandeMapper demandeMapper, CaisseService caisseService) {
+    private final TypeOperationRepository typeOperationRepository;
+
+    private final OperationRepository operationRepository;
+
+    private final ModeOperationRepository modeOperationRepository;
+
+    public DemandeServiceImpl(
+        DemandeRepository demandeRepository,
+        DemandeMapper demandeMapper,
+        CaisseService caisseService,
+        TypeOperationRepository typeOperationRepository,
+        OperationRepository operationRepository,
+        ModeOperationRepository modeOperationRepository
+    ) {
         this.demandeRepository = demandeRepository;
         this.demandeMapper = demandeMapper;
         this.caisseService = caisseService;
+        this.typeOperationRepository = typeOperationRepository;
+        this.operationRepository = operationRepository;
+        this.modeOperationRepository = modeOperationRepository;
     }
 
     @Override
-    public DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus) {
-        Optional<Demande> demandeOpt = demandeRepository.findById(id);
-        if (demandeOpt.isEmpty()) {
-            throw new RuntimeException("Demande non trouvée");
-        }
-        Demande demande = demandeOpt.get();
+    public DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus, Long modeOperationId) {
+        // Récupérer la demande
+        Demande demande = demandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Demande non trouvée pour l'ID : " + id));
 
         if (!accepte) {
+            // Cas de refus
             demande.setMotif(motifRefus);
-            // ...autres champs pour refus...
+            // TODO : ajouter d'autres champs spécifiques au refus si nécessaire
         } else {
-            if (demande.getObjet() == Objet.CREATION_CAISSE && demande.getEtablissement() != null) {
-                List<CaisseDTO> caisses = caisseService
-                    .findAll()
-                    .stream()
-                    .filter(c ->
-                        c.getEtablissement() != null &&
-                        c.getEtablissement().getId().equals(demande.getEtablissement().getId()) &&
-                        c.getLibelle() != null &&
-                        c.getLibelle().equalsIgnoreCase(demande.getLibelle())
-                    )
-                    .toList();
-                if (caisses.isEmpty()) {
+            // Cas d'acceptation
+            switch (demande.getObjet()) {
+                case CREATION_CAISSE -> {
+                    if (demande.getEtablissement() == null) {
+                        throw new RuntimeException("Etablissement manquant pour la création de caisse");
+                    }
+
+                    // Vérifier si une caisse avec ce libellé existe déjà
+                    boolean exists = caisseService
+                        .findAll()
+                        .stream()
+                        .anyMatch(c ->
+                            c.getEtablissement() != null &&
+                            c.getEtablissement().getId().equals(demande.getEtablissement().getId()) &&
+                            c.getLibelle() != null &&
+                            c.getLibelle().equalsIgnoreCase(demande.getLibelle())
+                        );
+
+                    if (exists) {
+                        throw new RuntimeException("Une caisse avec ce libellé existe déjà pour cet établissement");
+                    }
+
+                    // Créer la caisse
                     CaisseDTO caisse = new CaisseDTO();
                     caisse.setLibelle(demande.getLibelle());
                     caisse.setDateCreationCaisse(Instant.now());
@@ -72,30 +103,50 @@ public class DemandeServiceImpl implements DemandeService {
                     caisse.setEtat(EtatCaisse.OUVERTE);
                     caisse.setEtablissement(demande.getEtablissement());
                     caisseService.save(caisse);
-                } else {
-                    throw new RuntimeException("Une caisse avec ce libellé existe déjà pour cet établissement");
                 }
-            }
-            // if (demande.getObjet() == Objet.ALIMENTATION_CAISSE && demande.getEtablissement() != null) {
-            //     List<CaisseDTO> caisses = caisseService.findAll().stream()
-            //         .filter(c -> c.getEtablissement() != null && c.getEtablissement().getId().equals(demande.getEtablissement().getId()))
-            //         .toList();
-            //     if (!caisses.isEmpty()) {
-            //         CaisseDTO caisse = caisses.get(0);
-            //         Long montant = demande.getMontant();
-            //         caisse.setSolde(caisse.getSolde() + montant);
-            //         caisseService.update(caisse);
-            //              }
-            // }
-            if (demande.getObjet() == Objet.ALIMENTATION_CAISSE && demande.getCaisseId() != null && demande.getMontant() != null) {
-                Optional<CaisseDTO> caisseOpt = caisseService.findOne(demande.getCaisseId());
-                if (caisseOpt.isPresent()) {
-                    CaisseDTO caisse = caisseOpt.get();
+                case ALIMENTATION_CAISSE -> {
+                    if (demande.getCaisse() == null || demande.getMontant() == null) {
+                        throw new RuntimeException("Caisse ou montant manquant pour l'alimentation");
+                    }
+
+                    // Récupérer le mode d'opération depuis l'id fourni
+                    if (modeOperationId == null) {
+                        throw new RuntimeException("Mode d'opération non renseigné pour l'alimentation");
+                    }
+                    demande.setModeOperation(
+                        modeOperationRepository
+                            .findById(modeOperationId)
+                            .orElseThrow(() -> new RuntimeException("Mode d'opération introuvable"))
+                    );
+
+                    // Mettre à jour le solde de la caisse
+                    CaisseDTO caisse = caisseService
+                        .findOne(demande.getCaisse().getId())
+                        .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + demande.getCaisse().getId()));
                     caisse.setSolde(caisse.getSolde() + demande.getMontant());
                     caisseService.update(caisse);
+
+                    // Assigner le type d'opération fixe à CREDIT
+                    TypeOperation credit = typeOperationRepository
+                        .findByLibelle("CREDIT")
+                        .orElseThrow(() -> new RuntimeException("Type CREDIT non trouvé"));
+                    demande.setTypeOperation(credit);
+
+                    // Créer une opération correspondant à cette alimentation
+                    Operation operation = new Operation();
+                    operation.setCaisse(demande.getCaisse());
+                    operation.setTypeOperation(credit);
+                    operation.setModeOperation(demande.getModeOperation());
+                    operation.setMontant(demande.getMontant());
+                    operation.setDateOperation(Instant.now());
+
+                    operationRepository.save(operation);
                 }
+                default -> throw new RuntimeException("Objet de demande non géré : " + demande.getObjet());
             }
         }
+
+        // Sauvegarder la demande et retourner le DTO
         demandeRepository.save(demande);
         return demandeMapper.toDto(demande);
     }

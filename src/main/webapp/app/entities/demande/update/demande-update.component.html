@@ -1,8 +1,11 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form [formGroup]="editForm" (ngSubmit)="save()">
-      <h2 jhiTranslate="caissavance2App.demande.home.createOrEditLabel">Create or edit a Demande</h2>
+      <h2 jhiTranslate="caissavance2App.demande.home.createOrEditLabel">
+        {{ demande?.id ? 'Modifier la Demande' : 'Créer une Demande' }}
+      </h2>
 
+      <!-- Objet -->
       <div class="mb-3">
         <label for="field_objet">Objet</label>
         <select formControlName="objet" class="form-control">
@@ -11,37 +14,42 @@
         </select>
       </div>
 
-      <!-- Création caisse -->
-      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'CREATION_CAISSE'">
-        <label for="field_libelle">Libellé de la caisse</label>
-        <input type="text" formControlName="motif" class="form-control" placeholder="Libellé de la caisse" />
-      </div>
-
-      <!-- Alimentation caisse -->
-      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
-        <label for="field_etablissement">Etablissement</label>
+      <!-- Établissement -->
+      <div class="mb-3">
+        <label for="field_etablissement">Établissement demandeur</label>
         <select formControlName="etablissement" class="form-control">
           <option [ngValue]="null">Sélectionner un établissement</option>
           <option *ngFor="let etab of etablissementsSharedCollection" [ngValue]="etab">{{ etab.libelle }}</option>
         </select>
       </div>
 
-      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
-        <label for="field_caisseId">Caisse à alimenter</label>
-        <select formControlName="caisseId" class="form-control">
-          <option [ngValue]="null">Sélectionner une caisse</option>
-          <option *ngFor="let caisse of filteredCaisses" [ngValue]="caisse.id">{{ caisse.libelle }}</option>
-        </select>
-
-        <div *ngIf="filteredCaisses.length === 0" class="text-muted mt-1">⚠️ Aucun caisse disponible pour cet établissement</div>
+      <!-- Libellé de la caisse pour CREATION_CAISSE -->
+      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'CREATION_CAISSE'">
+        <label for="field_libelle">Libellé de la caisse</label>
+        <input type="text" formControlName="libelle" class="form-control" placeholder="Libellé de la caisse" />
       </div>
 
-      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
-        <label for="field_montant">Montant à alimenter</label>
-        <input type="number" formControlName="montant" class="form-control" placeholder="Montant" />
+      <!-- Sélection de la caisse et montant pour ALIMENTATION_CAISSE -->
+      <div *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
+        <div class="mb-3">
+          <label for="field_caisseId">Caisse à alimenter</label>
+          <select formControlName="caisseId" class="form-control">
+            <option [ngValue]="null">Sélectionner une caisse</option>
+            <option *ngFor="let caisse of filteredCaisses" [ngValue]="caisse.id">
+              {{ caisse.libelle }} (Solde: {{ caisse.solde || 0 }})
+            </option>
+          </select>
+          <div *ngIf="filteredCaisses.length === 0" class="text-muted mt-1">⚠️ Aucune caisse disponible pour cet établissement</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="field_montant">Montant à alimenter</label>
+          <input type="number" formControlName="montant" class="form-control" placeholder="Montant" min="0" required />
+        </div>
       </div>
 
-      <div class="mb-3">
+      <!-- Boutons -->
+      <div class="mb-3 d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-secondary" (click)="previousState()">Annuler</button>
         <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSaving">Enregistrer</button>
       </div>

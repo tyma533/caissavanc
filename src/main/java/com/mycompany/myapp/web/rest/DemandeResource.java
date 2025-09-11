@@ -62,15 +62,37 @@ public class DemandeResource {
             .body(result);
     }
 
+    //     @PostMapping("/{id}/traiter")
+    // public ResponseEntity<DemandeDTO> traiterDemande(
+    //     @PathVariable Long id,
+    //     @RequestParam boolean accepte,
+    //     @RequestParam(required = false) String motifRefus,
+    //     @RequestParam(required = false) Long modeOperationId
+    // ) {
+    //     log.debug("REST request to traiter Demande : {}, accepte={}, motifRefus={}, modeOperationId={}", id, accepte, motifRefus, modeOperationId);
+    //     DemandeDTO result = demandeService.traiterDemande(id, accepte, motifRefus, modeOperationId);
+    //     return ResponseEntity.ok(result);
+    // }
     @PostMapping("/{id}/traiter")
-    public ResponseEntity<DemandeDTO> traiterDemande(
-        @PathVariable Long id,
-        @RequestParam boolean accepte,
-        @RequestParam(required = false) String motifRefus
-    ) {
-        log.debug("REST request to traiter Demande : {}, accepte={}, motifRefus={}", id, accepte, motifRefus);
-        DemandeDTO result = demandeService.traiterDemande(id, accepte, motifRefus);
+    public ResponseEntity<DemandeDTO> traiterDemande(@PathVariable Long id, @RequestBody TraiterDemandeRequest request) {
+        log.debug(
+            "REST request to traiter Demande : {}, accepte={}, motifRefus={}, modeOperationId={}",
+            id,
+            request.accepte,
+            request.motifRefus,
+            request.modeOperationId
+        );
+
+        DemandeDTO result = demandeService.traiterDemande(id, request.accepte, request.motifRefus, request.modeOperationId);
         return ResponseEntity.ok(result);
+    }
+
+    // Classe interne pour recevoir le JSON
+    public static class TraiterDemandeRequest {
+
+        public boolean accepte;
+        public String motifRefus;
+        public Long modeOperationId;
     }
 
     /**

@@ -34,19 +34,14 @@ public class DemandeDTO implements Serializable {
 
     private String libelle;
 
-    private ModeOperation modeOperation;
+    private Long modeOperationId;
 
-    public ModeOperation getModeOperation() {
-        return this.modeOperation;
+    public Long getModeOperationId() {
+        return modeOperationId;
     }
 
-    public DemandeDTO modeOperation(ModeOperation modeOperation) {
-        this.setModeOperation(modeOperation);
-        return this;
-    }
-
-    public void setModeOperation(ModeOperation modeOperation) {
-        this.modeOperation = modeOperation;
+    public void setModeOperationId(Long modeOperationId) {
+        this.modeOperationId = modeOperationId;
     }
 
     public String getLibelle() {

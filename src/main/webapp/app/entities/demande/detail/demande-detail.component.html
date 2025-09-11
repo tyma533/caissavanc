@@ -49,7 +49,6 @@
       <div class="mt-3">
         <button class="btn btn-primary" (click)="ouvrirModalTraitement()"><fa-icon icon="tasks"></fa-icon>&nbsp;Traiter la demande</button>
       </div>
-
       <!-- Modal traitement -->
       <div class="modal" tabindex="-1" [ngClass]="{ show: showModalTraitement }" style="display: block" *ngIf="showModalTraitement">
         <div class="modal-dialog">
@@ -58,11 +57,24 @@
               <h5 class="modal-title">Choisir une action</h5>
               <button type="button" class="btn-close" (click)="fermerModalTraitement()"></button>
             </div>
-            <div class="modal-body d-flex justify-content-around">
-              <button class="btn btn-success" (click)="traiter(true)"><fa-icon icon="check"></fa-icon>&nbsp;Accepter</button>
-              <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">
-                <fa-icon icon="times"></fa-icon>&nbsp;Refuser
-              </button>
+            <div class="modal-body">
+              <!-- Sélection du mode d'opération uniquement pour ALIMENTATION_CAISSE -->
+              <div *ngIf="demande?.objet === 'ALIMENTATION_CAISSE'" class="mb-3">
+                <label for="modeOperationSelect" class="form-label">Mode d'opération</label>
+                <select id="modeOperationSelect" class="form-select" [(ngModel)]="selectedModeOperationId">
+                  <option [ngValue]="null">-- Sélectionner --</option>
+                  <option *ngFor="let mode of modeOperations" [ngValue]="mode.id">
+                    {{ mode.libelle }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="d-flex justify-content-around mt-3">
+                <button class="btn btn-success" (click)="traiter(true)"><fa-icon icon="check"></fa-icon>&nbsp;Accepter</button>
+                <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">
+                  <fa-icon icon="times"></fa-icon>&nbsp;Refuser
+                </button>
+              </div>
             </div>
           </div>
         </div>

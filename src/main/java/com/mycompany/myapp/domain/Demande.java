@@ -68,6 +68,19 @@ public class Demande implements Serializable {
     @JoinColumn(name = "type_operation_id")
     private TypeOperation typeOperation;
 
+    @ManyToOne
+    @JoinColumn(name = "caisse_id", insertable = false, updatable = false)
+    private Caisse caisse;
+
+    // Getter et Setter
+    public Caisse getCaisse() {
+        return caisse;
+    }
+
+    public void setCaisse(Caisse caisse) {
+        this.caisse = caisse;
+    }
+
     // Getters et setters
 
     public Long getId() {

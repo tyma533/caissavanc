@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,8 @@ import { IDemande } from '../demande.model';
 import { DemandeFormService, DemandeFormGroup } from './demande-form.service';
 import { ICaisse } from 'app/entities/caisse/caisse.model';
 import { CaisseService } from 'app/entities/caisse/service/caisse.service';
+import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model';
+import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
 
 @Component({
   standalone: true,
@@ -29,7 +31,8 @@ export class DemandeUpdateComponent implements OnInit {
 
   etablissementsSharedCollection: IEtablissement[] = [];
   caissesSharedCollection: ICaisse[] = [];
-  filteredCaisses: ICaisse[] = []; // caisses disponibles pour l'établissement choisi
+  filteredCaisses: ICaisse[] = [];
+  modeOperationsSharedCollection: IModeOperation[] = [];
 
   editForm: DemandeFormGroup = this.demandeFormService.createDemandeFormGroup();
 
@@ -38,40 +41,12 @@ export class DemandeUpdateComponent implements OnInit {
     protected demandeFormService: DemandeFormService,
     protected etablissementService: EtablissementService,
     protected caisseService: CaisseService,
+    protected modeOperationService: ModeOperationService,
     protected activatedRoute: ActivatedRoute,
   ) {}
 
   compareEtablissement = (o1: IEtablissement | null, o2: IEtablissement | null): boolean =>
     this.etablissementService.compareEtablissement(o1, o2);
-
-  // ngOnInit(): void {
-  //   // Charger la demande si modification
-  //   this.activatedRoute.data.subscribe(({ demande }) => {
-  //     this.demande = demande;
-  //     if (demande) {
-  //       this.updateForm(demande);
-  //     }
-  //   });
-
-  //   // Charger tous les établissements depuis l'API
-  //   this.etablissementService.query().subscribe((res: HttpResponse<IEtablissement[]>) => {
-  //     this.etablissementsSharedCollection = res.body ?? [];
-  //   });
-
-  //   // Réagir au changement de l'établissement pour filtrer les caisses
-  //   this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
-  //     if (etablissement?.id) {
-  //       this.filteredCaisses = this.caissesSharedCollection.filter(c => c.etablissement?.id === etablissement.id);
-  //     } else {
-  //       this.filteredCaisses = [];
-  //     }
-
-  //     // Réinitialiser la caisse sélectionnée si elle ne fait plus partie de la liste filtrée
-  //     if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
-  //       this.editForm.get('caisseId')?.setValue(null);
-  //     }
-  //   });
-  // }
 
   ngOnInit(): void {
     // Charger la demande si modification
@@ -82,27 +57,15 @@ export class DemandeUpdateComponent implements OnInit {
       }
     });
 
-    // Charger tous les établissements depuis l'API
-    this.etablissementService.query().subscribe((res: HttpResponse<IEtablissement[]>) => {
-      this.etablissementsSharedCollection = res.body ?? [];
+    // Charger tous les établissements
+    this.etablissementService.query().subscribe({
+      next: (res: HttpResponse<IEtablissement[]>) => {
+        this.etablissementsSharedCollection = res.body ?? [];
+      },
+      error: () => alert('Erreur lors du chargement des établissements'),
     });
 
-    // Charger toutes les caisses
-    this.loadCaisses();
-
     // Réagir au changement de l'établissement pour filtrer les caisses
-    // this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
-    //   if (etablissement?.id) {
-    //     this.filteredCaisses = this.caissesSharedCollection.filter(c => c.etablissement?.id === etablissement.id);
-    //   } else {
-    //     this.filteredCaisses = [];
-    //   }
-
-    // Réinitialiser la caisse sélectionnée si elle ne fait plus partie de la liste filtrée
-    //   if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
-    //     this.editForm.get('caisseId')?.setValue(null);
-    //   }
-    // });
     this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
       if (etablissement?.id) {
         this.loadCaisses(etablissement.id);
@@ -110,6 +73,14 @@ export class DemandeUpdateComponent implements OnInit {
         this.filteredCaisses = [];
         this.editForm.get('caisseId')?.setValue(null);
       }
+    });
+
+    // Charger tous les modes d’opération
+    this.modeOperationService.query().subscribe({
+      next: (res: HttpResponse<IModeOperation[]>) => {
+        this.modeOperationsSharedCollection = res.body ?? [];
+      },
+      error: () => alert('Erreur lors du chargement des modes d’opération'),
     });
   }
 
@@ -120,6 +91,21 @@ export class DemandeUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const demande = this.demandeFormService.getDemande(this.editForm);
+
+    // Validation pour l'alimentation
+    if (demande.objet === Objet.ALIMENTATION_CAISSE) {
+      if (!demande.caisseId) {
+        alert('Veuillez sélectionner une caisse');
+        this.isSaving = false;
+        return;
+      }
+      if (!demande.montant || demande.montant <= 0) {
+        alert('Veuillez saisir un montant valide');
+        this.isSaving = false;
+        return;
+      }
+    }
+
     if (demande.id !== null) {
       this.subscribeToSaveResponse(this.demandeService.update(demande));
     } else {
@@ -138,9 +124,7 @@ export class DemandeUpdateComponent implements OnInit {
     this.previousState();
   }
 
-  protected onSaveError(): void {
-    // Api pour héritage
-  }
+  protected onSaveError(): void {}
 
   protected onSaveFinalize(): void {
     this.isSaving = false;
@@ -154,42 +138,30 @@ export class DemandeUpdateComponent implements OnInit {
       this.etablissementsSharedCollection,
       demande.etablissement,
     );
+
+    if (demande.etablissement?.id) {
+      this.loadCaisses(demande.etablissement.id);
+    }
+    // S'assurer que le mode existe dans la liste
+    if (demande.modeOperationId) {
+      this.modeOperationsSharedCollection = this.modeOperationService.addModeOperationToCollectionIfMissing(
+        this.modeOperationsSharedCollection,
+        demande.modeOperationId,
+      );
+    }
   }
 
-  protected loadRelationshipsOptions(): void {
-    this.etablissementService
-      .query()
-      .pipe(map((res: HttpResponse<IEtablissement[]>) => res.body ?? []))
-      .pipe(
-        map((etablissements: IEtablissement[]) =>
-          this.etablissementService.addEtablissementToCollectionIfMissing<IEtablissement>(etablissements, this.demande?.etablissement),
-        ),
-      )
-      .subscribe((etablissements: IEtablissement[]) => (this.etablissementsSharedCollection = etablissements));
-  }
-
-  // protected loadCaisses(): void {
-  //   this.caisseService
-  //     .query()
-  //     .pipe(map((res: HttpResponse<ICaisse[]>) => res.body ?? []))
-  //     .subscribe((caisses: ICaisse[]) => {
-  //       this.caissesSharedCollection = caisses;
-  //     });
-  // }
-  protected loadCaisses(etablissementId?: number): void {
-    if (etablissementId) {
-      this.caisseService.findByEtablissementId(etablissementId).subscribe((caisses: ICaisse[]) => {
+  protected loadCaisses(etablissementId: number): void {
+    this.caisseService.findByEtablissementId(etablissementId).subscribe({
+      next: (caisses: ICaisse[]) => {
         this.caissesSharedCollection = caisses;
-        this.filteredCaisses = this.caissesSharedCollection;
+        this.filteredCaisses = [...caisses];
 
-        // Réinitialiser la caisse sélectionnée si nécessaire
         if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
           this.editForm.get('caisseId')?.setValue(null);
         }
-      });
-    } else {
-      this.filteredCaisses = [];
-      this.editForm.get('caisseId')?.setValue(null);
-    }
+      },
+      error: () => alert('Erreur lors du chargement des caisses pour cet établissement'),
+    });
   }
 }

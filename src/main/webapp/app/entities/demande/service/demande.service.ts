@@ -145,16 +145,41 @@ export class DemandeService {
   //   }
   //   return this.http.post<IDemande>(`${this.resourceUrl}/${id}/traiter`, null, { params, observe: 'response' });
   // }
-  traiterDemande(demandeId: number, accepte: boolean, motifRefus?: string): Observable<IDemande> {
-    let params = new HttpParams().set('accepte', accepte.toString());
-    if (motifRefus) {
-      params = params.set('motifRefus', motifRefus);
-    }
-    return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, null, { params });
-  }
-
-  //   traiterDemande(demandeId: number, accepte: boolean): Observable<IDemande> {
-  //   const params = new HttpParams().set('accepte', accepte.toString());
+  // traiterDemande(demandeId: number, accepte: boolean, motifRefus?: string, modeOperationId?: number | null): Observable<IDemande> {
+  //   let params = new HttpParams().set('accepte', accepte.toString());
+  //   if (motifRefus) {
+  //     params = params.set('motifRefus', motifRefus);
+  //   }
   //   return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, null, { params });
   // }
+
+  // traiterDemande(
+  //   demandeId: number,
+  //   accepte: boolean,
+  //   motifRefus?: string,
+  //   modeOperationId?: number | null
+  // ): Observable<IDemande> {
+  //   // Construire le corps de la requête
+  //   const body: any = { accepte };
+  //   if (motifRefus) {
+  //     body.motifRefus = motifRefus;
+  //   }
+  //   if (modeOperationId != null) {
+  //     body.modeOperationId = modeOperationId;
+  //   }
+
+  //   // Appel POST vers le backend avec body JSON
+  //   return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, body);
+  // }
+  traiterDemande(demandeId: number, accepte: boolean, motifRefus?: string, modeOperationId?: number | null): Observable<IDemande> {
+    // Construire le JSON du body
+    const body = {
+      accepte,
+      motifRefus: motifRefus ?? null,
+      modeOperationId: modeOperationId ?? null,
+    };
+
+    // POST vers le backend avec le body JSON
+    return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, body);
+  }
 }

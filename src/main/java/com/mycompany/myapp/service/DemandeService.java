@@ -54,5 +54,5 @@ public interface DemandeService {
      */
     void delete(Long id);
 
-    DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus);
+    DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus, Long modeOperationId);
 }

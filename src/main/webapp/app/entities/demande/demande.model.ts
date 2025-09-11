@@ -1,6 +1,7 @@
 import dayjs from 'dayjs/esm';
 import { IEtablissement } from 'app/entities/etablissement/etablissement.model';
 import { Objet } from 'app/entities/enumerations/objet.model';
+import { IModeOperation } from '../mode-operation/mode-operation.model';
 
 export interface IDemande {
   id: number;
@@ -15,6 +16,7 @@ export interface IDemande {
   libelle?: string | null;
   montant?: number | null;
   caisseId?: number | null;
+  modeOperationId?: IModeOperation | null;
 }
 
 export type NewDemande = Omit<IDemande, 'id'> & { id: null };

@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface TypeOperationRepository extends JpaRepository<TypeOperation, Long> {
-    Optional<Demande> findByLibelle(String string);
+    Optional<TypeOperation> findByLibelle(String string);
 }
