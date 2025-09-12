@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20250912-1" author="nde"> 
+        <createSequence sequenceName="mode_operation_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="20250912-2" author="nde">
+        <createTable tableName="mode_operation">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="libelle" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

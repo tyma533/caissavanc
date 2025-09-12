@@ -1,10 +1,19 @@
 package com.mycompany.myapp.service.impl;
 
+import com.mycompany.myapp.domain.Caisse;
+import com.mycompany.myapp.domain.ModeOperation;
 import com.mycompany.myapp.domain.Operation;
+import com.mycompany.myapp.domain.TypeOperation;
+import com.mycompany.myapp.repository.CaisseRepository;
+import com.mycompany.myapp.repository.ModeOperationRepository;
 import com.mycompany.myapp.repository.OperationRepository;
+import com.mycompany.myapp.repository.TypeOperationRepository;
+import com.mycompany.myapp.service.CaisseService;
 import com.mycompany.myapp.service.OperationService;
+import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.OperationDTO;
 import com.mycompany.myapp.service.mapper.OperationMapper;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +36,79 @@ public class OperationServiceImpl implements OperationService {
 
     private final OperationMapper operationMapper;
 
-    public OperationServiceImpl(OperationRepository operationRepository, OperationMapper operationMapper) {
+    private final CaisseService caisseService;
+
+    private final TypeOperationRepository typeOperationRepository;
+
+    private final ModeOperationRepository modeOperationRepository;
+
+    private final CaisseRepository caisseRepository;
+
+    public OperationServiceImpl(
+        OperationRepository operationRepository,
+        OperationMapper operationMapper,
+        CaisseService caisseService,
+        TypeOperationRepository typeOperationRepository,
+        ModeOperationRepository modeOperationRepository,
+        CaisseRepository caisseRepository
+    ) {
         this.operationRepository = operationRepository;
         this.operationMapper = operationMapper;
+        this.caisseService = caisseService;
+        this.typeOperationRepository = typeOperationRepository;
+        this.modeOperationRepository = modeOperationRepository;
+        this.caisseRepository = caisseRepository;
+    }
+
+    @Transactional
+    public Operation effectuerDepense(Long caisseId, Long montant, String commentaire, Long modeOperationId) {
+        // 1️⃣ Récupérer la caisse (entité)
+        Caisse caisse = caisseRepository
+            .findById(caisseId)
+            .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + caisseId));
+
+        // 2️⃣ Vérifier les conditions
+        if (montant <= 0) {
+            throw new RuntimeException("Le montant de la dépense doit être supérieur à 0");
+        }
+
+        if (montant > 200_000L) {
+            throw new RuntimeException("Le montant maximal pour une dépense est de 200 000");
+        }
+
+        if (caisse.getSolde() < montant) {
+            throw new RuntimeException("Solde insuffisant dans la caisse");
+        }
+
+        // 3️⃣ Récupérer le mode d'opération
+        ModeOperation modeOperation = modeOperationRepository
+            .findById(modeOperationId)
+            .orElseThrow(() -> new RuntimeException("Mode d'opération introuvable"));
+
+        // 4️⃣ Récupérer le type DEBIT
+        TypeOperation debit = typeOperationRepository
+            .findByLibelle("DEBIT")
+            .orElseThrow(() -> new RuntimeException("Type DEBIT non trouvé"));
+
+        // 5️⃣ Créer l'opération
+        Operation operation = new Operation();
+        //Générer un numéro unique (exemple simple, à améliorer si besoin)
+        String numero = "OP-" + System.currentTimeMillis();
+        operation.setNumero(numero);
+
+        operation.setCaisse(caisse);
+        operation.setMontant(montant);
+        operation.setTypeOperation(debit);
+        operation.setModeOperation(modeOperation);
+        operation.setCommentaire(commentaire);
+        operation.setDateOperation(Instant.now());
+
+        // 6️⃣ Mettre à jour le solde de la caisse
+        caisse.setSolde(caisse.getSolde() - montant);
+        caisseRepository.save(caisse);
+
+        // 7️⃣ Sauvegarder l'opération
+        return operationRepository.save(operation);
     }
 
     @Override

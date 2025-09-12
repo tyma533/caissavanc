@@ -1,0 +1,12 @@
+<changeSet id="20250912-3" author="nde">
+    <createSequence sequenceName="type_operation_seq" startValue="1" incrementBy="1"/>
+</changeSet>
+
+<changeSet id="20250912-4" author="nde">
+    <createTable tableName="type_operation">
+        <column name="id" type="bigint">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="libelle" type="varchar(255)"/>
+    </createTable>
+</changeSet>

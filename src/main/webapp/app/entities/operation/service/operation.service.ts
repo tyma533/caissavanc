@@ -132,4 +132,11 @@ export class OperationService {
       body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
     });
   }
+
+  effectuerDepense(caisseId: number, montant: number, commentaire: string, modeOperationId: number): Observable<IOperation> {
+    return this.http.post<IOperation>(
+      `${this.resourceUrl}/caisses/${caisseId}/depense?montant=${montant}&commentaire=${commentaire}&modeOperationId=${modeOperationId}`,
+      {},
+    );
+  }
 }

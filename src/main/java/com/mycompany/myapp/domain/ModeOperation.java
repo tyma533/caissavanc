@@ -19,7 +19,7 @@ public class ModeOperation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator", sequenceName = "mode_operation_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 

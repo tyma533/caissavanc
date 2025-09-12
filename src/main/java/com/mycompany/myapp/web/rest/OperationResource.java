@@ -1,8 +1,10 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.Operation;
 import com.mycompany.myapp.repository.OperationRepository;
 import com.mycompany.myapp.service.OperationService;
 import com.mycompany.myapp.service.dto.OperationDTO;
+import com.mycompany.myapp.service.mapper.OperationMapper;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -37,9 +39,12 @@ public class OperationResource {
 
     private final OperationRepository operationRepository;
 
-    public OperationResource(OperationService operationService, OperationRepository operationRepository) {
+    private final OperationMapper operationMapper;
+
+    public OperationResource(OperationService operationService, OperationRepository operationRepository, OperationMapper operationMapper) {
         this.operationService = operationService;
         this.operationRepository = operationRepository;
+        this.operationMapper = operationMapper;
     }
 
     /**
@@ -170,5 +175,30 @@ public class OperationResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @PostMapping("/caisses/{caisseId}/depense")
+    public ResponseEntity<OperationDTO> effectuerDepense(
+        @PathVariable Long caisseId,
+        @RequestParam Long montant,
+        @RequestParam String commentaire,
+        @RequestParam Long modeOperationId
+    ) {
+        // Vérifications simples côté REST
+        if (montant <= 0) {
+            throw new BadRequestAlertException("Le montant doit être supérieur à 0", ENTITY_NAME, "montantsmall");
+        }
+        if (montant > 200_000L) {
+            throw new BadRequestAlertException("Le montant maximal pour une dépense est de 200 000", ENTITY_NAME, "montantmax");
+        }
+        if (commentaire == null || commentaire.isBlank()) {
+            throw new BadRequestAlertException("Le commentaire est obligatoire", ENTITY_NAME, "commentaireempty");
+        }
+
+        // Appel du service qui gère la dépense et met à jour le solde
+        Operation operation = operationService.effectuerDepense(caisseId, montant, commentaire, modeOperationId);
+
+        // Retourner la DTO de l'opération créée
+        return ResponseEntity.ok(operationMapper.toDto(operation));
     }
 }

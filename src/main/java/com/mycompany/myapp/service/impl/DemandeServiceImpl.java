@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Demande;
+import com.mycompany.myapp.domain.ModeOperation;
 import com.mycompany.myapp.domain.Operation;
 import com.mycompany.myapp.domain.TypeOperation;
 import com.mycompany.myapp.domain.enumeration.EtatCaisse;
@@ -63,6 +64,10 @@ public class DemandeServiceImpl implements DemandeService {
         this.modeOperationRepository = modeOperationRepository;
     }
 
+    private String generateNumeroOperation() {
+        return "OP-" + Instant.now().toEpochMilli();
+    }
+
     @Override
     public DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus, Long modeOperationId) {
         // Récupérer la demande
@@ -109,15 +114,22 @@ public class DemandeServiceImpl implements DemandeService {
                         throw new RuntimeException("Caisse ou montant manquant pour l'alimentation");
                     }
 
-                    // Récupérer le mode d'opération depuis l'id fourni
-                    if (modeOperationId == null) {
-                        throw new RuntimeException("Mode d'opération non renseigné pour l'alimentation");
-                    }
-                    demande.setModeOperation(
-                        modeOperationRepository
-                            .findById(modeOperationId)
-                            .orElseThrow(() -> new RuntimeException("Mode d'opération introuvable"))
-                    );
+                    // // Récupérer le mode d'opération depuis l'id fourni
+                    // if (modeOperationId == null) {
+                    //     throw new RuntimeException("Mode d'opération non renseigné pour l'alimentation");
+                    // }
+                    // demande.setModeOperation(
+                    //     modeOperationRepository
+                    //         .findById(modeOperationId)
+                    //         .orElseThrow(() -> new RuntimeException("Mode d'opération introuvable"))
+                    // );
+                    // ⚡ assignation automatique du mode "VIREMENT"
+                    ModeOperation virementMode = modeOperationRepository
+                        .findByLibelle("VIREMENT")
+                        .orElseThrow(() -> new RuntimeException("Mode d'opération VIREMENT introuvable"));
+                    // ⚡ récupérer l'entité attachée
+                    ModeOperation attachedMode = modeOperationRepository.getReferenceById(virementMode.getId());
+                    demande.setModeOperation(virementMode);
 
                     // Mettre à jour le solde de la caisse
                     CaisseDTO caisse = caisseService
@@ -139,6 +151,8 @@ public class DemandeServiceImpl implements DemandeService {
                     operation.setModeOperation(demande.getModeOperation());
                     operation.setMontant(demande.getMontant());
                     operation.setDateOperation(Instant.now());
+                    operation.setNumero(generateNumeroOperation()); // ou un compteur automatique
+                    operation.setCommentaire("Alimentation de la caisse via virement");
 
                     operationRepository.save(operation);
                 }

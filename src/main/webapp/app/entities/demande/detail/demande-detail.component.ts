@@ -37,7 +37,7 @@ export class DemandeDetailComponent implements OnInit {
   motifRefus = '';
   caisses: ICaisse[] = [];
   modeOperations: IModeOperation[] = [];
-  selectedModeOperationId?: number;
+  selectedModeOperationId: number | null = null;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -78,11 +78,13 @@ export class DemandeDetailComponent implements OnInit {
       return;
     }
 
-    // Vérifier le mode d'opération en cas d'alimentation
-    if (accepte && this.demande.objet === Objet.ALIMENTATION_CAISSE && !this.selectedModeOperationId) {
-      alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation.');
-      return;
-    }
+    // // Vérifier le mode d'opération en cas d'alimentation
+    // if (accepte && this.demande.objet === Objet.ALIMENTATION_CAISSE && !this.selectedModeOperationId) {
+    //   alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation.');
+    //   return;
+    // }
+
+    // Forcer "VIREMENT" pour les alimentations cochées
 
     const modeOperationId = this.selectedModeOperationId ?? null;
 

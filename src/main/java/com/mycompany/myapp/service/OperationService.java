@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.Operation;
 import com.mycompany.myapp.service.dto.OperationDTO;
 import java.util.List;
 import java.util.Optional;
@@ -53,4 +54,6 @@ public interface OperationService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Operation effectuerDepense(Long caisseId, Long montant, String commentaire, Long modeOperationId);
 }

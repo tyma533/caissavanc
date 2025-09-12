@@ -8,6 +8,7 @@ import { IRubrique } from 'app/entities/rubrique/rubrique.model';
 import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
+import { OperationService } from 'app/entities/operation/service/operation.service';
 
 @Component({
   standalone: true,
@@ -18,7 +19,7 @@ import { forkJoin, Observable } from 'rxjs';
     `
       .rubriques-container {
         display: flex;
-        gap: 20px;
+        j-gap: 20px;
         align-items: flex-start;
       }
       .rubriques-list {
@@ -42,10 +43,14 @@ export class CaisseDetailComponent {
   @Input() caisse: ICaisse | null = null;
   rubriquesAffectees: IRubrique[] = [];
   rubriquesNonAffectees: IRubrique[] = [];
+  modeOperationId: number = 1;
+  montant: number = 0;
+  commentaire: string = '';
 
   constructor(
     protected activatedRoute: ActivatedRoute,
     private caisseService: CaisseService,
+    private operationService: OperationService,
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +112,24 @@ export class CaisseDetailComponent {
     console.log('Caisse ID:', this.caisse!.id);
     forkJoin(requests).subscribe(() => {
       this.loadRubriques(this.caisse!.id!); // recharge les rubriques après désaffectation
+    });
+  }
+
+  effectuerDepense(): void {
+    if (!this.caisse?.id) {
+      alert('Aucune caisse sélectionnée');
+      return;
+    }
+
+    this.operationService.effectuerDepense(this.caisse.id, this.montant, this.commentaire, this.modeOperationId).subscribe({
+      next: res => {
+        alert('Dépense effectuée avec succès ! ✅');
+        console.log(res);
+      },
+      error: err => {
+        alert("Erreur lors de l'enregistrement de la dépense ❌");
+        console.error(err);
+      },
     });
   }
 
