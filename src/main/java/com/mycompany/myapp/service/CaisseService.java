@@ -69,4 +69,5 @@ public interface CaisseService {
     List<RubriqueDTO> getRubriquesNonAffectees(Long caisseId);
 
     CaisseRubriqueDTO affecterRubriqueALaCaisse(Long caisseId, Long rubriqueId);
+    List<CaisseDTO> findAllFiltered(String libelle, String etablissement);
 }

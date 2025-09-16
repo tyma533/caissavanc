@@ -121,7 +121,9 @@
             [compareWith]="compareOperation"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="operationOption" *ngFor="let operationOption of operationsSharedCollection">{{ operationOption.id }}</option>
+            <option [ngValue]="operationOption" *ngFor="let operationOption of operationsSharedCollection">
+              {{ operationOption.numero }}
+            </option>
           </select>
         </div>
       </div>

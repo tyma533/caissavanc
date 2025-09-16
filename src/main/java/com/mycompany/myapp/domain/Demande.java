@@ -54,6 +54,9 @@ public class Demande implements Serializable {
     @Column(name = "montant")
     private Long montant;
 
+    @Column(name = "commentaire")
+    private String commentaire;
+
     @Column(name = "caisse_id")
     private Long caisseId;
 
@@ -193,6 +196,14 @@ public class Demande implements Serializable {
 
     public void setTypeOperation(TypeOperation typeOperation) {
         this.typeOperation = typeOperation;
+    }
+
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
     }
 
     // equals, hashCode et toString

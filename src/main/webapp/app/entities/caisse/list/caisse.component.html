@@ -27,6 +27,12 @@
   <form class="mb-3 col-md-3">
     <div class="input-group">
       <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+      <select class="form-select" [formControl]="etablissementFilter">
+        <option [ngValue]="null">Tous les établissements</option>
+        <option *ngFor="let e of etablissements" [ngValue]="e.id">
+          {{ e.libelle }}
+        </option>
+      </select>
     </div>
   </form>
 
@@ -72,7 +78,7 @@
           <td>{{ caisse.libelle }}</td>
           <td>
             <div *ngIf="caisse.etablissement">
-              <a [routerLink]="['/etablissement', caisse.etablissement.id, 'view']">{{ caisse.etablissement.id }}</a>
+              <a [routerLink]="['/etablissement', caisse.etablissement.libelle, 'view']">{{ caisse.etablissement.libelle }}</a>
             </div>
           </td>
 
@@ -88,6 +94,24 @@
 
               <a [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary btn-sm mx-1" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </a>
+
+              <a
+                [routerLink]="['/caisse', caisse.id, 'affectation']"
+                class="btn btn-secondary btn-sm mx-1"
+                data-cy="entityAffectationButton"
+              >
+                <fa-icon icon="tasks"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </a>
+
+              <!-- <a [routerLink]="['/caisse', caisse.id, 'depense']" class="btn btn-warning btn-sm mx-1" data-cy="entityDepenseButton">
+                <fa-icon icon="hand-holding-usd"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </a> -->
+              <a [routerLink]="['/caisse', caisse.id, 'depense']" class="btn btn-warning btn-sm mx-1" data-cy="entityDepenseButton">
+                <fa-icon icon="tasks"></fa-icon>
                 <span class="d-none d-md-inline"></span>
               </a>
 

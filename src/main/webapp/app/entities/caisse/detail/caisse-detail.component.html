@@ -47,63 +47,12 @@
       <button type="button" [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
-      <div *ngIf="caisse">
+      <!-- <div *ngIf="caisse">
         <h2>Détails de la caisse : {{ caisse.libelle }}</h2>
         <p>Solde actuel : {{ caisse.solde }}</p>
 
         <hr />
-
-        <h3>Effectuer une dépense</h3>
-        <form (ngSubmit)="effectuerDepense()">
-          <div>
-            <label>Montant :</label>
-            <input type="number" [(ngModel)]="montant" name="montant" required />
-          </div>
-
-          <div>
-            <label>Commentaire :</label>
-            <input type="text" [(ngModel)]="commentaire" name="commentaire" required />
-          </div>
-
-          <!-- Optionnel si tu veux choisir un mode -->
-          <div>
-            <label>Mode d'opération :</label>
-            <select [(ngModel)]="modeOperationId" name="modeOperationId">
-              <option [value]="1">Virement</option>
-              <option [value]="2">Cash</option>
-              <option [value]="3">Chèque</option>
-            </select>
-          </div>
-
-          <button type="submit">Effectuer la dépense</button>
-        </form>
-      </div>
-
-      <div class="rubriques-container">
-        <h2>Affectation des rubriques</h2>
-
-        <!-- Rubriques non affectées -->
-        <div class="rubriques-list">
-          <h6>Rubriques non affectées</h6>
-          <ul>
-            <li *ngFor="let r of rubriquesNonAffectees"><input type="checkbox" [(ngModel)]="r.selected" /> {{ r.libelle }}</li>
-          </ul>
-        </div>
-
-        <!-- Boutons Affecter / Enlever -->
-        <div class="rubriques-actions">
-          <button class="btn btn-primary" (click)="affecterSelected()">Affecter →</button>
-          <button class="btn btn-secondary" (click)="desaffecterSelected()">← Enlever</button>
-        </div>
-
-        <!-- Rubriques affectées -->
-        <div class="rubriques-list">
-          <h6>Rubriques affectées</h6>
-          <ul>
-            <li *ngFor="let r of rubriquesAffectees"><input type="checkbox" [(ngModel)]="r.selected" /> {{ r.libelle }}</li>
-          </ul>
-        </div>
-      </div>
+       </div> -->
     </div>
   </div>
 </div>

@@ -12,6 +12,9 @@ import { SortService } from 'app/shared/sort/sort.service';
 import { ICaisse } from '../caisse.model';
 import { EntityArrayResponseType, CaisseService } from '../service/caisse.service';
 import { CaisseDeleteDialogComponent } from '../delete/caisse-delete-dialog.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IEtablissement } from 'app/entities/etablissement/etablissement.model';
+import { EtablissementService } from 'app/entities/etablissement/service/etablissement.service';
 
 @Component({
   standalone: true,
@@ -27,6 +30,7 @@ import { CaisseDeleteDialogComponent } from '../delete/caisse-delete-dialog.comp
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
     ReactiveFormsModule,
+    FontAwesomeModule,
   ],
 })
 export class CaisseComponent implements OnInit {
@@ -36,6 +40,8 @@ export class CaisseComponent implements OnInit {
   predicate = 'id';
   ascending = true;
   filter = new FormControl('', { nonNullable: true });
+  etablissements: IEtablissement[] = [];
+  etablissementFilter = new FormControl<number | null>(null);
 
   page = 1;
   pageSize = 10;
@@ -44,6 +50,7 @@ export class CaisseComponent implements OnInit {
   constructor(
     protected caisseService: CaisseService,
     protected activatedRoute: ActivatedRoute,
+    protected etablissementService: EtablissementService,
     public router: Router,
     protected sortService: SortService,
     protected modalService: NgbModal,
@@ -51,25 +58,57 @@ export class CaisseComponent implements OnInit {
 
   trackId = (_index: number, item: ICaisse): number => this.caisseService.getCaisseIdentifier(item);
 
+  // ngOnInit(): void {
+  //   this.load();
+  //   this.filter.valueChanges.subscribe(() => {
+  //     this.applyFilterAndSort();
+  //   });
+  // }
   ngOnInit(): void {
     this.load();
-    this.filter.valueChanges.subscribe(() => {
-      this.applyFilterAndSort();
+
+    // Charger les établissements pour le select
+    this.etablissementService.query().subscribe(res => {
+      this.etablissements = res.body ?? [];
     });
+
+    // Déclencher le filtrage quand on tape dans la recherche
+    this.filter.valueChanges.subscribe(() => this.applyFilterAndSort());
+
+    // Déclencher le filtrage quand on change l’établissement
+    this.etablissementFilter.valueChanges.subscribe(() => this.applyFilterAndSort());
   }
+  // applyFilterAndSort(): void {
+  //   let filteredCaisses: ICaisse[];
+
+  //   const term = this.filter.value.toLowerCase();
+  //   if (term) {
+  //     filteredCaisses = this.tranchesSharedCollection.filter(t => t.libelle?.toLowerCase().includes(term));
+  //   } else {
+  //     filteredCaisses = [...this.tranchesSharedCollection];
+  //   }
+
+  //   const sortedRubriques = this.refineData(filteredCaisses);
+  //   this.collectionSize = sortedRubriques.length;
+  //   this.caisses = sortedRubriques.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  // }
+
   applyFilterAndSort(): void {
-    let filteredCaisses: ICaisse[];
+    let filteredCaisses: ICaisse[] = [...this.tranchesSharedCollection];
 
     const term = this.filter.value.toLowerCase();
     if (term) {
-      filteredCaisses = this.tranchesSharedCollection.filter(t => t.libelle?.toLowerCase().includes(term));
-    } else {
-      filteredCaisses = [...this.tranchesSharedCollection];
+      filteredCaisses = filteredCaisses.filter(t => t.libelle?.toLowerCase().includes(term));
     }
 
-    const sortedRubriques = this.refineData(filteredCaisses);
-    this.collectionSize = sortedRubriques.length;
-    this.caisses = sortedRubriques.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+    const etablissementId = this.etablissementFilter.value;
+    if (etablissementId) {
+      filteredCaisses = filteredCaisses.filter(t => t.etablissement?.id === etablissementId);
+    }
+
+    const sortedCaisses = this.refineData(filteredCaisses);
+    this.collectionSize = sortedCaisses.length;
+    this.caisses = sortedCaisses.slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   delete(caisse: ICaisse): void {

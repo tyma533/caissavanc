@@ -1,0 +1,37 @@
+<div *ngIf="caisse" class="caisse-details">
+  <h2 class="caisse-title">Détails de la caisse : {{ caisse.libelle }}</h2>
+  <p class="caisse-solde">
+    Solde actuel : <span>{{ caisse.solde | currency: 'EUR' }}</span>
+  </p>
+
+  <hr />
+
+  <h3 class="depense-title">Effectuer une dépense</h3>
+  <form class="depense-form" (ngSubmit)="effectuerDepense()">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Montant :</label>
+        <input type="number" [(ngModel)]="montant" name="montant" required />
+      </div>
+
+      <div class="form-group">
+        <label>Commentaire :</label>
+        <input type="text" [(ngModel)]="commentaire" name="commentaire" required />
+      </div>
+
+      <div class="form-group">
+        <label>Mode d'opération :</label>
+        <select [(ngModel)]="modeOperationId" name="modeOperationId">
+          <option [value]="1">Virement</option>
+          <option [value]="2">Cash</option>
+          <option [value]="3">Chèque</option>
+        </select>
+      </div>
+
+      <div class="form-group"></div>
+      <!-- Empty div to balance grid -->
+    </div>
+
+    <button type="submit" class="btn-depense">Effectuer la dépense</button>
+  </form>
+</div>

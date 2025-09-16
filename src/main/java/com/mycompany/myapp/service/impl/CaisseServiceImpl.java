@@ -85,6 +85,34 @@ public class CaisseServiceImpl implements CaisseService {
         return caisseRubriqueMapper.toDto(caisseRubrique);
     }
 
+    //     @Override
+    // public List<CaisseDTO> findAllFiltered(String libelle, String etablissementName) {
+    //     return caisseRepository.findAll().stream()
+    //         .filter(c -> libelle == null || c.getLibelle().toLowerCase().contains(libelle.toLowerCase()))
+    //         .filter(c -> etablissementName == null ||
+    //                      (c.getEtablissement() != null &&
+    //                       c.getEtablissement().getLibelle().toLowerCase().contains(etablissementName.toLowerCase())))
+    //         .map(caisseMapper::toDto)
+    //         .collect(Collectors.toList());
+    // }
+
+    @Transactional(readOnly = true)
+    public List<CaisseDTO> findAllFiltered(String libelle, String etablissement) {
+        if ((libelle == null || libelle.isEmpty()) && (etablissement == null || etablissement.isEmpty())) {
+            // aucun filtre → retourne tout
+            return caisseRepository.findAll().stream().map(caisseMapper::toDto).toList();
+        }
+
+        return caisseRepository
+            .findByLibelleContainingIgnoreCaseAndEtablissement_LibelleContainingIgnoreCase(
+                libelle != null ? libelle : "",
+                etablissement != null ? etablissement : ""
+            )
+            .stream()
+            .map(caisseMapper::toDto)
+            .toList();
+    }
+
     @Override
     public CaisseDTO save(CaisseDTO caisseDTO) {
         log.debug("Request to save Caisse : {}", caisseDTO);

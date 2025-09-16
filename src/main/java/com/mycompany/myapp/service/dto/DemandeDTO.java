@@ -31,6 +31,8 @@ public class DemandeDTO implements Serializable {
 
     private EtablissementDTO etablissement;
 
+    private String commentaire;
+
     private Long caisseId;
 
     private String libelle;
@@ -131,6 +133,14 @@ public class DemandeDTO implements Serializable {
         return this.montant;
     }
 
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
+    }
+
     public void setMontant(Long montant) {
         this.montant = montant;
     }
@@ -172,6 +182,7 @@ public class DemandeDTO implements Serializable {
             ", objet='" + getObjet() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", motif='" + getMotif() + "'" +
+            ", commentaire='" + getCommentaire() + "'" +
             ", dateHeureModification='" + getDateHeureModification() + "'" +
             ", dateHeureCreation='" + getDateHeureCreation() + "'" +
             ", utiCree=" + getUtiCree() +

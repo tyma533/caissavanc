@@ -216,4 +216,13 @@ public class CaisseResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/caisses")
+    public ResponseEntity<List<CaisseDTO>> getAllCaisses(
+        @RequestParam(required = false) String libelle,
+        @RequestParam(required = false) String etablissement
+    ) {
+        List<CaisseDTO> list = caisseService.findAllFiltered(libelle, etablissement);
+        return ResponseEntity.ok().body(list);
+    }
 }

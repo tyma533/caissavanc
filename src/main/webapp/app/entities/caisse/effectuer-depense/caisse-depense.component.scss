@@ -1,0 +1,102 @@
+.caisse-details {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 2rem auto;
+
+  .caisse-title {
+    color: #2c3e50;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .caisse-solde {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+
+    span {
+      font-weight: bold;
+      color: #27ae60;
+    }
+  }
+
+  hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+
+  .depense-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #34495e;
+  }
+
+  .depense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+
+        label {
+          font-weight: 500;
+          color: #34495e;
+        }
+
+        input,
+        select {
+          padding: 0.6rem 0.8rem;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: all 0.2s;
+
+          &:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.3);
+          }
+        }
+      }
+    }
+
+    .btn-depense {
+      padding: 0.8rem;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #3498db;
+      }
+
+      &:active {
+        background-color: #1f6391;
+      }
+    }
+  }
+
+  // Responsiveness
+  @media (max-width: 600px) {
+    .depense-form {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

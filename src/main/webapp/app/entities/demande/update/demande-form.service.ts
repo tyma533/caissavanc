@@ -43,6 +43,7 @@ type DemandeFormGroupContent = {
   libelle: FormControl<DemandeFormRawValue['libelle']>;
   montant: FormControl<DemandeFormRawValue['montant']>;
   caisseId: FormControl<number | null>;
+  commentaire: FormControl<DemandeFormRawValue['commentaire'] | null>;
 };
 
 export type DemandeFormGroup = FormGroup<DemandeFormGroupContent>;
@@ -68,6 +69,7 @@ export class DemandeFormService {
       libelle: new FormControl(demandeRawValue.libelle),
       montant: new FormControl(demandeRawValue.montant),
       caisseId: new FormControl(demandeRawValue.caisseId ?? null),
+      commentaire: new FormControl(demandeRawValue.commentaire ?? null),
     });
   }
 

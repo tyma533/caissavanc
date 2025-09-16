@@ -17,6 +17,7 @@ export interface IDemande {
   montant?: number | null;
   caisseId?: number | null;
   modeOperationId?: IModeOperation | null;
+  commentaire?: string | null;
 }
 
 export type NewDemande = Omit<IDemande, 'id'> & { id: null };

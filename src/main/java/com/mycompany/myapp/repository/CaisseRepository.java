@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CaisseRepository extends JpaRepository<Caisse, Long> {
     List<Caisse> findByEtablissementId(Long etablissementId);
+    List<Caisse> findByLibelleContainingIgnoreCaseAndEtablissement_LibelleContainingIgnoreCase(String libelle, String etablissement);
 }

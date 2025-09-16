@@ -12,6 +12,9 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { ICaisse, NewCaisse } from '../caisse.model';
 import { IRubrique } from 'app/entities/rubrique/rubrique.model';
 import { ICaisseRubrique } from 'app/entities/caisse-rubrique/caisse-rubrique.model';
+import { HttpParams } from '@angular/common/http';
+import { IEtablissement } from 'app/entities/etablissement/etablissement.model';
+import { EtablissementService } from 'app/entities/etablissement/service/etablissement.service';
 
 export type PartialUpdateCaisse = Partial<ICaisse> & Pick<ICaisse, 'id'>;
 
@@ -172,5 +175,12 @@ export class CaisseService {
 
   findByEtablissementId(etablissementId: number): Observable<ICaisse[]> {
     return this.http.get<ICaisse[]>(`${this.resourceUrl}/by-etablissement/${etablissementId}`);
+  }
+
+  getFilteredCaisses(libelle?: string, etablissement?: string): Observable<ICaisse[]> {
+    let params = new HttpParams();
+    if (libelle) params = params.set('libelle', libelle);
+    if (etablissement) params = params.set('etablissement', etablissement);
+    return this.http.get<ICaisse[]>(this.resourceUrl, { params });
   }
 }

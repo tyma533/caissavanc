@@ -9,6 +9,8 @@ import { errorRoute } from './layouts/error/error.route';
 import HomeComponent from './home/home.component';
 import NavbarComponent from './layouts/navbar/navbar.component';
 import LoginComponent from './login/login.component';
+import { CaisseAffectationComponent } from './entities/caisse/affectation_rubrique/caisse-affectation.component';
+import { CaisseDepenseComponent } from './entities/caisse/effectuer-depense/caisse-depense.component';
 
 @NgModule({
   imports: [
@@ -36,6 +38,17 @@ import LoginComponent from './login/login.component';
           path: 'account',
           loadChildren: () => import('./account/account.route'),
         },
+
+        {
+          path: 'caisse/:id/affectation',
+          component: CaisseAffectationComponent,
+        },
+
+        {
+          path: 'caisse/:id/depense',
+          component: CaisseDepenseComponent,
+        },
+
         {
           path: 'login',
           component: LoginComponent,

@@ -58,7 +58,6 @@ export class CaisseDetailComponent {
     this.activatedRoute.params.subscribe(params => {
       const caisseId = +params['id'];
       this.loadCaisse(caisseId);
-      this.loadRubriques(caisseId);
     });
   }
 
@@ -71,67 +70,11 @@ export class CaisseDetailComponent {
   //   this.caisseService.getRubriquesNonAffectees(caisseId).subscribe(data => (this.rubriquesNonAffectees = data));
   // }
 
-  loadRubriques(caisseId: number): void {
-    this.caisseService.getRubriquesAffectees(caisseId).subscribe((data: IRubrique[]) => {
-      // Ajouter selected = false pour chaque rubrique
-      this.rubriquesAffectees = data.map(r => ({ ...r, selected: false }));
-    });
-
-    this.caisseService.getRubriquesNonAffectees(caisseId).subscribe((data: IRubrique[]) => {
-      // Ajouter selected = false pour chaque rubrique
-      this.rubriquesNonAffectees = data.map(r => ({ ...r, selected: false }));
-    });
-  }
-
   // affecterSelected(): void {
   //   const selected = this.rubriquesNonAffectees.filter(r => r.selected);
   //   console.log('Caisse ID:', this.caisse!.id);
   //   selected.forEach(r => console.log('Rubrique ID:', r.id));
   // }
-
-  affecterSelected(): void {
-    const selected = this.rubriquesNonAffectees.filter(r => r.selected);
-
-    if (selected.length === 0) return; // rien à affecter
-
-    // Crée un tableau d'observables pour chaque requête
-    const requests = selected.map(r => this.caisseService.affecterRubrique(this.caisse!.id!, r.id!));
-    console.log('Caisse ID:', this.caisse!.id);
-    // Attendre que toutes les requêtes soient terminées
-    forkJoin(requests).subscribe(() => {
-      this.loadRubriques(this.caisse!.id!); // recharge les rubriques après l'affectation
-    });
-  }
-
-  desaffecterSelected(): void {
-    const selected = this.rubriquesAffectees.filter(r => r.selected);
-
-    if (selected.length === 0) return;
-
-    const requests = selected.map(r => this.caisseService.desaffecterRubrique(this.caisse!.id!, r.id!));
-    console.log('Caisse ID:', this.caisse!.id);
-    forkJoin(requests).subscribe(() => {
-      this.loadRubriques(this.caisse!.id!); // recharge les rubriques après désaffectation
-    });
-  }
-
-  effectuerDepense(): void {
-    if (!this.caisse?.id) {
-      alert('Aucune caisse sélectionnée');
-      return;
-    }
-
-    this.operationService.effectuerDepense(this.caisse.id, this.montant, this.commentaire, this.modeOperationId).subscribe({
-      next: res => {
-        alert('Dépense effectuée avec succès ! ✅');
-        console.log(res);
-      },
-      error: err => {
-        alert("Erreur lors de l'enregistrement de la dépense ❌");
-        console.error(err);
-      },
-    });
-  }
 
   previousState(): void {
     window.history.back();

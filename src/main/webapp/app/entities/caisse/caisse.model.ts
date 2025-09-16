@@ -13,7 +13,7 @@ export interface ICaisse {
   dateHeureCreation?: dayjs.Dayjs | null;
   utiCree?: number | null;
   utiModifie?: number | null;
-  etablissement?: Pick<IEtablissement, 'id'> | null;
+  etablissement?: Pick<IEtablissement, 'id' | 'libelle'> | null;
 }
 
 export type NewCaisse = Omit<ICaisse, 'id'> & { id: null };
