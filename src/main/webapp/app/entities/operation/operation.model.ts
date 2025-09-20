@@ -13,9 +13,13 @@ export interface IOperation {
   dateHeureCreation?: dayjs.Dayjs | null;
   utiCree?: number | null;
   utiModifie?: number | null;
-  caisse?: Pick<ICaisse, 'id'> | null;
-  typeOperation?: Pick<ITypeOperation, 'id'> | null;
-  modeOperation?: Pick<IModeOperation, 'id'> | null;
+  caisse?: Pick<ICaisse, 'id' | 'libelle'> | null;
+  typeOperation?: Pick<ITypeOperation, 'id' | 'libelle'> | null;
+  modeOperation?: Pick<IModeOperation, 'id' | 'libelle'> | null;
+  numeroVC?: string | null;
+  banque?: string | null;
+  beneficiaire?: string | null;
+  crediteur?: string | null;
 }
 
 export type NewOperation = Omit<IOperation, 'id'> & { id: null };

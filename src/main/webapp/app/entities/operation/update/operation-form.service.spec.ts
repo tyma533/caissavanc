@@ -31,6 +31,10 @@ describe('Operation Form Service', () => {
             caisse: expect.any(Object),
             typeOperation: expect.any(Object),
             modeOperation: expect.any(Object),
+            numeroVC: expect.any(Object),
+            banque: expect.any(Object),
+            beneficière: expect.any(Object),
+            crediteur: expect.any(Object),
           }),
         );
       });

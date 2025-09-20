@@ -148,8 +148,11 @@ export class CaisseService {
   }
 
   getCaisse(id: number): Observable<ICaisse> {
-    return this.http.get<ICaisse>(`${this.resourceUrl}/${id}`);
+    return this.http
+      .get<RestCaisse>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res).body as ICaisse));
   }
+
   getRubriquesAffectees(caisseId: number): Observable<IRubrique[]> {
     return this.http.get<IRubrique[]>(`${this.resourceUrl}/${caisseId}/rubriques/affectees`);
   }
@@ -182,5 +185,13 @@ export class CaisseService {
     if (libelle) params = params.set('libelle', libelle);
     if (etablissement) params = params.set('etablissement', etablissement);
     return this.http.get<ICaisse[]>(this.resourceUrl, { params });
+  }
+
+  getCaissesOuvertes(etablissementId: number): Observable<ICaisse[]> {
+    return this.http.get<ICaisse[]>(`${this.resourceUrl}/etablissement/${etablissementId}/ouvertes`);
+  }
+
+  getCaissesFermees(etablissementId: number): Observable<ICaisse[]> {
+    return this.http.get<ICaisse[]>(`${this.resourceUrl}/caisses-fermees/etablissement/${etablissementId}`);
   }
 }

@@ -24,38 +24,6 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.caisse.dateCreationCaisse" for="field_dateCreationCaisse"
-            >Date Creation Caisse</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateCreationCaisse"
-              data-cy="dateCreationCaisse"
-              type="datetime-local"
-              class="form-control"
-              name="dateCreationCaisse"
-              formControlName="dateCreationCaisse"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.caisse.dateFermiture" for="field_dateFermiture">Date Fermiture</label>
-          <div class="d-flex">
-            <input
-              id="field_dateFermiture"
-              data-cy="dateFermiture"
-              type="datetime-local"
-              class="form-control"
-              name="dateFermiture"
-              formControlName="dateFermiture"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.caisse.solde" for="field_solde">Solde</label>
           <input type="number" class="form-control" name="solde" id="field_solde" data-cy="solde" formControlName="solde" />
           <div *ngIf="editForm.get('solde')!.invalid && (editForm.get('solde')!.dirty || editForm.get('solde')!.touched)">
@@ -84,57 +52,6 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.caisse.dateHeureModification" for="field_dateHeureModification"
-            >Date Heure Modification</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateHeureModification"
-              data-cy="dateHeureModification"
-              type="datetime-local"
-              class="form-control"
-              name="dateHeureModification"
-              formControlName="dateHeureModification"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.caisse.dateHeureCreation" for="field_dateHeureCreation"
-            >Date Heure Creation</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateHeureCreation"
-              data-cy="dateHeureCreation"
-              type="datetime-local"
-              class="form-control"
-              name="dateHeureCreation"
-              formControlName="dateHeureCreation"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.caisse.utiCree" for="field_utiCree">Uti Cree</label>
-          <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.caisse.utiModifie" for="field_utiModifie">Uti Modifie</label>
-          <input
-            type="number"
-            class="form-control"
-            name="utiModifie"
-            id="field_utiModifie"
-            data-cy="utiModifie"
-            formControlName="utiModifie"
-          />
-        </div>
-
-        <div class="mb-3">
           <label class="form-label" jhiTranslate="caissavance2App.caisse.etablissement" for="field_etablissement">Etablissement</label>
           <select
             class="form-control"
@@ -146,7 +63,7 @@
           >
             <option [ngValue]="null"></option>
             <option [ngValue]="etablissementOption" *ngFor="let etablissementOption of etablissementsSharedCollection">
-              {{ etablissementOption.id }}
+              {{ etablissementOption.libelle }}
             </option>
           </select>
         </div>

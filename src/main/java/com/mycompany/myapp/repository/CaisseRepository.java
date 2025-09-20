@@ -1,6 +1,7 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.Caisse;
+import com.mycompany.myapp.domain.enumeration.EtatCaisse;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,5 @@ import org.springframework.stereotype.Repository;
 public interface CaisseRepository extends JpaRepository<Caisse, Long> {
     List<Caisse> findByEtablissementId(Long etablissementId);
     List<Caisse> findByLibelleContainingIgnoreCaseAndEtablissement_LibelleContainingIgnoreCase(String libelle, String etablissement);
+    List<Caisse> findAllByEtablissement_IdAndEtat(Long etablissementId, EtatCaisse etat);
 }

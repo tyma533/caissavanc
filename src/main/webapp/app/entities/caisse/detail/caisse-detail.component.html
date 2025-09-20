@@ -56,3 +56,22 @@
     </div>
   </div>
 </div>
+
+<hr />
+<h3>Opérations de cette caisse</h3>
+
+<div *ngIf="operations && operations.length > 0; else noOperation">
+  <div *ngFor="let op of operations" class="card my-2 p-3 shadow-sm">
+    <div>
+      <strong>Type :</strong>
+      {{ op.typeOperation?.libelle === 'CREDIT' ? 'Alimentation' : 'Dépense' }}
+    </div>
+    <div><strong>Montant :</strong> {{ op.montant | number: '1.0-0' }} FCFA</div>
+    <div><strong>Date :</strong> {{ op.dateOperation?.toDate() | date: 'short' }}</div>
+    <div><strong>Mode :</strong> {{ op.modeOperation?.libelle }}</div>
+  </div>
+</div>
+
+<ng-template #noOperation>
+  <p>Aucune opération enregistrée pour cette caisse.</p>
+</ng-template>

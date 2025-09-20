@@ -177,14 +177,12 @@ public class OperationResource {
             .build();
     }
 
-    @PostMapping("/caisses/{caisseId}/depense")
-    public ResponseEntity<OperationDTO> effectuerDepense(
-        @PathVariable Long caisseId,
-        @RequestParam Long montant,
-        @RequestParam String commentaire,
-        @RequestParam Long modeOperationId
-    ) {
+    @PostMapping("/caisses/effectuer-depense")
+    public ResponseEntity<OperationDTO> effectuerDepense2(@RequestBody OperationDTO operation) {
         // Vérifications simples côté REST
+        Long caisseId = operation.getCaisse().getId();
+        Long montant = operation.getMontant();
+        String commentaire = operation.getCommentaire();
         if (montant <= 0) {
             throw new BadRequestAlertException("Le montant doit être supérieur à 0", ENTITY_NAME, "montantsmall");
         }
@@ -194,11 +192,12 @@ public class OperationResource {
         if (commentaire == null || commentaire.isBlank()) {
             throw new BadRequestAlertException("Le commentaire est obligatoire", ENTITY_NAME, "commentaireempty");
         }
+        operation.setId(null); // S'assurer que l'ID est null pour une création
 
         // Appel du service qui gère la dépense et met à jour le solde
-        Operation operation = operationService.effectuerDepense(caisseId, montant, commentaire, modeOperationId);
+        Operation operationResult = operationService.effectuerDepense(operation);
 
         // Retourner la DTO de l'opération créée
-        return ResponseEntity.ok(operationMapper.toDto(operation));
+        return ResponseEntity.ok(operationMapper.toDto(operationResult));
     }
 }

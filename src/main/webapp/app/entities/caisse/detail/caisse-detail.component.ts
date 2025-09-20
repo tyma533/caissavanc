@@ -9,7 +9,7 @@ import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
 import { OperationService } from 'app/entities/operation/service/operation.service';
-
+import { IOperation } from 'app/entities/operation/operation.model';
 @Component({
   standalone: true,
   selector: 'jhi-caisse-detail',
@@ -46,6 +46,7 @@ export class CaisseDetailComponent {
   modeOperationId: number = 1;
   montant: number = 0;
   commentaire: string = '';
+  operations: IOperation[] = [];
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -59,10 +60,24 @@ export class CaisseDetailComponent {
       const caisseId = +params['id'];
       this.loadCaisse(caisseId);
     });
+
+    this.activatedRoute.data.subscribe(({ caisse }) => {
+      this.caisse = caisse;
+      if (caisse.id) {
+        this.loadOperations(caisse.id);
+      }
+    });
   }
 
   loadCaisse(caisseId: number): void {
     this.caisseService.getCaisse(caisseId).subscribe(caisse => (this.caisse = caisse));
+  }
+
+  loadOperations(caisseId: number): void {
+    this.operationService.findByCaisse(caisseId).subscribe({
+      next: res => (this.operations = res),
+      error: () => alert('Erreur lors du chargement des opérations'),
+    });
   }
 
   // loadRubriques(caisseId: number): void {

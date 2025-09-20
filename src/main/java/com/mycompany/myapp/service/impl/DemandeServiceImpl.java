@@ -156,6 +156,47 @@ public class DemandeServiceImpl implements DemandeService {
 
                     operationRepository.save(operation);
                 }
+                case CLOTURE_CAISSE -> {
+                    if (demande.getCaisse() == null) {
+                        throw new RuntimeException("Caisse manquante pour la clôture");
+                    }
+
+                    // Charger la caisse
+                    CaisseDTO caisse = caisseService
+                        .findOne(demande.getCaisse().getId())
+                        .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + demande.getCaisse().getId()));
+
+                    // Vérifier si elle est déjà clôturée
+                    if (caisse.getEtat() == EtatCaisse.CLOTURE) {
+                        throw new RuntimeException("La caisse sélectionnée est déjà clôturée");
+                    }
+
+                    // Clôturer la caisse
+                    caisse.setEtat(EtatCaisse.CLOTURE);
+                    caisseService.update(caisse);
+
+                    demande.setMotif("Clôture de la caisse validée");
+                }
+                case REOUVERTURE_CAISSE -> {
+                    if (demande.getCaisse() == null) {
+                        throw new RuntimeException("Caisse manquante pour la réouverture");
+                    }
+
+                    // Charger la caisse
+                    CaisseDTO caisse = caisseService
+                        .findOne(demande.getCaisse().getId())
+                        .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + demande.getCaisse().getId()));
+
+                    if (caisse.getEtat() == EtatCaisse.OUVERTE) {
+                        throw new RuntimeException("La caisse sélectionnée est déjà ouverte");
+                    }
+
+                    // Réouvrir la caisse
+                    caisse.setEtat(EtatCaisse.OUVERTE);
+                    caisseService.update(caisse);
+
+                    demande.setMotif("Réouverture de la caisse validée");
+                }
                 default -> throw new RuntimeException("Objet de demande non géré : " + demande.getObjet());
             }
         }

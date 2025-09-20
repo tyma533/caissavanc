@@ -22,7 +22,11 @@ public interface OperationMapper extends EntityMapper<OperationDTO, Operation> {
 
     @Mapping(target = "caisse", source = "caisse", qualifiedByName = "caisseId")
     @Mapping(target = "typeOperation", source = "typeOperation", qualifiedByName = "typeOperationId")
-    @Mapping(target = "modeOperationId", source = "modeOperation", qualifiedByName = "modeOperationId")
+    @Mapping(target = "modeOperation", source = "modeOperation", qualifiedByName = "modeOperationId")
+    @Mapping(target = "banque", source = "banque")
+    @Mapping(target = "beneficiaire", source = "beneficiaire")
+    @Mapping(target = "crediteur", source = "crediteur")
+    @Mapping(target = "numeroVC", source = "numeroVC")
     OperationDTO toDto(Operation s);
 
     Operation toEntity(OperationDTO operationDTO);
@@ -35,5 +39,12 @@ public interface OperationMapper extends EntityMapper<OperationDTO, Operation> {
     @Named("typeOperationId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "libelle", source = "libelle")
     TypeOperationDTO toDtoTypeOperationId(TypeOperation typeOperation);
+
+    @Named("modeOperationId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "libelle", source = "libelle")
+    ModeOperationDTO toDtoModeOperationId(ModeOperation modeOperation);
 }

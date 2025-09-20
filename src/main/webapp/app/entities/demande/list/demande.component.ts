@@ -17,6 +17,7 @@ import { DemandeDeleteDialogComponent } from '../delete/demande-delete-dialog.co
   standalone: true,
   selector: 'jhi-demande',
   templateUrl: './demande.component.html',
+  styleUrls: ['./demande.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

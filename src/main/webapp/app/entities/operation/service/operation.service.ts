@@ -133,10 +133,15 @@ export class OperationService {
     });
   }
 
-  effectuerDepense(caisseId: number, montant: number, commentaire: string, modeOperationId: number): Observable<IOperation> {
-    return this.http.post<IOperation>(
-      `${this.resourceUrl}/caisses/${caisseId}/depense?montant=${montant}&commentaire=${commentaire}&modeOperationId=${modeOperationId}`,
-      {},
-    );
+  effectuerDepense(operation: IOperation): Observable<IOperation> {
+    console.log('Service Operation - effectuerDepense appelé avec:', operation);
+    return this.http.post<IOperation>(`${this.resourceUrl}/caisses/effectuer-depense`, operation);
+  }
+
+  // operation.service.ts
+  findByCaisse(caisseId: number): Observable<IOperation[]> {
+    return this.http
+      .get<RestOperation[]>(`api/caisses/${caisseId}/operations`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res).body ?? []));
   }
 }

@@ -3,8 +3,10 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.repository.CaisseRepository;
 import com.mycompany.myapp.service.CaisseRubriqueService;
 import com.mycompany.myapp.service.CaisseService;
+import com.mycompany.myapp.service.OperationService;
 import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.CaisseRubriqueDTO;
+import com.mycompany.myapp.service.dto.OperationDTO;
 import com.mycompany.myapp.service.dto.RubriqueDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -42,10 +44,18 @@ public class CaisseResource {
 
     private final CaisseRubriqueService caisseRubriqueService;
 
-    public CaisseResource(CaisseService caisseService, CaisseRepository caisseRepository, CaisseRubriqueService caisseRubriqueService) {
+    private final OperationService operationService;
+
+    public CaisseResource(
+        CaisseService caisseService,
+        CaisseRepository caisseRepository,
+        CaisseRubriqueService caisseRubriqueService,
+        OperationService operationService
+    ) {
         this.caisseService = caisseService;
         this.caisseRepository = caisseRepository;
         this.caisseRubriqueService = caisseRubriqueService;
+        this.operationService = operationService;
     }
 
     /**
@@ -199,6 +209,21 @@ public class CaisseResource {
     public ResponseEntity<List<CaisseDTO>> getByEtablissement(@PathVariable Long etablissementId) {
         List<CaisseDTO> caisses = caisseService.findByEtablissementId(etablissementId);
         return ResponseEntity.ok().body(caisses);
+    }
+
+    @GetMapping("/etablissement/{etablissementId}/ouvertes")
+    public List<CaisseDTO> getCaissesOuvertesByEtablissement(@PathVariable Long etablissementId) {
+        return caisseService.findOuvertesByEtablissement(etablissementId);
+    }
+
+    @GetMapping("/caisses-fermees/etablissement/{etablissementId}")
+    public List<CaisseDTO> getCaissesFermeesByEtablissement(@PathVariable Long etablissementId) {
+        return caisseService.findFermeesByEtablissement(etablissementId);
+    }
+
+    @GetMapping("/{id}/operations")
+    public List<OperationDTO> getOperationsByCaisse(@PathVariable Long id) {
+        return operationService.findByCaisse(id);
     }
 
     /**

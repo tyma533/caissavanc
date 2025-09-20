@@ -3,6 +3,7 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Caisse;
 import com.mycompany.myapp.domain.CaisseRubrique;
 import com.mycompany.myapp.domain.Rubrique;
+import com.mycompany.myapp.domain.enumeration.EtatCaisse;
 import com.mycompany.myapp.repository.CaisseRepository;
 import com.mycompany.myapp.repository.CaisseRubriqueRepository;
 import com.mycompany.myapp.repository.RubriqueRepository;
@@ -193,6 +194,24 @@ public class CaisseServiceImpl implements CaisseService {
     @Override
     public List<CaisseDTO> findByEtablissementId(Long etablissementId) {
         return caisseRepository.findByEtablissementId(etablissementId).stream().map(caisseMapper::toDto).toList();
+    }
+
+    @Override
+    public List<CaisseDTO> findOuvertesByEtablissement(Long etablissementId) {
+        return caisseRepository
+            .findAllByEtablissement_IdAndEtat(etablissementId, EtatCaisse.OUVERTE)
+            .stream()
+            .map(caisseMapper::toDto)
+            .toList();
+    }
+
+    @Override
+    public List<CaisseDTO> findFermeesByEtablissement(Long etablissementId) {
+        return caisseRepository
+            .findAllByEtablissement_IdAndEtat(etablissementId, EtatCaisse.CLOTURE)
+            .stream()
+            .map(caisseMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     @Override

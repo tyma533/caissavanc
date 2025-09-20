@@ -840,7 +840,8 @@
                 <profile.test>testdev</profile.test>
                 <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.H2Dialect</liquibase-plugin.hibernate-dialect>
                 <liquibase-plugin.driver>org.h2.Driver</liquibase-plugin.driver>
-                <liquibase-plugin.url>jdbc:h2:tcp://localhost:18080/mem:caissavance2</liquibase-plugin.url>
+                <!-- <liquibase-plugin.url>jdbc:h2:tcp://localhost:18080/mem:caissavance2</liquibase-plugin.url> -->
+                <liquibase-plugin.url>jdbc:h2:file:${project.build.directory}/h2db/db/caissavance2</liquibase-plugin.url>
                 <liquibase-plugin.username>caissavance2</liquibase-plugin.username>
                 <liquibase-plugin.password/>
             </properties>

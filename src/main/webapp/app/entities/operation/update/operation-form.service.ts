@@ -44,6 +44,10 @@ type OperationFormGroupContent = {
   caisse: FormControl<OperationFormRawValue['caisse']>;
   typeOperation: FormControl<OperationFormRawValue['typeOperation']>;
   modeOperation: FormControl<OperationFormRawValue['modeOperation']>;
+  beneficiaire: FormControl<OperationFormRawValue['beneficiaire']>;
+  banque: FormControl<OperationFormRawValue['banque']>;
+  crediteur: FormControl<OperationFormRawValue['crediteur']>;
+  numeroVC: FormControl<OperationFormRawValue['numeroVC']>;
 };
 
 export type OperationFormGroup = FormGroup<OperationFormGroupContent>;
@@ -80,6 +84,10 @@ export class OperationFormService {
       caisse: new FormControl(operationRawValue.caisse),
       typeOperation: new FormControl(operationRawValue.typeOperation),
       modeOperation: new FormControl(operationRawValue.modeOperation),
+      beneficiaire: new FormControl(operationRawValue.beneficiaire),
+      banque: new FormControl(operationRawValue.banque),
+      crediteur: new FormControl(operationRawValue.crediteur),
+      numeroVC: new FormControl(operationRawValue.numeroVC),
     });
   }
 

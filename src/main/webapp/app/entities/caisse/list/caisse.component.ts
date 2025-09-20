@@ -20,6 +20,7 @@ import { EtablissementService } from 'app/entities/etablissement/service/etablis
   standalone: true,
   selector: 'jhi-caisse',
   templateUrl: './caisse.component.html',
+  styleUrls: ['./caisse.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

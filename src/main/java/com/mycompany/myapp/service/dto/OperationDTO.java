@@ -23,6 +23,14 @@ public class OperationDTO implements Serializable {
     @NotNull
     private Long montant;
 
+    private String numeroVC;
+
+    private String banque;
+
+    private String beneficiaire;
+
+    private String crediteur;
+
     private Instant dateOperation;
 
     private Instant dateHeureModification;
@@ -37,7 +45,7 @@ public class OperationDTO implements Serializable {
 
     private TypeOperationDTO typeOperation;
 
-    private Long modeOperationId;
+    private ModeOperationDTO modeOperation;
 
     public Long getId() {
         return id;
@@ -127,12 +135,44 @@ public class OperationDTO implements Serializable {
         this.typeOperation = typeOperation;
     }
 
-    public Long getModeOperationId() {
-        return modeOperationId;
+    public ModeOperationDTO getModeOperation() {
+        return modeOperation;
     }
 
-    public void setModeOperationId(Long modeOperationId) {
-        this.modeOperationId = modeOperationId;
+    public void setModeOperation(ModeOperationDTO modeOperation) {
+        this.modeOperation = modeOperation;
+    }
+
+    public String getNumeroVC() {
+        return numeroVC;
+    }
+
+    public void setNumeroVC(String numeroVC) {
+        this.numeroVC = numeroVC;
+    }
+
+    public String getBanque() {
+        return banque;
+    }
+
+    public void setBanque(String banque) {
+        this.banque = banque;
+    }
+
+    public String getBeneficiaire() {
+        return beneficiaire;
+    }
+
+    public void setBeneficiaire(String beneficiaire) {
+        this.beneficiaire = beneficiaire;
+    }
+
+    public String getCrediteur() {
+        return crediteur;
+    }
+
+    public void setCrediteur(String crediteur) {
+        this.crediteur = crediteur;
     }
 
     @Override
@@ -164,6 +204,10 @@ public class OperationDTO implements Serializable {
             ", numero='" + getNumero() + "'" +
             ", commentaire='" + getCommentaire() + "'" +
             ", montant=" + getMontant() +
+            ", numeroVC='" + getNumeroVC() + "'" +
+            ", banque='" + getBanque() + "'" +
+            ", beneficière='" + getBeneficiaire() + "'" +
+            ", crediteur='" + getCrediteur() + "'" +
             ", dateOperation='" + getDateOperation() + "'" +
             ", dateHeureModification='" + getDateHeureModification() + "'" +
             ", dateHeureCreation='" + getDateHeureCreation() + "'" +
@@ -171,7 +215,7 @@ public class OperationDTO implements Serializable {
             ", utiModifie=" + getUtiModifie() +
             ", caisse=" + getCaisse() +
             ", typeOperation=" + getTypeOperation() +
-            ", modeOperation=" + getModeOperationId() +
+            ", modeOperation=" + getModeOperation() +
             "}";
     }
 }

@@ -55,5 +55,6 @@ public interface OperationService {
      */
     void delete(Long id);
 
-    Operation effectuerDepense(Long caisseId, Long montant, String commentaire, Long modeOperationId);
+    Operation effectuerDepense(OperationDTO operation);
+    List<OperationDTO> findByCaisse(Long caisseId);
 }

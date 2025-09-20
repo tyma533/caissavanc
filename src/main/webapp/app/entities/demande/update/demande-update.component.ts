@@ -33,6 +33,8 @@ export class DemandeUpdateComponent implements OnInit {
   caissesSharedCollection: ICaisse[] = [];
   filteredCaisses: ICaisse[] = [];
   modeOperationsSharedCollection: IModeOperation[] = [];
+  caissesOuvertes: ICaisse[] = [];
+  caissesFermees: ICaisse[] = [];
 
   editForm: DemandeFormGroup = this.demandeFormService.createDemandeFormGroup();
 
@@ -67,10 +69,25 @@ export class DemandeUpdateComponent implements OnInit {
 
     // Réagir au changement de l'établissement pour filtrer les caisses
     this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
-      if (etablissement?.id) {
-        this.loadCaisses(etablissement.id);
+      const objet = this.editForm.get('objet')?.value as Objet | undefined;
+      if (!etablissement?.id) {
+        this.filteredCaisses = [];
+        this.caissesOuvertes = [];
+        this.caissesFermees = [];
+        this.editForm.get('caisseId')?.setValue(null);
+        return;
+      }
+
+      if (objet === Objet.ALIMENTATION_CAISSE) {
+        this.loadCaissesOuvertes(etablissement.id); // si tu veux que l’alimentation se fasse seulement sur caisses ouvertes
+      } else if (objet === Objet.CLOTURE_CAISSE) {
+        this.loadCaissesOuvertes(etablissement.id); // uniquement les caisses ouvertes
+      } else if (objet === Objet.REOUVERTURE_CAISSE) {
+        this.loadCaissesFermees(etablissement.id); // uniquement les caisses fermées
       } else {
         this.filteredCaisses = [];
+        this.caissesOuvertes = [];
+        this.caissesFermees = [];
         this.editForm.get('caisseId')?.setValue(null);
       }
     });
@@ -81,6 +98,11 @@ export class DemandeUpdateComponent implements OnInit {
         this.modeOperationsSharedCollection = res.body ?? [];
       },
       error: () => alert('Erreur lors du chargement des modes d’opération'),
+    });
+
+    // Réagir au changement d'objet pour filtrer les caisses
+    this.editForm.get('objet')?.valueChanges.subscribe(() => {
+      this.updateFilteredCaisses();
     });
   }
 
@@ -104,6 +126,12 @@ export class DemandeUpdateComponent implements OnInit {
         this.isSaving = false;
         return;
       }
+    }
+
+    if (demande.objet === Objet.CLOTURE_CAISSE && !demande.caisseId) {
+      alert('Veuillez sélectionner une caisse à clôturer');
+      this.isSaving = false;
+      return;
     }
 
     if (demande.id !== null) {
@@ -134,15 +162,17 @@ export class DemandeUpdateComponent implements OnInit {
     this.demande = demande;
     this.demandeFormService.resetForm(this.editForm, demande);
 
-    this.etablissementsSharedCollection = this.etablissementService.addEtablissementToCollectionIfMissing<IEtablissement>(
+    this.etablissementsSharedCollection = this.etablissementService.addEtablissementToCollectionIfMissing(
       this.etablissementsSharedCollection,
       demande.etablissement,
     );
 
     if (demande.etablissement?.id) {
-      this.loadCaisses(demande.etablissement.id);
+      const etabId = demande.etablissement.id;
+      this.loadCaisses(etabId);
+      this.updateFilteredCaisses();
     }
-    // S'assurer que le mode existe dans la liste
+
     if (demande.modeOperationId) {
       this.modeOperationsSharedCollection = this.modeOperationService.addModeOperationToCollectionIfMissing(
         this.modeOperationsSharedCollection,
@@ -151,17 +181,68 @@ export class DemandeUpdateComponent implements OnInit {
     }
   }
 
+  protected updateFilteredCaisses(): void {
+    const etab = this.editForm.get('etablissement')?.value;
+    const objet = this.editForm.get('objet')?.value as Objet | undefined;
+
+    if (!etab?.id) {
+      this.clearCaisses();
+      return;
+    }
+
+    const etabId = etab.id;
+
+    if (objet === Objet.ALIMENTATION_CAISSE || objet === Objet.CLOTURE_CAISSE) {
+      this.loadCaissesOuvertes(etabId);
+    } else if (objet === Objet.REOUVERTURE_CAISSE) {
+      this.loadCaissesFermees(etabId);
+    } else {
+      this.clearCaisses();
+    }
+  }
+
   protected loadCaisses(etablissementId: number): void {
     this.caisseService.findByEtablissementId(etablissementId).subscribe({
       next: (caisses: ICaisse[]) => {
         this.caissesSharedCollection = caisses;
         this.filteredCaisses = [...caisses];
-
         if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
           this.editForm.get('caisseId')?.setValue(null);
         }
       },
       error: () => alert('Erreur lors du chargement des caisses pour cet établissement'),
     });
+  }
+
+  protected loadCaissesOuvertes(etablissementId: number): void {
+    this.caisseService.getCaissesOuvertes(etablissementId).subscribe({
+      next: (caisses: ICaisse[]) => {
+        this.filteredCaisses = caisses;
+        this.caissesOuvertes = caisses;
+        if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+          this.editForm.get('caisseId')?.setValue(null);
+        }
+      },
+      error: () => alert('Erreur lors du chargement des caisses ouvertes pour cet établissement'),
+    });
+  }
+
+  protected loadCaissesFermees(etablissementId: number): void {
+    this.caisseService.getCaissesFermees(etablissementId).subscribe({
+      next: (caisses: ICaisse[]) => {
+        this.caissesFermees = caisses;
+        if (!this.caissesFermees.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+          this.editForm.get('caisseId')?.setValue(null);
+        }
+      },
+      error: () => alert('Erreur lors du chargement des caisses fermées pour cet établissement'),
+    });
+  }
+
+  protected clearCaisses(): void {
+    this.filteredCaisses = [];
+    this.caissesOuvertes = [];
+    this.caissesFermees = [];
+    this.editForm.get('caisseId')?.setValue(null);
   }
 }

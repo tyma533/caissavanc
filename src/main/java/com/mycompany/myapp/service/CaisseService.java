@@ -70,4 +70,6 @@ public interface CaisseService {
 
     CaisseRubriqueDTO affecterRubriqueALaCaisse(Long caisseId, Long rubriqueId);
     List<CaisseDTO> findAllFiltered(String libelle, String etablissement);
+    List<CaisseDTO> findOuvertesByEtablissement(Long etablissementId);
+    List<CaisseDTO> findFermeesByEtablissement(Long etablissementId);
 }

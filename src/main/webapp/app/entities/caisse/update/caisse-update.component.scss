@@ -1,0 +1,106 @@
+/* Container général */
+.d-flex.justify-content-center {
+  padding: 2rem 0;
+  background-color: #f8f9fa;
+}
+
+/* Formulaire */
+form[name='editForm'] {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h2 {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #343a40;
+  }
+
+  .mb-3 {
+    display: flex;
+    flex-direction: column;
+
+    label.form-label {
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+      color: #495057;
+    }
+
+    input.form-control,
+    select.form-control {
+      padding: 0.55rem 0.75rem;
+      font-size: 0.9rem;
+      border: 1px solid #ced4da;
+      border-radius: 0.35rem;
+      transition: all 0.2s;
+      &:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        outline: none;
+      }
+    }
+
+    .form-text.text-danger {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  /* Buttons */
+  div:last-child {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 0.35rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+
+      &.btn-primary {
+        background-color: #4a90e2;
+        color: #fff;
+        &:hover {
+          background-color: #357abd;
+        }
+      }
+
+      &.btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+        &:hover {
+          background-color: #5a6268;
+        }
+      }
+
+      fa-icon {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  /* ID field read-only */
+  input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .col-8 {
+    width: 95%;
+  }
+}

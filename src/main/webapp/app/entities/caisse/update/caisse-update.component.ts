@@ -18,6 +18,7 @@ import { CaisseFormService, CaisseFormGroup } from './caisse-form.service';
   standalone: true,
   selector: 'jhi-caisse-update',
   templateUrl: './caisse-update.component.html',
+  styleUrls: ['./caisse-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class CaisseUpdateComponent implements OnInit {

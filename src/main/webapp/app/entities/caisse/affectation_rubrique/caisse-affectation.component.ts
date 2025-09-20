@@ -6,13 +6,14 @@ import { CaisseService } from '../service/caisse.service';
 import { forkJoin } from 'rxjs';
 import { FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
 
 @Component({
   selector: 'jhi-caisse-affectation',
   templateUrl: './caisse-affectation.component.html',
   styleUrls: ['./caisse-affectation.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AngularDualListBoxModule],
 })
 export class CaisseAffectationComponent implements OnInit {
   caisse: ICaisse | null = null;

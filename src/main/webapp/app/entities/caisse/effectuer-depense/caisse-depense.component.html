@@ -22,11 +22,36 @@
       <div class="form-group">
         <label>Mode d'opération :</label>
         <select [(ngModel)]="modeOperationId" name="modeOperationId">
-          <option [value]="1">Virement</option>
-          <option [value]="2">Cash</option>
-          <option [value]="3">Chèque</option>
+          <option [value]="1">VIREMENT</option>
+          <option [value]="2">CASH</option>
+          <option [value]="3">CHEQUE</option>
+          <option [value]="4">ESPECE</option>
         </select>
       </div>
+
+      <!-- Champs toujours requis -->
+      <div class="mb-3">
+        <label for="beneficiaire">Bénéficiaire</label>
+        <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="beneficiaire" name="beneficiaire" />
+      </div>
+
+      <div class="mb-3">
+        <label for="crediteur">Créditeur</label>
+        <input id="crediteur" type="text" class="form-control" [(ngModel)]="crediteur" name="crediteur" />
+      </div>
+
+      <!-- Champs spécifiques VIREMENT / CHEQUE -->
+      <!-- <div *ngIf="modeOperationId === 1 || modeOperationId === 3"> -->
+      <div class="mb-3">
+        <label for="numeroVC">Numéro Virement/Chèque</label>
+        <input id="numeroVC" type="text" class="form-control" [(ngModel)]="numeroVC" name="numeroVC" />
+      </div>
+
+      <div class="mb-3">
+        <label for="banque">Banque</label>
+        <input id="banque" type="text" class="form-control" [(ngModel)]="banque" name="banque" />
+      </div>
+      <!-- </div> -->
 
       <div class="form-group"></div>
       <!-- Empty div to balance grid -->

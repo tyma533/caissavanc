@@ -37,6 +37,18 @@ public class Operation implements Serializable {
     @Column(name = "montant", nullable = false)
     private Long montant;
 
+    @Column(name = "numeroVC")
+    private String numeroVC;
+
+    @Column(name = "banque")
+    private String banque;
+
+    @Column(name = "beneficiaire")
+    private String beneficiaire;
+
+    @Column(name = "crediteur")
+    private String crediteur;
+
     @Column(name = "date_operation")
     private Instant dateOperation;
 
@@ -220,6 +232,38 @@ public class Operation implements Serializable {
         return this;
     }
 
+    public String getNumeroVC() {
+        return numeroVC;
+    }
+
+    public void setNumeroVC(String numeroVC) {
+        this.numeroVC = numeroVC;
+    }
+
+    public String getBanque() {
+        return banque;
+    }
+
+    public void setBanque(String banque) {
+        this.banque = banque;
+    }
+
+    public String getBeneficiaire() {
+        return beneficiaire;
+    }
+
+    public void setBeneficiaire(String beneficiaire) {
+        this.beneficiaire = beneficiaire;
+    }
+
+    public String getCrediteur() {
+        return crediteur;
+    }
+
+    public void setCrediteur(String crediteur) {
+        this.crediteur = crediteur;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -247,6 +291,10 @@ public class Operation implements Serializable {
             ", numero='" + getNumero() + "'" +
             ", commentaire='" + getCommentaire() + "'" +
             ", montant=" + getMontant() +
+            ", numeroVC='" + getNumeroVC() + "'" +
+            ", banque='" + getBanque() + "'" +
+            ", beneficière='" + getBeneficiaire() + "'" +
+            ", crediteur='" + getCrediteur() + "'" +
             ", dateOperation='" + getDateOperation() + "'" +
             ", dateHeureModification='" + getDateHeureModification() + "'" +
             ", dateHeureCreation='" + getDateHeureCreation() + "'" +

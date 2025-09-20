@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form [formGroup]="editForm" (ngSubmit)="save()">
-      <h2 jhiTranslate="caissavance2App.demande.home.createOrEditLabel">
+      <h2>
         {{ demande?.id ? 'Modifier la Demande' : 'Créer une Demande' }}
       </h2>
 
@@ -29,25 +29,44 @@
         <input type="text" formControlName="libelle" class="form-control" placeholder="Libellé de la caisse" />
       </div>
 
-      <!-- Sélection de la caisse et montant pour ALIMENTATION_CAISSE -->
-      <div *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
-        <div class="mb-3">
-          <label for="field_caisseId">Caisse à alimenter</label>
-          <select formControlName="caisseId" class="form-control">
-            <option [ngValue]="null">Sélectionner une caisse</option>
-            <option *ngFor="let caisse of filteredCaisses" [ngValue]="caisse.id">
-              {{ caisse.libelle }} (Solde: {{ caisse.solde || 0 }})
-            </option>
-          </select>
-          <div *ngIf="filteredCaisses.length === 0" class="text-muted mt-1">⚠️ Aucune caisse disponible pour cet établissement</div>
-        </div>
+      <!-- Sélection de la caisse pour ALIMENTATION_CAISSE -->
+      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
+        <label for="field_caisseId">Caisse à alimenter</label>
+        <select formControlName="caisseId" class="form-control">
+          <option [ngValue]="null">Sélectionner une caisse</option>
+          <option *ngFor="let caisse of filteredCaisses" [ngValue]="caisse.id">
+            {{ caisse.libelle }} (Solde: {{ caisse.solde || 0 }})
+          </option>
+        </select>
+        <div *ngIf="filteredCaisses.length === 0" class="text-muted mt-1">⚠️ Aucune caisse ouverte disponible pour cet établissement</div>
 
-        <div class="mb-3">
-          <label for="field_montant">Montant à alimenter</label>
-          <input type="number" formControlName="montant" class="form-control" placeholder="Montant" min="0" required />
-        </div>
+        <label for="field_montant" class="mt-2">Montant à alimenter</label>
+        <input type="number" formControlName="montant" class="form-control" placeholder="Montant" min="0" required />
       </div>
 
+      <!-- Sélection de la caisse pour CLOTURE_CAISSE -->
+      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'CLOTURE_CAISSE'">
+        <label for="field_caisseId">Caisse à clôturer</label>
+        <select formControlName="caisseId" class="form-control">
+          <option [ngValue]="null">Sélectionner une caisse</option>
+          <option *ngFor="let caisse of caissesOuvertes" [ngValue]="caisse.id">
+            {{ caisse.libelle }} (Solde: {{ caisse.solde || 0 }})
+          </option>
+        </select>
+        <div *ngIf="caissesOuvertes.length === 0" class="text-muted mt-1">⚠️ Aucune caisse ouverte disponible pour cet établissement</div>
+      </div>
+
+      <!-- Sélection de la caisse pour REOUVERTURE_CAISSE -->
+      <div class="mb-3" *ngIf="editForm.get('objet')?.value === 'REOUVERTURE_CAISSE'">
+        <label for="field_caisseId">Caisse à rouvrir</label>
+        <select formControlName="caisseId" class="form-control">
+          <option [ngValue]="null">Sélectionner une caisse</option>
+          <option *ngFor="let caisse of caissesFermees" [ngValue]="caisse.id">{{ caisse.libelle }} (Solde: {{ caisse.solde || 0 }})</option>
+        </select>
+        <div *ngIf="caissesFermees.length === 0" class="text-muted mt-1">⚠️ Aucune caisse fermée disponible pour cet établissement</div>
+      </div>
+
+      <!-- Commentaire -->
       <div class="form-group">
         <label for="commentaire">Commentaire</label>
         <textarea id="commentaire" class="form-control" formControlName="commentaire" placeholder="Entrez un commentaire"></textarea>

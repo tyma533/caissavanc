@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.Caisse;
 import com.mycompany.myapp.domain.ModeOperation;
 import com.mycompany.myapp.domain.Operation;
 import com.mycompany.myapp.domain.TypeOperation;
+import com.mycompany.myapp.domain.enumeration.EtatCaisse;
 import com.mycompany.myapp.repository.CaisseRepository;
 import com.mycompany.myapp.repository.ModeOperationRepository;
 import com.mycompany.myapp.repository.OperationRepository;
@@ -61,12 +62,18 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Transactional
-    public Operation effectuerDepense(Long caisseId, Long montant, String commentaire, Long modeOperationId) {
+    public Operation effectuerDepense(OperationDTO operationDTO) {
+        Long caisseId = operationDTO.getCaisse().getId();
+        Long montant = operationDTO.getMontant();
+        Long modeOperationId = operationDTO.getModeOperation().getId();
         // 1️⃣ Récupérer la caisse (entité)
         Caisse caisse = caisseRepository
             .findById(caisseId)
             .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + caisseId));
 
+        if (caisse.getEtat() != EtatCaisse.OUVERTE) {
+            throw new IllegalStateException("Impossible de faire une dépense : la caisse est fermée");
+        }
         // 2️⃣ Vérifier les conditions
         if (montant <= 0) {
             throw new RuntimeException("Le montant de la dépense doit être supérieur à 0");
@@ -91,17 +98,14 @@ public class OperationServiceImpl implements OperationService {
             .orElseThrow(() -> new RuntimeException("Type DEBIT non trouvé"));
 
         // 5️⃣ Créer l'opération
-        Operation operation = new Operation();
+        Operation operation = operationMapper.toEntity(operationDTO);
         //Générer un numéro unique (exemple simple, à améliorer si besoin)
         String numero = "OP-" + System.currentTimeMillis();
         operation.setNumero(numero);
-
-        operation.setCaisse(caisse);
-        operation.setMontant(montant);
-        operation.setTypeOperation(debit);
-        operation.setModeOperation(modeOperation);
-        operation.setCommentaire(commentaire);
+        operation.setDateHeureCreation(Instant.now());
+        operation.setDateHeureModification(Instant.now());
         operation.setDateOperation(Instant.now());
+        operation.setTypeOperation(debit);
 
         // 6️⃣ Mettre à jour le solde de la caisse
         caisse.setSolde(caisse.getSolde() - montant);
@@ -109,6 +113,11 @@ public class OperationServiceImpl implements OperationService {
 
         // 7️⃣ Sauvegarder l'opération
         return operationRepository.save(operation);
+    }
+
+    @Transactional(readOnly = true)
+    public List<OperationDTO> findByCaisse(Long caisseId) {
+        return operationRepository.findByCaisseId(caisseId).stream().map(operationMapper::toDto).toList();
     }
 
     @Override
