@@ -17,6 +17,7 @@ import { EtatOperationDeleteDialogComponent } from '../delete/etat-operation-del
   standalone: true,
   selector: 'jhi-etat-operation',
   templateUrl: './etat-operation.component.html',
+  styleUrls: ['./etat-operation.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

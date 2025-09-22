@@ -27,7 +27,8 @@
       "utiModifie": "Uti Modifie",
       "etablissement": "Etablissement",
       "libelle": "Libelle",
-      "montant": "Montant"
+      "montant": "Montant",
+      "action": "Action"
     }
   }
 }

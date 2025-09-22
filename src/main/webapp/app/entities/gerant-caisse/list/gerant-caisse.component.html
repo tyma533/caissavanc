@@ -23,18 +23,32 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
-
+  <!-- --- FORMULAIRE AMÉLIORÉ (remplace ton <form> actuel par celui-ci) --- -->
   <form class="mb-3 col-md-3">
-    <div class="input-group">
-      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-body p-2">
+        <div class="row g-2 align-items-center">
+          <!-- Champ de recherche -->
+          <div class="col-12 col-md-8">
+            <label class="visually-hidden" for="caisse-search">Recherche</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                <fa-icon icon="search"></fa-icon>
+              </span>
+              <input id="caisse-search" type="text" class="form-control" [formControl]="filter" placeholder="🔍 Rechercher..." />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
+  <!-- --- FIN FORMULAIRE AMÉLIORÉ --- -->
   <div class="alert alert-warning" id="no-result" *ngIf="gerantCaisses?.length === 0">
     <span jhiTranslate="caissavance2App.gerantCaisse.home.notFound">No Gerant Caisses found</span>
   </div>
 
   <div class="table-responsive table-entities" id="entities" *ngIf="gerantCaisses && gerantCaisses.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="table table-bordered" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="actif">
@@ -56,7 +70,14 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col"></th>
+
+          <th scope="col" jhiSortBy="action">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.gerantCaisse.action">Action</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <!-- <th scope="col"></th> -->
         </tr>
       </thead>
       <tbody>

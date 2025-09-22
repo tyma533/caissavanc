@@ -1,74 +1,74 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="caisse">
-      <h2 data-cy="caisseDetailsHeading"><span jhiTranslate="caissavance2App.caisse.detail.title">Caisse</span></h2>
+    <div *ngIf="caisse" class="caisse-details">
+      <h2 data-cy="caisseDetailsHeading">
+        <span jhiTranslate="caissavance2App.caisse.detail.title">Caisse</span>
+      </h2>
 
       <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+      <div class="detail-row">
+        <div class="label">ID</div>
+        <div class="value">{{ caisse.id }}</div>
+      </div>
 
-      <jhi-alert></jhi-alert>
+      <div class="detail-row">
+        <div class="label">Libelle</div>
+        <div class="value">{{ caisse.libelle }}</div>
+      </div>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ caisse.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.libelle">Libelle</span></dt>
-        <dd>
-          <span>{{ caisse.libelle }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.dateCreationCaisse">Date Creation Caisse</span></dt>
-        <dd>
-          <span>{{ caisse.dateCreationCaisse | formatMediumDatetime }}</span>
-        </dd>
+      <div class="detail-row">
+        <div class="label">Date Creation Caisse</div>
+        <div class="value">{{ caisse.dateCreationCaisse | formatMediumDatetime }}</div>
+      </div>
 
-        <dt><span jhiTranslate="caissavance2App.caisse.solde">Solde</span></dt>
-        <dd>
-          <span>{{ caisse.solde }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.caisse.etat">Etat</span></dt>
-        <dd>
+      <div class="detail-row">
+        <div class="label">Solde</div>
+        <div class="value">{{ caisse.solde }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="label">Etat</div>
+        <div class="value">
           <span jhiTranslate="{{ 'caissavance2App.EtatCaisse.' + caisse.etat }}">{{ caisse.etat }}</span>
-        </dd>
+        </div>
+      </div>
 
-        <dt><span jhiTranslate="caissavance2App.caisse.etablissement">Etablissement</span></dt>
-        <dd>
+      <div class="detail-row">
+        <div class="label">Etablissement</div>
+        <div class="value">
           <div *ngIf="caisse.etablissement">
             <a [routerLink]="['/etablissement', caisse.etablissement.id, 'view']">{{ caisse.etablissement.id }}</a>
           </div>
-        </dd>
-      </dl>
+        </div>
+      </div>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+      <button type="submit" (click)="previousState()" class="btn btn-info"><fa-icon icon="arrow-left"></fa-icon>&nbsp;Back</button>
 
       <button type="button" [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Edit
       </button>
-      <!-- <div *ngIf="caisse">
-        <h2>Détails de la caisse : {{ caisse.libelle }}</h2>
-        <p>Solde actuel : {{ caisse.solde }}</p>
-
-        <hr />
-       </div> -->
     </div>
   </div>
 </div>
 
 <hr />
-<h3>Opérations de cette caisse</h3>
+<div>
+  <h3>Opérations de cette caisse</h3>
 
-<div *ngIf="operations && operations.length > 0; else noOperation">
-  <div *ngFor="let op of operations" class="card my-2 p-3 shadow-sm">
-    <div>
-      <strong>Type :</strong>
-      {{ op.typeOperation?.libelle === 'CREDIT' ? 'Alimentation' : 'Dépense' }}
+  <div *ngIf="operations && operations.length > 0; else noOperation">
+    <div *ngFor="let op of operations" class="operation-card">
+      <p><strong>Numéro d'Opération :</strong> {{ op.numero }}</p>
+      <p><strong>Montant de l'opération :</strong> {{ op.montant | number: '1.0-0' }} CFA</p>
+      <p><strong>Date d'opération :</strong> {{ op.dateOperation?.toDate() | date: 'dd-MM-yyyy à HH:mm:ss' }}</p>
+      <p><strong>Mode :</strong> {{ op.modeOperation?.libelle }}</p>
+      <p>
+        <strong>Type Opération :</strong>
+        <span [ngClass]="{ credit: op.typeOperation?.libelle === 'CREDIT', debit: op.typeOperation?.libelle === 'DEBIT' }">
+          {{ op.typeOperation?.libelle }}
+        </span>
+      </p>
     </div>
-    <div><strong>Montant :</strong> {{ op.montant | number: '1.0-0' }} FCFA</div>
-    <div><strong>Date :</strong> {{ op.dateOperation?.toDate() | date: 'short' }}</div>
-    <div><strong>Mode :</strong> {{ op.modeOperation?.libelle }}</div>
   </div>
 </div>
 

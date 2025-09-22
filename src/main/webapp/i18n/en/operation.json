@@ -28,7 +28,8 @@
       "utiModifie": "Uti Modifie",
       "caisse": "Caisse",
       "typeOperation": "Type Operation",
-      "modeOperation": "Mode Operation"
+      "modeOperation": "Mode Operation",
+      "action": "Action"
     }
   }
 }

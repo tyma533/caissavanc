@@ -18,6 +18,7 @@ import { PieceJustificatifDeleteDialogComponent } from '../delete/piece-justific
   standalone: true,
   selector: 'jhi-piece-justificatif',
   templateUrl: './piece-justificatif.component.html',
+  styleUrls: ['./piece-justificatif.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

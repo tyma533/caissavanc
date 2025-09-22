@@ -17,6 +17,7 @@ import { TypeOperationDeleteDialogComponent } from '../delete/type-operation-del
   standalone: true,
   selector: 'jhi-type-operation',
   templateUrl: './type-operation.component.html',
+  styleUrls: ['./type-operation.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

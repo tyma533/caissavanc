@@ -17,6 +17,7 @@ import { CaisseRubriqueDeleteDialogComponent } from '../delete/caisse-rubrique-d
   standalone: true,
   selector: 'jhi-caisse-rubrique',
   templateUrl: './caisse-rubrique.component.html',
+  styleUrls: ['./caisse-rubrique.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

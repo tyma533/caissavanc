@@ -17,6 +17,7 @@ import { AgentDeleteDialogComponent } from '../delete/agent-delete-dialog.compon
   standalone: true,
   selector: 'jhi-agent',
   templateUrl: './agent.component.html',
+  styleUrls: ['./agent.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

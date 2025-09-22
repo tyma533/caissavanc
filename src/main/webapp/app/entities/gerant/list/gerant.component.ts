@@ -17,6 +17,7 @@ import { GerantDeleteDialogComponent } from '../delete/gerant-delete-dialog.comp
   standalone: true,
   selector: 'jhi-gerant',
   templateUrl: './gerant.component.html',
+  styleUrls: ['./gerant.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

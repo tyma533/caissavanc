@@ -17,6 +17,7 @@ import { AgentEtatProfilDeleteDialogComponent } from '../delete/agent-etat-profi
   standalone: true,
   selector: 'jhi-agent-etat-profil',
   templateUrl: './agent-etat-profil.component.html',
+  styleUrls: ['./agent-etat-profil.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

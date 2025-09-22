@@ -24,7 +24,8 @@
       "dateHeureCreation": "Date Heure Creation",
       "utiCree": "Uti Cree",
       "utiModifie": "Uti Modifie",
-      "operation": "Operation"
+      "operation": "Operation",
+      "action": "Action"
     }
   }
 }

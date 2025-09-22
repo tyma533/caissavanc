@@ -14,30 +14,8 @@ import { IOperation } from 'app/entities/operation/operation.model';
   standalone: true,
   selector: 'jhi-caisse-detail',
   templateUrl: './caisse-detail.component.html',
+  styleUrls: ['./caisse-detail.component.scss'],
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe, FormsModule],
-  styles: [
-    `
-      .rubriques-container {
-        display: flex;
-        j-gap: 20px;
-        align-items: flex-start;
-      }
-      .rubriques-list {
-        border: 1px solid #ccc;
-        padding: 10px;
-        width: 250px;
-        height: 300px;
-        overflow-y: auto;
-      }
-      .rubriques-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        justify-content: center;
-        align-items: center;
-      }
-    `,
-  ],
 })
 export class CaisseDetailComponent {
   @Input() caisse: ICaisse | null = null;

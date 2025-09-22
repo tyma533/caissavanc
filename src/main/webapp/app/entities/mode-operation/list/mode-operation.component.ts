@@ -17,6 +17,7 @@ import { ModeOperationDeleteDialogComponent } from '../delete/mode-operation-del
   standalone: true,
   selector: 'jhi-mode-operation',
   templateUrl: './mode-operation.component.html',
+  styleUrls: ['./mode-operation.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

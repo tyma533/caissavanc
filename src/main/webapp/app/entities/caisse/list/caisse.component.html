@@ -24,24 +24,49 @@
 
   <jhi-alert></jhi-alert>
 
+  <!-- --- FORMULAIRE AMÉLIORÉ (remplace ton <form> actuel par celui-ci) --- -->
   <form class="mb-3 col-md-3">
-    <div class="input-group">
-      <input type="text" class="form-control w-10" [formControl]="filter" placeholder="Rechercher..." />
-      <select class="form-select" [formControl]="etablissementFilter">
-        <option [ngValue]="null">Tous les établissements</option>
-        <option *ngFor="let e of etablissements" [ngValue]="e.id">
-          {{ e.libelle }}
-        </option>
-      </select>
+    <div class="card shadow-sm border-0 rounded-3">
+      <div class="card-body p-2">
+        <div class="row g-2 align-items-center">
+          <!-- Champ de recherche -->
+          <div class="col-12 col-md-8">
+            <label class="visually-hidden" for="caisse-search">Recherche</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                <fa-icon icon="search"></fa-icon>
+              </span>
+              <input id="caisse-search" type="text" class="form-control" [formControl]="filter" placeholder="🔍 Rechercher..." />
+            </div>
+          </div>
+
+          <!-- Filtre établissement -->
+          <div class="col-12 col-md-4">
+            <label class="visually-hidden" for="etablissement-filter">Etablissement</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                <fa-icon icon="building"></fa-icon>
+              </span>
+              <select id="etablissement-filter" class="form-select" [formControl]="etablissementFilter">
+                <option [ngValue]="null">Tous les établissements</option>
+                <option *ngFor="let e of etablissements" [ngValue]="e.id">
+                  {{ e.libelle }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </form>
+  <!-- --- FIN FORMULAIRE AMÉLIORÉ --- -->
 
   <div class="alert alert-warning" id="no-result" *ngIf="caisses?.length === 0">
     <span jhiTranslate="caissavance2App.caisse.home.notFound">No Caisses found</span>
   </div>
 
   <div class="table-responsive table-entities" id="entities" *ngIf="caisses && caisses.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="table table-bordered" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
           <th scope="col" jhiSortBy="libelle">
@@ -70,7 +95,13 @@
             </div>
           </th>
 
-          <th scope="col"></th>
+          <th scope="col" jhiSortBy="action">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.caisse.action">Action</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <!-- <th scope="col"></th> -->
         </tr>
       </thead>
       <tbody>
@@ -106,10 +137,6 @@
                 <span class="d-none d-md-inline"></span>
               </a>
 
-              <!-- <a [routerLink]="['/caisse', caisse.id, 'depense']" class="btn btn-warning btn-sm mx-1" data-cy="entityDepenseButton">
-                <fa-icon icon="hand-holding-usd"></fa-icon>
-                <span class="d-none d-md-inline"></span>
-              </a> -->
               <a [routerLink]="['/caisse', caisse.id, 'depense']" class="btn btn-warning btn-sm mx-1" data-cy="entityDepenseButton">
                 <fa-icon icon="tasks"></fa-icon>
                 <span class="d-none d-md-inline"></span>

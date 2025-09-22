@@ -1,0 +1,101 @@
+.caisse-details {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 0.5rem auto 1rem;
+  width: 800; // largeur fixe
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+
+  h2 {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    margin-top: 2rem;
+    color: #1e293b;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .label {
+    width: 150px; // largeur fixe pour aligner toutes les valeurs
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .value {
+    flex: 1; // prend le reste de l'espace
+    color: #1e293b;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    border-radius: 6px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.9rem;
+    margin: 0.25rem 0.4rem 0.25rem 0;
+  }
+}
+
+// --- Opérations ---
+
+h3 {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  margin-top: 2rem;
+  color: #1e293b;
+}
+
+.operation-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin: 0.5rem auto; // auto pour centrer horizontalement
+  width: 400px; // largeur fixe ou max-width pour limiter la taille
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: #374151;
+
+    strong {
+      font-weight: 600;
+      color: #111827;
+    }
+  }
+
+  .credit {
+    color: #10b981;
+    font-weight: 600;
+  }
+
+  .debit {
+    color: #ef4444;
+    font-weight: 600;
+  }
+}
+
+// Pour cartes Alimentation / Dépense
+.card:has(div:contains('Alimentation')),
+.card:has(div:contains('Dépense')) {
+  border-radius: 8px;
+  border-left: 6px solid currentColor;
+  width: 300px; // largeur fixe
+  margin: 0.5rem auto; // centré
+}

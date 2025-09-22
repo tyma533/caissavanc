@@ -17,6 +17,7 @@ import { ControleDeleteDialogComponent } from '../delete/controle-delete-dialog.
   standalone: true,
   selector: 'jhi-controle',
   templateUrl: './controle.component.html',
+  styleUrls: ['./controle.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

@@ -25,7 +25,8 @@
       "modifiedBy": "Modified By",
       "createdBy": "Created By",
       "agent": "Agent",
-      "etablissement": "Etablissement"
+      "etablissement": "Etablissement",
+      "action": "Action"
     }
   }
 }

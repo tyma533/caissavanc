@@ -17,6 +17,7 @@ import { RubriqueDeleteDialogComponent } from '../delete/rubrique-delete-dialog.
   standalone: true,
   selector: 'jhi-rubrique',
   templateUrl: './rubrique.component.html',
+  styleUrls: ['./rubrique.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

@@ -17,6 +17,7 @@ import { GerantCaisseDeleteDialogComponent } from '../delete/gerant-caisse-delet
   standalone: true,
   selector: 'jhi-gerant-caisse',
   templateUrl: './gerant-caisse.component.html',
+  styleUrls: ['./gerant-caisse.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

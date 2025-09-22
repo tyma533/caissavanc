@@ -17,6 +17,7 @@ import { OperationDeleteDialogComponent } from '../delete/operation-delete-dialo
   standalone: true,
   selector: 'jhi-operation',
   templateUrl: './operation.component.html',
+  styleUrls: ['./operation.component.scss'],
   imports: [
     RouterModule,
     FormsModule,

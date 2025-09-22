@@ -22,6 +22,7 @@ import { ModeOperationService } from 'app/entities/mode-operation/service/mode-o
   standalone: true,
   selector: 'jhi-demande-update',
   templateUrl: './demande-update.component.html',
+  styleUrls: ['./demande-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class DemandeUpdateComponent implements OnInit {

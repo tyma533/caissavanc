@@ -39,7 +39,8 @@
       "dateHeureModification": "Date Heure Modification",
       "dateHeureCreation": "Date Heure Creation",
       "modifiedBy": "Modified By",
-      "createdBy": "Created By"
+      "createdBy": "Created By",
+      "action": "Action"
     }
   }
 }

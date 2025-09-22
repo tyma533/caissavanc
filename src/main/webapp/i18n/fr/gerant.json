@@ -25,7 +25,8 @@
       "dateHeureCreation": "Date Heure Creation",
       "utiCree": "Uti Cree",
       "utiModifie": "Uti Modifie",
-      "agentEtatProfil": "Agent Etat Profil"
+      "agentEtatProfil": "Agent Etat Profil",
+      "action": "Action"
     }
   }
 }

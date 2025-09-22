@@ -17,6 +17,7 @@ import { EtablissementDeleteDialogComponent } from '../delete/etablissement-dele
   standalone: true,
   selector: 'jhi-etablissement',
   templateUrl: './etablissement.component.html',
+  styleUrls: ['./etablissement.component.scss'],
   imports: [
     RouterModule,
     FormsModule,
