@@ -9,6 +9,7 @@ import { IControle } from '../controle.model';
   standalone: true,
   selector: 'jhi-controle-detail',
   templateUrl: './controle-detail.component.html',
+  styleUrls: ['./controle-detail.component.scss'],
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class ControleDetailComponent {

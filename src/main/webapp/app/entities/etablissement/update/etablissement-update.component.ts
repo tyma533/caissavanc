@@ -15,6 +15,7 @@ import { EtablissementFormService, EtablissementFormGroup } from './etablissemen
   standalone: true,
   selector: 'jhi-etablissement-update',
   templateUrl: './etablissement-update.component.html',
+  styleUrls: ['./etablissement-update.component.scss'],
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class EtablissementUpdateComponent implements OnInit {

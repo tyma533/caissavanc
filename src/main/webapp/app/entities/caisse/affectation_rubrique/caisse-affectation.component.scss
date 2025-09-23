@@ -1,21 +1,90 @@
-.rubriques-container {
-  display: flex;
-  gap: 20px; // corrigé ici, pas "j-gap"
-  align-items: flex-start;
-}
+.rubriques-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 
-.rubriques-list {
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 250px;
-  height: 300px;
-  overflow-y: auto;
-}
+  .form-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
 
-.rubriques-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
+    fa-icon {
+      margin-right: 0.5rem;
+      color: #2980b9;
+    }
+  }
+
+  .rubriques-transfer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+
+    .rubriques-list {
+      flex: 1;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+
+      h6 {
+        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #34495e;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.5rem;
+
+          input[type='checkbox'] {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+
+    .rubriques-actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+
+      button {
+        width: 130px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rubriques-transfer {
+      flex-direction: column;
+
+      .rubriques-actions {
+        flex-direction: row;
+        justify-content: center;
+
+        button {
+          width: 140px;
+        }
+      }
+    }
+  }
 }

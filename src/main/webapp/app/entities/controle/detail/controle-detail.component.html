@@ -1,42 +1,37 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <div *ngIf="controle">
-      <h2 data-cy="controleDetailsHeading"><span jhiTranslate="caissavance2App.controle.detail.title">Controle</span></h2>
+<div class="details-container" *ngIf="controle">
+  <div class="details-card">
+    <h2 class="details-title">
+      <fa-icon icon="file-alt"></fa-icon>
+      <span jhiTranslate="caissavance2App.controle.detail.title">Controle</span>
+    </h2>
 
-      <hr />
+    <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
 
-      <jhi-alert></jhi-alert>
+    <dl class="details-grid">
+      <dt>ID</dt>
+      <dd>{{ controle.id }}</dd>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ controle.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.controle.dateControle">Date Controle</span></dt>
-        <dd>
-          <span>{{ controle.dateControle | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.controle.observation">Observation</span></dt>
-        <dd>
-          <span>{{ controle.observation }}</span>
-        </dd>
+      <dt jhiTranslate="caissavance2App.controle.dateControle">Date Controle</dt>
+      <dd>{{ controle.dateControle | formatMediumDatetime }}</dd>
 
-        <dt><span jhiTranslate="caissavance2App.controle.caisse">Caisse</span></dt>
-        <dd>
-          <div *ngIf="controle.caisse">
-            <a [routerLink]="['/caisse', controle.caisse.id, 'view']">{{ controle.caisse.id }}</a>
-          </div>
-        </dd>
-      </dl>
+      <dt jhiTranslate="caissavance2App.controle.observation">Observation</dt>
+      <dd>{{ controle.observation }}</dd>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+      <dt jhiTranslate="caissavance2App.controle.caisse">Caisse</dt>
+      <dd>
+        <div *ngIf="controle.caisse">
+          <a [routerLink]="['/caisse', controle.caisse.id, 'view']">{{ controle.caisse.id }}</a>
+        </div>
+      </dd>
+    </dl>
 
+    <div class="actions">
+      <button type="button" class="btn btn-info" (click)="previousState()"><fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour</button>
       <button type="button" [routerLink]="['/controle', controle.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
       </button>
     </div>
   </div>

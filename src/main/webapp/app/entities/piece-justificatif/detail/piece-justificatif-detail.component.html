@@ -1,47 +1,44 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <div *ngIf="pieceJustificatif">
-      <h2 data-cy="pieceJustificatifDetailsHeading">
-        <span jhiTranslate="caissavance2App.pieceJustificatif.detail.title">Piece Justificatif</span>
-      </h2>
+<div class="details-container" *ngIf="pieceJustificatif">
+  <div class="details-card">
+    <h2 class="details-title">
+      <fa-icon icon="file-alt"></fa-icon>
+      <span jhiTranslate="caissavance2App.pieceJustificatif.detail.title">Piece Justificatif</span>
+    </h2>
 
-      <hr />
+    <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
 
-      <jhi-alert></jhi-alert>
+    <dl class="details-grid">
+      <dt>ID</dt>
+      <dd>{{ pieceJustificatif.id }}</dd>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ pieceJustificatif.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.libelle">Libelle</span></dt>
-        <dd>
-          <span>{{ pieceJustificatif.libelle }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.piece">Piece</span></dt>
-        <dd>
-          <div *ngIf="pieceJustificatif.piece">
-            <a (click)="openFile(pieceJustificatif.piece, pieceJustificatif.pieceContentType)" jhiTranslate="entity.action.open">Open</a>
-            {{ pieceJustificatif.pieceContentType }}, {{ byteSize(pieceJustificatif.piece) }}
-          </div>
-        </dd>
+      <dt jhiTranslate="caissavance2App.pieceJustificatif.libelle">Libelle</dt>
+      <dd>{{ pieceJustificatif.libelle }}</dd>
 
-        <dt><span jhiTranslate="caissavance2App.pieceJustificatif.operation">Operation</span></dt>
-        <dd>
-          <div *ngIf="pieceJustificatif.operation">
-            <a [routerLink]="['/operation', pieceJustificatif.operation.id, 'view']">{{ pieceJustificatif.operation.id }}</a>
-          </div>
-        </dd>
-      </dl>
+      <dt jhiTranslate="caissavance2App.pieceJustificatif.piece">Piece</dt>
+      <dd>
+        <div *ngIf="pieceJustificatif.piece">
+          <a (click)="openFile(pieceJustificatif.piece, pieceJustificatif.pieceContentType)" jhiTranslate="entity.action.open">Open</a>
+          , {{ pieceJustificatif.pieceContentType }}, {{ byteSize(pieceJustificatif.piece) }}
+        </div>
+      </dd>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+      <dt jhiTranslate="caissavance2App.pieceJustificatif.operation">Operation</dt>
+      <dd>
+        <div *ngIf="pieceJustificatif.operation">
+          <a [routerLink]="['/operation', pieceJustificatif.operation.id, 'view']">
+            {{ pieceJustificatif.operation.id }}
+          </a>
+        </div>
+      </dd>
+    </dl>
 
+    <div class="actions">
+      <button type="button" class="btn btn-info" (click)="previousState()"><fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour</button>
       <button type="button" [routerLink]="['/piece-justificatif', pieceJustificatif.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
       </button>
     </div>
   </div>

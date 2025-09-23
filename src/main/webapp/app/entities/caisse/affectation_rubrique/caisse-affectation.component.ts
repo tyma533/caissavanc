@@ -7,13 +7,14 @@ import { forkJoin } from 'rxjs';
 import { FormControl, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'jhi-caisse-affectation',
   templateUrl: './caisse-affectation.component.html',
   styleUrls: ['./caisse-affectation.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, AngularDualListBoxModule],
+  imports: [CommonModule, FormsModule, AngularDualListBoxModule, FontAwesomeModule],
 })
 export class CaisseAffectationComponent implements OnInit {
   caisse: ICaisse | null = null;

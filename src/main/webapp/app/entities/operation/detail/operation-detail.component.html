@@ -1,62 +1,57 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <div *ngIf="operation">
-      <h2 data-cy="operationDetailsHeading"><span jhiTranslate="caissavance2App.operation.detail.title">Operation</span></h2>
+<div class="details-container" *ngIf="operation">
+  <div class="details-card">
+    <h2 class="details-title">
+      <fa-icon icon="file-alt"></fa-icon>
+      <span jhiTranslate="caissavance2App.operation.detail.title">Operation</span>
+    </h2>
 
-      <hr />
+    <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
 
-      <jhi-alert></jhi-alert>
+    <dl class="details-grid">
+      <dt>ID</dt>
+      <dd>{{ operation.id }}</dd>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ operation.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.numero">Numero</span></dt>
-        <dd>
-          <span>{{ operation.numero }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.commentaire">Commentaire</span></dt>
-        <dd>
-          <span>{{ operation.commentaire }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.montant">Montant</span></dt>
-        <dd>
-          <span>{{ operation.montant }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.dateOperation">Date Operation</span></dt>
-        <dd>
-          <span>{{ operation.dateOperation | formatMediumDatetime }}</span>
-        </dd>
+      <dt jhiTranslate="caissavance2App.operation.numero">Numero</dt>
+      <dd>{{ operation.numero }}</dd>
 
-        <dt><span jhiTranslate="caissavance2App.operation.caisse">Caisse</span></dt>
-        <dd>
-          <div *ngIf="operation.caisse">
-            <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.id }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.typeOperation">Type Operation</span></dt>
-        <dd>
-          <div *ngIf="operation.typeOperation">
-            <a [routerLink]="['/type-operation', operation.typeOperation.id, 'view']">{{ operation.typeOperation.id }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.operation.modeOperation">Mode Operation</span></dt>
-        <dd>
-          <div *ngIf="operation.modeOperation">
-            <a [routerLink]="['/mode-operation', operation.modeOperation.id, 'view']">{{ operation.modeOperation.id }}</a>
-          </div>
-        </dd>
-      </dl>
+      <dt jhiTranslate="caissavance2App.operation.commentaire">Commentaire</dt>
+      <dd>{{ operation.commentaire }}</dd>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
+      <dt jhiTranslate="caissavance2App.operation.montant">Montant</dt>
+      <dd>{{ operation.montant }}</dd>
 
+      <dt jhiTranslate="caissavance2App.operation.dateOperation">Date Operation</dt>
+      <dd>{{ operation.dateOperation | formatMediumDatetime }}</dd>
+
+      <dt jhiTranslate="caissavance2App.operation.caisse">Caisse</dt>
+      <dd>
+        <div *ngIf="operation.caisse">
+          <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.id }}</a>
+        </div>
+      </dd>
+
+      <dt jhiTranslate="caissavance2App.operation.typeOperation">Type Operation</dt>
+      <dd>
+        <div *ngIf="operation.typeOperation">
+          <a [routerLink]="['/type-operation', operation.typeOperation.id, 'view']">{{ operation.typeOperation.id }}</a>
+        </div>
+      </dd>
+
+      <dt jhiTranslate="caissavance2App.operation.modeOperation">Mode Operation</dt>
+      <dd>
+        <div *ngIf="operation.modeOperation">
+          <a [routerLink]="['/mode-operation', operation.modeOperation.id, 'view']">{{ operation.modeOperation.id }}</a>
+        </div>
+      </dd>
+    </dl>
+
+    <div class="actions">
+      <button type="button" class="btn btn-info" (click)="previousState()"><fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour</button>
       <button type="button" [routerLink]="['/operation', operation.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
       </button>
     </div>
   </div>

@@ -9,6 +9,7 @@ import { ITypeOperation } from '../type-operation.model';
   standalone: true,
   selector: 'jhi-type-operation-detail',
   templateUrl: './type-operation-detail.component.html',
+  styleUrls: ['./type-operation-detail.component.scss'],
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class TypeOperationDetailComponent {

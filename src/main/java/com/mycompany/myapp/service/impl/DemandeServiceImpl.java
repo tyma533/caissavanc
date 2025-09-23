@@ -5,6 +5,7 @@ import com.mycompany.myapp.domain.ModeOperation;
 import com.mycompany.myapp.domain.Operation;
 import com.mycompany.myapp.domain.TypeOperation;
 import com.mycompany.myapp.domain.enumeration.EtatCaisse;
+import com.mycompany.myapp.domain.enumeration.EtatDemande;
 import com.mycompany.myapp.domain.enumeration.Objet;
 import com.mycompany.myapp.repository.DemandeRepository;
 import com.mycompany.myapp.repository.ModeOperationRepository;
@@ -15,6 +16,7 @@ import com.mycompany.myapp.service.DemandeService;
 import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.DemandeDTO;
 import com.mycompany.myapp.service.mapper.DemandeMapper;
+import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.persistence.EntityNotFoundException;
 import java.lang.reflect.Type;
 import java.time.Instant;
@@ -73,6 +75,10 @@ public class DemandeServiceImpl implements DemandeService {
         // Récupérer la demande
         Demande demande = demandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Demande non trouvée pour l'ID : " + id));
 
+        // Bloquer retraitement
+        if (demande.getEtat() == EtatDemande.TRAITEE) {
+            throw new BadRequestAlertException("Demande déjà traitée", "demande", "alreadyProcessed");
+        }
         if (!accepte) {
             // Cas de refus
             demande.setMotif(motifRefus);

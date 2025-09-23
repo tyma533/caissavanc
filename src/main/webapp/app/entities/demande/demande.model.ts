@@ -18,6 +18,7 @@ export interface IDemande {
   caisseId?: number | null;
   modeOperationId?: IModeOperation | null;
   commentaire?: string | null;
+  etat?: 'EN_ATTENTE' | 'TRAITEE';
 }
 
 export type NewDemande = Omit<IDemande, 'id'> & { id: null };

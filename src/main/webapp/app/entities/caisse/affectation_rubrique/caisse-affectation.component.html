@@ -1,25 +1,33 @@
-<h2>Affectation des rubriques pour la caisse {{ caisse?.libelle }}</h2>
+<div class="rubriques-form-container">
+  <h2 class="form-title">Affectation des rubriques pour la caisse {{ caisse?.libelle }}</h2>
 
-<div class="rubriques-container">
-  <!-- Rubriques non affectées -->
-  <div class="rubriques-list">
-    <h6>Rubriques non affectées</h6>
-    <ul>
-      <li *ngFor="let r of rubriquesNonAffectees"><input type="checkbox" [(ngModel)]="r.selected" /> {{ r.libelle }}</li>
-    </ul>
-  </div>
+  <div class="rubriques-transfer">
+    <!-- Rubriques non affectées -->
+    <div class="rubriques-list">
+      <h6>Rubriques non affectées</h6>
+      <ul>
+        <li *ngFor="let r of rubriquesNonAffectees">
+          <input type="checkbox" [(ngModel)]="r.selected" />
+          <span>{{ r.libelle }}</span>
+        </li>
+      </ul>
+    </div>
 
-  <!-- Boutons Affecter / Enlever -->
-  <div class="rubriques-actions">
-    <button class="btn btn-primary" (click)="affecterSelected()">Affecter →</button>
-    <button class="btn btn-secondary" (click)="desaffecterSelected()">← Enlever</button>
-  </div>
+    <!-- Boutons Affecter / Enlever -->
+    <div class="rubriques-actions">
+      <button class="btn btn-primary" (click)="affecterSelected()"><fa-icon icon="arrow-right"></fa-icon> Affecter</button>
+      <button class="btn btn-secondary" (click)="desaffecterSelected()"><fa-icon icon="arrow-left"></fa-icon> Enlever</button>
+    </div>
 
-  <!-- Rubriques affectées -->
-  <div class="rubriques-list">
-    <h6>Rubriques affectées</h6>
-    <ul>
-      <li *ngFor="let r of rubriquesAffectees"><input type="checkbox" [(ngModel)]="r.selected" /> {{ r.libelle }}</li>
-    </ul>
+    <!-- Rubriques affectées -->
+    <div class="rubriques-list">
+      <h6>Rubriques affectées</h6>
+      <ul>
+        <li *ngFor="let r of rubriquesAffectees">
+          <input type="checkbox" [(ngModel)]="r.selected" />
+          <span>{{ r.libelle }}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

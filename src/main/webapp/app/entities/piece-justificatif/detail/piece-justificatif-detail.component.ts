@@ -10,6 +10,7 @@ import { IPieceJustificatif } from '../piece-justificatif.model';
   standalone: true,
   selector: 'jhi-piece-justificatif-detail',
   templateUrl: './piece-justificatif-detail.component.html',
+  styleUrls: ['./piece-justificatif-detail.component.scss'],
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class PieceJustificatifDetailComponent {

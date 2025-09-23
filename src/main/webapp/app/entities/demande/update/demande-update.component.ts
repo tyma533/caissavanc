@@ -17,6 +17,7 @@ import { ICaisse } from 'app/entities/caisse/caisse.model';
 import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model';
 import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -46,6 +47,7 @@ export class DemandeUpdateComponent implements OnInit {
     protected caisseService: CaisseService,
     protected modeOperationService: ModeOperationService,
     protected activatedRoute: ActivatedRoute,
+    protected router: Router,
   ) {}
 
   compareEtablissement = (o1: IEtablissement | null, o2: IEtablissement | null): boolean =>
@@ -151,6 +153,7 @@ export class DemandeUpdateComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     this.previousState();
+    this.router.navigate(['/demande']);
   }
 
   protected onSaveError(): void {}

@@ -1,0 +1,87 @@
+.details-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+  .details-card {
+    width: 100%;
+    max-width: 600px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+
+    .details-title {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+
+      fa-icon {
+        margin-right: 0.5rem;
+        color: #2980b9;
+      }
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-weight: 500;
+          color: #34495e;
+          margin-bottom: 0.3rem;
+        }
+
+        input {
+          padding: 0.6rem 0.8rem;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: all 0.2s;
+
+          &:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 5px rgba(41, 128, 185, 0.3);
+          }
+        }
+
+        small.text-danger {
+          margin-top: 0.3rem;
+        }
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+
+      .btn {
+        min-width: 120px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .details-card {
+      padding: 1.5rem;
+
+      .actions {
+        flex-direction: column;
+        gap: 1rem;
+
+        .btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

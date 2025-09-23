@@ -1,0 +1,151 @@
+.demande-details-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  font-family: 'Inter', sans-serif;
+
+  .demande-card {
+    background-color: #fdfdfd;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
+    .demande-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    hr {
+      margin: 1.5rem 0;
+      border: 0;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      row-gap: 1rem;
+      column-gap: 1.5rem;
+
+      dt {
+        font-weight: 900;
+        color: #34495e;
+      }
+
+      dd {
+        margin: 0;
+        color: #2c3e50;
+        word-break: break-word;
+
+        a.link-entity {
+          color: #2980b9;
+          text-decoration: none;
+          transition: all 0.2s;
+
+          &:hover {
+            text-decoration: underline;
+            color: #3498db;
+          }
+        }
+      }
+    }
+
+    .actions {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 0.6rem 1rem;
+        transition: all 0.2s;
+
+        &.btn-outline-secondary {
+          border-color: #bdc3c7;
+          color: #34495e;
+
+          &:hover {
+            background-color: #ecf0f1;
+          }
+        }
+
+        &.btn-outline-primary {
+          border-color: #2980b9;
+          color: #2980b9;
+
+          &:hover {
+            background-color: #2980b9;
+            color: #fff;
+          }
+        }
+
+        &.btn-primary {
+          background-color: #2980b9;
+          color: #fff;
+          border: none;
+
+          &:hover {
+            background-color: #3498db;
+          }
+        }
+      }
+    }
+
+    // Modal styles
+    .modal-content {
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+      .modal-header {
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .modal-body {
+        margin-top: 1rem;
+
+        .alert-info {
+          background-color: #dff0ff;
+          color: #31708f;
+          border-radius: 6px;
+          padding: 0.5rem 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .demande-card {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+        gap: 0.5rem;
+
+        button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}

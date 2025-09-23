@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import com.mycompany.myapp.domain.enumeration.EtatDemande;
 import com.mycompany.myapp.domain.enumeration.Objet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -74,6 +75,9 @@ public class Demande implements Serializable {
     @ManyToOne
     @JoinColumn(name = "caisse_id", insertable = false, updatable = false)
     private Caisse caisse;
+
+    @Enumerated(EnumType.STRING)
+    private EtatDemande etat;
 
     // Getter et Setter
     public Caisse getCaisse() {
@@ -204,6 +208,14 @@ public class Demande implements Serializable {
 
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
+    }
+
+    public EtatDemande getEtat() {
+        return this.etat;
+    }
+
+    public void setEtat(EtatDemande etat) {
+        this.etat = etat;
     }
 
     // equals, hashCode et toString

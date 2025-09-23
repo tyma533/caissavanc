@@ -17,6 +17,7 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 @Component({
   selector: 'jhi-demande-detail',
   templateUrl: './demande-detail.component.html',
+  styleUrls: ['./demande-detail.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -44,6 +45,7 @@ export class DemandeDetailComponent implements OnInit {
     protected demandeService: DemandeService,
     protected caisseService: CaisseService,
     protected modeOperationService: ModeOperationService,
+    protected router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +94,8 @@ export class DemandeDetailComponent implements OnInit {
     this.demandeService.traiterDemande(this.demande.id!, accepte, this.motifRefus, modeOperationId).subscribe({
       next: res => {
         alert('Traitement effectué !');
-        this.demande = res;
+        // this.demande = res;
+        this.demande = { ...res, etat: 'TRAITEE' }; // <- on marque traité
         this.fermerModalTraitement();
 
         // Mise à jour automatique de la caisse pour alimentation
@@ -104,6 +107,8 @@ export class DemandeDetailComponent implements OnInit {
         if (accepte && this.demande.objet === Objet.CLOTURE_CAISSE && this.demande.etablissement) {
           this.cloturerCaisse(this.demande.etablissement.id);
         }
+
+        this.router.navigate(['/caisse']);
       },
       error: () => alert('Erreur lors du traitement de la demande'),
     });

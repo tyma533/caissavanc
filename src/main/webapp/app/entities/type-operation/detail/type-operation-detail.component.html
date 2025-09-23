@@ -1,31 +1,27 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <div *ngIf="typeOperation">
-      <h2 data-cy="typeOperationDetailsHeading"><span jhiTranslate="caissavance2App.typeOperation.detail.title">Type Operation</span></h2>
+<div class="details-container" *ngIf="typeOperation">
+  <div class="details-card">
+    <h2 class="details-title">
+      <fa-icon icon="file-alt"></fa-icon>
+      <span jhiTranslate="caissavance2App.typeOperation.detail.title">Type Operation</span>
+    </h2>
 
-      <hr />
+    <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
 
-      <jhi-alert></jhi-alert>
+    <dl class="details-grid">
+      <dt>ID</dt>
+      <dd>{{ typeOperation.id }}</dd>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ typeOperation.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.typeOperation.libelle">Libelle</span></dt>
-        <dd>
-          <span>{{ typeOperation.libelle }}</span>
-        </dd>
-      </dl>
+      <dt jhiTranslate="caissavance2App.typeOperation.libelle">Libelle</dt>
+      <dd>{{ typeOperation.libelle }}</dd>
+    </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
-
+    <div class="actions">
+      <button type="button" class="btn btn-info" (click)="previousState()"><fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour</button>
       <button type="button" [routerLink]="['/type-operation', typeOperation.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
       </button>
     </div>
   </div>

@@ -1,35 +1,32 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <div *ngIf="etablissement">
-      <h2 data-cy="etablissementDetailsHeading"><span jhiTranslate="caissavance2App.etablissement.detail.title">Etablissement</span></h2>
+<div class="etablissement-details-container" *ngIf="etablissement">
+  <div class="etablissement-card">
+    <h2 class="etablissement-title">
+      <fa-icon icon="building"></fa-icon>
+      <span jhiTranslate="caissavance2App.etablissement.detail.title">Etablissement</span>
+    </h2>
 
-      <hr />
+    <hr />
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
 
-      <jhi-alert></jhi-alert>
+    <dl class="details-grid">
+      <dt>ID</dt>
+      <dd>{{ etablissement.id }}</dd>
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ etablissement.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etablissement.libelle">Libelle</span></dt>
-        <dd>
-          <span>{{ etablissement.libelle }}</span>
-        </dd>
-        <dt><span jhiTranslate="caissavance2App.etablissement.sigle">Sigle</span></dt>
-        <dd>
-          <span>{{ etablissement.sigle }}</span>
-        </dd>
-      </dl>
+      <dt>Libellé</dt>
+      <dd>{{ etablissement.libelle }}</dd>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      <dt>Sigle</dt>
+      <dd>{{ etablissement.sigle }}</dd>
+    </dl>
+
+    <div class="actions">
+      <button type="submit" (click)="previousState()" class="btn btn-outline-secondary">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour
       </button>
-
-      <button type="button" [routerLink]="['/etablissement', etablissement.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      <button type="button" [routerLink]="['/etablissement', etablissement.id, 'edit']" class="btn btn-outline-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
       </button>
     </div>
   </div>

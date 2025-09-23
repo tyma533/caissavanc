@@ -9,6 +9,7 @@ import { IEtablissement } from '../etablissement.model';
   standalone: true,
   selector: 'jhi-etablissement-detail',
   templateUrl: './etablissement-detail.component.html',
+  styleUrls: ['./etablissement-detail.component.scss'],
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class EtablissementDetailComponent {

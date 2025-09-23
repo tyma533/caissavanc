@@ -51,12 +51,13 @@
     <table class="table table-bordered" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="dateControle">
+          <th scope="col" jhiSortBy="caisse.id">
             <div class="d-flex">
-              <span jhiTranslate="caissavance2App.controle.dateControle">Date Controle</span>
+              <span jhiTranslate="caissavance2App.controle.caisse">Caisse</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
+
           <th scope="col" jhiSortBy="observation">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.controle.observation">Observation</span>
@@ -64,9 +65,9 @@
             </div>
           </th>
 
-          <th scope="col" jhiSortBy="caisse.id">
+          <th scope="col" jhiSortBy="dateControle">
             <div class="d-flex">
-              <span jhiTranslate="caissavance2App.controle.caisse">Caisse</span>
+              <span jhiTranslate="caissavance2App.controle.dateControle">Date Controle</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -82,14 +83,15 @@
       </thead>
       <tbody>
         <tr *ngFor="let controle of controles; trackBy: trackId" data-cy="entityTable">
-          <td>{{ controle.dateControle | formatMediumDatetime }}</td>
-          <td>{{ controle.observation }}</td>
-
           <td>
             <div *ngIf="controle.caisse">
               <a [routerLink]="['/caisse', controle.caisse.id, 'view']">{{ controle.caisse.id }}</a>
             </div>
           </td>
+
+          <td>{{ controle.observation }}</td>
+          <td>{{ controle.dateControle | formatMediumDatetime }}</td>
+
           <td class="text-end">
             <div class="btn-group">
               <a [routerLink]="['/controle', controle.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
