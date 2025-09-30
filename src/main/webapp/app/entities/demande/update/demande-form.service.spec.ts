@@ -20,7 +20,7 @@ describe('Demande Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            objet: expect.any(Object),
+            type: expect.any(Object),
             dateDemande: expect.any(Object),
             motif: expect.any(Object),
             dateHeureModification: expect.any(Object),
@@ -38,7 +38,7 @@ describe('Demande Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            objet: expect.any(Object),
+            type: expect.any(Object),
             dateDemande: expect.any(Object),
             motif: expect.any(Object),
             dateHeureModification: expect.any(Object),

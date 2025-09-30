@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Demande;
-import com.mycompany.myapp.domain.enumeration.Objet;
+import com.mycompany.myapp.domain.enumeration.Type;
 import com.mycompany.myapp.repository.DemandeRepository;
 import com.mycompany.myapp.service.dto.DemandeDTO;
 import com.mycompany.myapp.service.mapper.DemandeMapper;
@@ -34,8 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class DemandeResourceIT {
 
-    private static final Objet DEFAULT_OBJET = Objet.CREATION_CAISSE;
-    private static final Objet UPDATED_OBJET = Objet.ALIMENTATION_CAISSE;
+    private static final Type DEFAULT_OBJET = Type.CREATION_CAISSE;
+    private static final Type UPDATED_OBJET = Type.ALIMENTATION_CAISSE;
 
     private static final Instant DEFAULT_DATE_DEMANDE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE_DEMANDE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -77,7 +77,7 @@ class DemandeResourceIT {
 
     public static Demande createEntity(EntityManager em) {
         Demande demande = new Demande();
-        demande.setObjet(DEFAULT_OBJET);
+        demande.setType(DEFAULT_OBJET);
         demande.setDateDemande(DEFAULT_DATE_DEMANDE);
         demande.setMotif(DEFAULT_MOTIF);
         demande.setDateHeureModification(DEFAULT_DATE_HEURE_MODIFICATION);
@@ -89,7 +89,7 @@ class DemandeResourceIT {
 
     public static Demande createUpdatedEntity(EntityManager em) {
         Demande demande = new Demande();
-        demande.setObjet(UPDATED_OBJET);
+        demande.setType(UPDATED_OBJET);
         demande.setDateDemande(UPDATED_DATE_DEMANDE);
         demande.setMotif(UPDATED_MOTIF);
         demande.setDateHeureModification(UPDATED_DATE_HEURE_MODIFICATION);
@@ -116,7 +116,7 @@ class DemandeResourceIT {
         List<Demande> demandeList = demandeRepository.findAll();
         assertThat(demandeList).hasSize(databaseSizeBeforeCreate + 1);
         Demande testDemande = demandeList.get(demandeList.size() - 1);
-        assertThat(testDemande.getObjet()).isEqualTo(DEFAULT_OBJET);
+        assertThat(testDemande.getType()).isEqualTo(DEFAULT_OBJET);
         assertThat(testDemande.getDateDemande()).isEqualTo(DEFAULT_DATE_DEMANDE);
         assertThat(testDemande.getMotif()).isEqualTo(DEFAULT_MOTIF);
         assertThat(testDemande.getDateHeureModification()).isEqualTo(DEFAULT_DATE_HEURE_MODIFICATION);
@@ -144,7 +144,7 @@ class DemandeResourceIT {
     @Transactional
     void checkObjetIsRequired() throws Exception {
         int databaseSizeBeforeTest = demandeRepository.findAll().size();
-        demande.setObjet(null);
+        demande.setType(null);
         DemandeDTO demandeDTO = demandeMapper.toDto(demande);
 
         restDemandeMockMvc
@@ -205,7 +205,7 @@ class DemandeResourceIT {
 
         Demande updatedDemande = demandeRepository.findById(demande.getId()).orElseThrow();
         em.detach(updatedDemande);
-        updatedDemande.setObjet(UPDATED_OBJET);
+        updatedDemande.setType(UPDATED_OBJET);
         updatedDemande.setDateDemande(UPDATED_DATE_DEMANDE);
         updatedDemande.setMotif(UPDATED_MOTIF);
         updatedDemande.setDateHeureModification(UPDATED_DATE_HEURE_MODIFICATION);
@@ -226,7 +226,7 @@ class DemandeResourceIT {
         List<Demande> demandeList = demandeRepository.findAll();
         assertThat(demandeList).hasSize(databaseSizeBeforeUpdate);
         Demande testDemande = demandeList.get(demandeList.size() - 1);
-        assertThat(testDemande.getObjet()).isEqualTo(UPDATED_OBJET);
+        assertThat(testDemande.getType()).isEqualTo(UPDATED_OBJET);
         assertThat(testDemande.getDateDemande()).isEqualTo(UPDATED_DATE_DEMANDE);
         assertThat(testDemande.getMotif()).isEqualTo(UPDATED_MOTIF);
         assertThat(testDemande.getDateHeureModification()).isEqualTo(UPDATED_DATE_HEURE_MODIFICATION);
@@ -234,6 +234,6 @@ class DemandeResourceIT {
         assertThat(testDemande.getUtiCree()).isEqualTo(UPDATED_UTI_CREE);
         assertThat(testDemande.getUtiModifie()).isEqualTo(UPDATED_UTI_MODIFIE);
     }
-    // Les autres tests patch et delete doivent également utiliser setObjet(), setDateDemande(), etc.
+    // Les autres tests patch et delete doivent également utiliser setType(), setDateDemande(), etc.
     // Remplace toutes les occurrences des appels fluent par les setters classiques
 }

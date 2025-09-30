@@ -3,6 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.repository.DemandeRepository;
 import com.mycompany.myapp.service.DemandeService;
 import com.mycompany.myapp.service.dto.DemandeDTO;
+import com.mycompany.myapp.service.dto.OperationDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -76,14 +77,14 @@ public class DemandeResource {
     @PostMapping("/{id}/traiter")
     public ResponseEntity<DemandeDTO> traiterDemande(@PathVariable Long id, @RequestBody TraiterDemandeRequest request) {
         log.debug(
-            "REST request to traiter Demande : {}, accepte={}, motifRefus={}, modeOperationId={}",
+            "REST request to traiter Demande : {}, accepte={}, motifRefus={}",
             id,
             request.accepte,
             request.motifRefus,
-            request.modeOperationId
+            request.operationDTO
         );
 
-        DemandeDTO result = demandeService.traiterDemande(id, request.accepte, request.motifRefus, request.modeOperationId);
+        DemandeDTO result = demandeService.traiterDemande(id, request.accepte, request.motifRefus, request.operationDTO);
         return ResponseEntity.ok(result);
     }
 
@@ -92,7 +93,7 @@ public class DemandeResource {
 
         public boolean accepte;
         public String motifRefus;
-        public Long modeOperationId;
+        public OperationDTO operationDTO;
     }
 
     /**

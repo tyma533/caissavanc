@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service.dto;
 
-import com.mycompany.myapp.domain.enumeration.Objet;
+import com.mycompany.myapp.domain.enumeration.EtatDemande;
+import com.mycompany.myapp.domain.enumeration.Type;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -15,7 +16,7 @@ public class DemandeDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Objet objet;
+    private Type type;
 
     private Instant dateDemande;
 
@@ -31,15 +32,17 @@ public class DemandeDTO implements Serializable {
 
     private EtablissementDTO etablissement;
 
-    private String commentaire;
+    private String objet;
 
     private Long caisseId;
 
-    private String libelle;
+    private String intitule;
 
     private Long montant;
 
     private Long modeOperationId;
+
+    private EtatDemande etat = EtatDemande.EN_ATTENTE;
 
     public Long getId() {
         return id;
@@ -49,12 +52,12 @@ public class DemandeDTO implements Serializable {
         this.id = id;
     }
 
-    public Objet getObjet() {
-        return objet;
+    public Type getType() {
+        return type;
     }
 
-    public void setObjet(Objet objet) {
-        this.objet = objet;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public Instant getDateDemande() {
@@ -121,24 +124,24 @@ public class DemandeDTO implements Serializable {
         this.caisseId = caisseId;
     }
 
-    public String getLibelle() {
-        return this.libelle;
+    public String getIntitule() {
+        return this.intitule;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setIntitule(String intitule) {
+        this.intitule = intitule;
     }
 
     public Long getMontant() {
         return this.montant;
     }
 
-    public String getCommentaire() {
-        return commentaire;
+    public String getObjet() {
+        return objet;
     }
 
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
+    public void setObjet(String objet) {
+        this.objet = objet;
     }
 
     public void setMontant(Long montant) {
@@ -151,6 +154,14 @@ public class DemandeDTO implements Serializable {
 
     public void setModeOperationId(Long modeOperationId) {
         this.modeOperationId = modeOperationId;
+    }
+
+    public EtatDemande getEtat() {
+        return etat;
+    }
+
+    public void setEtat(EtatDemande etat) {
+        this.etat = etat;
     }
 
     @Override
@@ -179,15 +190,16 @@ public class DemandeDTO implements Serializable {
     public String toString() {
         return "DemandeDTO{" +
             "id=" + getId() +
-            ", objet='" + getObjet() + "'" +
+            ", type='" + getType() + "'" +
             ", dateDemande='" + getDateDemande() + "'" +
             ", motif='" + getMotif() + "'" +
-            ", commentaire='" + getCommentaire() + "'" +
+            ", objet='" + getObjet() + "'" +
             ", dateHeureModification='" + getDateHeureModification() + "'" +
             ", dateHeureCreation='" + getDateHeureCreation() + "'" +
             ", utiCree=" + getUtiCree() +
             ", utiModifie=" + getUtiModifie() +
             ", etablissement=" + getEtablissement() +
+            
             "}";
     }
 }

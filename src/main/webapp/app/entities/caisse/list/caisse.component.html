@@ -128,20 +128,6 @@
                 <span class="d-none d-md-inline"></span>
               </a>
 
-              <a
-                [routerLink]="['/caisse', caisse.id, 'affectation']"
-                class="btn btn-secondary btn-sm mx-1"
-                data-cy="entityAffectationButton"
-              >
-                <fa-icon icon="tasks"></fa-icon>
-                <span class="d-none d-md-inline"></span>
-              </a>
-
-              <a [routerLink]="['/caisse', caisse.id, 'depense']" class="btn btn-warning btn-sm mx-1" data-cy="entityDepenseButton">
-                <fa-icon icon="tasks"></fa-icon>
-                <span class="d-none d-md-inline"></span>
-              </a>
-
               <button type="submit" (click)="delete(caisse)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline"></span>

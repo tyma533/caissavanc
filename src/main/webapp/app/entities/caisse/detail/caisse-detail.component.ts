@@ -25,6 +25,7 @@ export class CaisseDetailComponent {
   montant: number = 0;
   commentaire: string = '';
   operations: IOperation[] = [];
+  isCaisseFermee = false;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -48,7 +49,22 @@ export class CaisseDetailComponent {
   }
 
   loadCaisse(caisseId: number): void {
-    this.caisseService.getCaisse(caisseId).subscribe(caisse => (this.caisse = caisse));
+    this.caisseService.getCaisse(caisseId).subscribe(
+      caisse => {
+        this.caisse = caisse;
+
+        // Vérifier si la caisse est clôturée
+        this.isCaisseFermee = this.caisse?.etat === 'CLOTURE';
+
+        // Charger les opérations seulement si la caisse est ouverte
+        if (!this.isCaisseFermee && this.caisse?.id) {
+          this.loadOperations(this.caisse.id);
+        }
+      },
+      error => {
+        alert('Erreur lors du chargement de la caisse');
+      },
+    );
   }
 
   loadOperations(caisseId: number): void {

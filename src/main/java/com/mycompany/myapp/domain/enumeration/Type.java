@@ -3,7 +3,7 @@ package com.mycompany.myapp.domain.enumeration;
 /**
  * The Objet enumeration.
  */
-public enum Objet {
+public enum Type {
     CREATION_CAISSE,
     ALIMENTATION_CAISSE,
     CLOTURE_CAISSE,

@@ -1,124 +1,59 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-gerant-caisse-heading"
-        data-cy="GerantCaisseCreateUpdateHeading"
-        jhiTranslate="caissavance2App.gerantCaisse.home.createOrEditLabel"
-      >
-        Create or edit a Gerant Caisse
-      </h2>
+<div class="d-flex justify-content-center py-5">
+  <div class="col-md-6">
+    <div class="card border-primary shadow-lg rounded-4">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0" id="jhi-gerant-caisse-heading" data-cy="GerantCaisseCreateUpdateHeading">Créer / Modifier une Affectation</h3>
+      </div>
 
-      <div>
+      <div class="card-body p-4">
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.actif" for="field_actif">Actif</label>
-          <input type="checkbox" class="form-check" name="actif" id="field_actif" data-cy="actif" formControlName="actif" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.dateHeureModification" for="field_dateHeureModification"
-            >Date Heure Modification</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateHeureModification"
-              data-cy="dateHeureModification"
-              type="datetime-local"
-              class="form-control"
-              name="dateHeureModification"
-              formControlName="dateHeureModification"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
+        <form [formGroup]="editForm" (ngSubmit)="save()" novalidate>
+          <!-- ID -->
+          <div class="mb-4" *ngIf="editForm.controls.id.value !== null">
+            <label class="form-label fw-bold" for="field_id">ID</label>
+            <input type="number" class="form-control" id="field_id" formControlName="id" readonly />
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.dateHeureCreation" for="field_dateHeureCreation"
-            >Date Heure Creation</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateHeureCreation"
-              data-cy="dateHeureCreation"
-              type="datetime-local"
-              class="form-control"
-              name="dateHeureCreation"
-              formControlName="dateHeureCreation"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
+          <!-- Actif -->
+          <div class="form-check form-switch mb-4">
+            <input type="checkbox" class="form-check-input" id="field_actif" formControlName="actif" />
+            <label class="form-check-label fw-bold" for="field_actif">Actif</label>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.utiCree" for="field_utiCree">Uti Cree</label>
-          <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
-        </div>
+          <!-- Select Caisse -->
+          <div class="mb-4">
+            <label class="form-label fw-bold" for="field_caisse">Caisse</label>
+            <select class="form-select" id="field_caisse" formControlName="caisse" [compareWith]="compareCaisse">
+              <option [ngValue]="null">-- Sélectionnez une caisse --</option>
+              <option *ngFor="let caisseOption of caissesSharedCollection" [ngValue]="caisseOption">
+                {{ caisseOption.libelle }}
+              </option>
+            </select>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.utiModifie" for="field_utiModifie">Uti Modifie</label>
-          <input
-            type="number"
-            class="form-control"
-            name="utiModifie"
-            id="field_utiModifie"
-            data-cy="utiModifie"
-            formControlName="utiModifie"
-          />
-        </div>
+          <!-- Select Gérants -->
+          <div class="mb-4">
+            <label class="form-label fw-bold" for="field_gerant">Gérant</label>
+            <select class="form-select" id="field_gerant" formControlName="gerant" [compareWith]="compareGerant">
+              <option [ngValue]="null">-- Sélectionnez un gérant --</option>
+              <option *ngFor="let gerantOption of gerantsSharedCollection" [ngValue]="gerantOption">
+                {{ gerantOption.nom }}
+              </option>
+            </select>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.caisse" for="field_caisse">Caisse</label>
-          <select
-            class="form-control"
-            id="field_caisse"
-            data-cy="caisse"
-            name="caisse"
-            formControlName="caisse"
-            [compareWith]="compareCaisse"
-          >
-            <option [ngValue]="null"></option>
-            <option [ngValue]="caisseOption" *ngFor="let caisseOption of caissesSharedCollection">{{ caisseOption.id }}</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.gerantCaisse.gerant" for="field_gerant">Gerant</label>
-          <select
-            class="form-control"
-            id="field_gerant"
-            data-cy="gerant"
-            name="gerant"
-            formControlName="gerant"
-            [compareWith]="compareGerant"
-          >
-            <option [ngValue]="null"></option>
-            <option [ngValue]="gerantOption" *ngFor="let gerantOption of gerantsSharedCollection">{{ gerantOption.id }}</option>
-          </select>
-        </div>
+          <!-- Boutons -->
+          <div class="d-flex justify-content-end gap-3 mt-4">
+            <button type="button" class="btn btn-outline-secondary" (click)="previousState()">
+              <fa-icon icon="ban"></fa-icon> Annuler
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSaving">
+              <fa-icon icon="save"></fa-icon> Enregistrer
+            </button>
+          </div>
+        </form>
       </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

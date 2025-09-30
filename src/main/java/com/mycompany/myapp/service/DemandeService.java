@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.DemandeDTO;
+import com.mycompany.myapp.service.dto.OperationDTO;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,5 +55,5 @@ public interface DemandeService {
      */
     void delete(Long id);
 
-    DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus, Long modeOperationId);
+    DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus, OperationDTO operationDTO);
 }

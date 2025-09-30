@@ -32,7 +32,7 @@ type DemandeFormDefaults = Pick<NewDemande, 'id' | 'dateDemande' | 'dateHeureMod
 
 type DemandeFormGroupContent = {
   id: FormControl<DemandeFormRawValue['id'] | NewDemande['id']>;
-  objet: FormControl<DemandeFormRawValue['objet']>;
+  type: FormControl<DemandeFormRawValue['type']>;
   dateDemande: FormControl<DemandeFormRawValue['dateDemande']>;
   motif: FormControl<DemandeFormRawValue['motif']>;
   dateHeureModification: FormControl<DemandeFormRawValue['dateHeureModification']>;
@@ -40,10 +40,10 @@ type DemandeFormGroupContent = {
   utiCree: FormControl<DemandeFormRawValue['utiCree']>;
   utiModifie: FormControl<DemandeFormRawValue['utiModifie']>;
   etablissement: FormControl<DemandeFormRawValue['etablissement']>;
-  libelle: FormControl<DemandeFormRawValue['libelle']>;
+  intitule: FormControl<DemandeFormRawValue['intitule']>;
   montant: FormControl<DemandeFormRawValue['montant']>;
   caisseId: FormControl<number | null>;
-  commentaire: FormControl<DemandeFormRawValue['commentaire'] | null>;
+  objet: FormControl<DemandeFormRawValue['objet'] | null>;
 };
 
 export type DemandeFormGroup = FormGroup<DemandeFormGroupContent>;
@@ -58,7 +58,7 @@ export class DemandeFormService {
 
     return new FormGroup<DemandeFormGroupContent>({
       id: new FormControl({ value: demandeRawValue.id, disabled: true }, { nonNullable: true, validators: [Validators.required] }),
-      objet: new FormControl(demandeRawValue.objet, { validators: [Validators.required] }),
+      type: new FormControl(demandeRawValue.type, { validators: [Validators.required] }),
       dateDemande: new FormControl(demandeRawValue.dateDemande),
       motif: new FormControl(demandeRawValue.motif),
       dateHeureModification: new FormControl(demandeRawValue.dateHeureModification),
@@ -66,10 +66,10 @@ export class DemandeFormService {
       utiCree: new FormControl(demandeRawValue.utiCree),
       utiModifie: new FormControl(demandeRawValue.utiModifie),
       etablissement: new FormControl(demandeRawValue.etablissement),
-      libelle: new FormControl(demandeRawValue.libelle),
+      intitule: new FormControl(demandeRawValue.intitule),
       montant: new FormControl(demandeRawValue.montant),
       caisseId: new FormControl(demandeRawValue.caisseId ?? null),
-      commentaire: new FormControl(demandeRawValue.commentaire ?? null),
+      objet: new FormControl(demandeRawValue.objet ?? null),
     });
   }
 

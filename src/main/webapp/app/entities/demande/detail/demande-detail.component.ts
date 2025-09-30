@@ -1,18 +1,20 @@
-import { Component, Input, NgModule, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+
 import { IDemande } from '../demande.model';
 import { DemandeService } from '../service/demande.service';
 import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 import { ICaisse } from 'app/entities/caisse/caisse.model';
-import { Objet } from 'app/entities/enumerations/objet.model';
+import { Type } from 'app/entities/enumerations/type.model';
 import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model';
 import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
 import { EtatCaisse } from 'app/entities/enumerations/etat-caisse.model';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { FaIconComponent, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import SharedModule from 'app/shared/shared.module';
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import { IOperation } from 'app/entities/operation/operation.model';
 
 @Component({
   selector: 'jhi-demande-detail',
@@ -28,7 +30,6 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
-    FontAwesomeModule,
   ],
 })
 export class DemandeDetailComponent implements OnInit {
@@ -40,6 +41,15 @@ export class DemandeDetailComponent implements OnInit {
   modeOperations: IModeOperation[] = [];
   selectedModeOperationId: number | null = null;
 
+  operationDTO: IOperation = {
+    modeOperation: null,
+    montant: 0,
+    banque: '',
+    numeroVC: '',
+    beneficiaire: '',
+    crediteur: '',
+  };
+
   constructor(
     protected activatedRoute: ActivatedRoute,
     protected demandeService: DemandeService,
@@ -49,27 +59,78 @@ export class DemandeDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Charger les modes d'opération pour l'alimentation
     this.modeOperationService.query().subscribe({
-      next: res => {
-        this.modeOperations = res.body ?? [];
-      },
+      next: res => (this.modeOperations = res.body ?? []),
       error: () => alert('Erreur lors de la récupération des modes d’opération'),
     });
 
-    // Charger les caisses si un établissement est lié
     if (this.demande?.etablissement?.id) {
       this.onEtablissementChange(this.demande.etablissement.id);
     }
   }
 
   ouvrirModalTraitement(): void {
+    if (this.demande?.type === Type.ALIMENTATION_CAISSE) {
+      this.operationDTO = {
+        id: undefined,
+        modeOperation: undefined,
+        montant: Number(this.demande.montant),
+        banque: '',
+        numeroVC: '',
+        beneficiaire: '',
+        crediteur: '',
+      };
+    }
     this.showModalTraitement = true;
   }
 
   fermerModalTraitement(): void {
     this.showModalTraitement = false;
   }
+
+  isDemandeTraitee(): boolean {
+    return this.demande?.etat !== 'EN_ATTENTE';
+  }
+
+  // traiter(accepte: boolean): void {
+  //   if (!this.demande) return;
+
+  //   if (!accepte && !this.motifRefus) {
+  //     alert('Le motif est obligatoire pour refuser.');
+  //     return;
+  //   }
+
+  //   if (accepte && this.demande.type === Type.ALIMENTATION_CAISSE && !this.selectedModeOperationId) {
+  //     alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation.');
+  //     return;
+  //   }
+
+  //   this.operationDTO.modeOperation = this.modeOperations.find(m => m.id === this.selectedModeOperationId);
+
+  //   this.demandeService.traiterDemande(
+  //     this.demande.id!,
+  //     accepte,
+  //     this.motifRefus,
+  //     this.operationDTO
+  //   ).subscribe({
+  //     next: res => {
+  //       alert('Traitement effectué !');
+  //       this.demande = { ...res, etat: 'TRAITEE' };
+  //       this.fermerModalTraitement();
+
+  //       if (accepte && this.demande.type === Type.ALIMENTATION_CAISSE && this.demande.etablissement) {
+  //         this.alimenterCaisse(this.demande.etablissement.id, Number(this.demande.montant));
+  //       }
+
+  //       if (accepte && this.demande.type === Type.CLOTURE_CAISSE && this.demande.etablissement) {
+  //         this.cloturerCaisse(this.demande.etablissement.id);
+  //       }
+
+  //       this.router.navigate(['/caisse']);
+  //     },
+  //     error: () => alert('Erreur lors du traitement de la demande')
+  //   });
+  // }
 
   traiter(accepte: boolean): void {
     if (!this.demande) return;
@@ -80,35 +141,24 @@ export class DemandeDetailComponent implements OnInit {
       return;
     }
 
-    // // Vérifier le mode d'opération en cas d'alimentation
-    // if (accepte && this.demande.objet === Objet.ALIMENTATION_CAISSE && !this.selectedModeOperationId) {
-    //   alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation.');
-    //   return;
-    // }
+    // Vérifier le mode d'opération si c'est une alimentation
+    if (accepte && this.demande.type === 'ALIMENTATION_CAISSE') {
+      if (!this.operationDTO.modeOperation) {
+        alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation');
+        return;
+      }
+      if (!this.operationDTO.montant || this.operationDTO.montant <= 0) {
+        alert('Veuillez saisir un montant valide.');
+        return;
+      }
+    }
 
-    // Forcer "VIREMENT" pour les alimentations cochées
-
-    const modeOperationId = this.selectedModeOperationId ?? null;
-
-    // Appel backend pour traiter la demande
-    this.demandeService.traiterDemande(this.demande.id!, accepte, this.motifRefus, modeOperationId).subscribe({
+    // Appel du service pour traiter la demande
+    this.demandeService.traiterDemande(this.demande.id!, accepte, this.motifRefus, this.operationDTO).subscribe({
       next: res => {
         alert('Traitement effectué !');
-        // this.demande = res;
-        this.demande = { ...res, etat: 'TRAITEE' }; // <- on marque traité
+        this.demande = { ...res, etat: 'TRAITEE' };
         this.fermerModalTraitement();
-
-        // Mise à jour automatique de la caisse pour alimentation
-        if (accepte && this.demande.objet === Objet.ALIMENTATION_CAISSE && this.demande.etablissement) {
-          this.alimenterCaisse(this.demande.etablissement.id, Number(this.demande.montant));
-        }
-
-        // Clôture automatique pour clôture de caisse
-        if (accepte && this.demande.objet === Objet.CLOTURE_CAISSE && this.demande.etablissement) {
-          this.cloturerCaisse(this.demande.etablissement.id);
-        }
-
-        this.router.navigate(['/caisse']);
       },
       error: () => alert('Erreur lors du traitement de la demande'),
     });
@@ -116,9 +166,7 @@ export class DemandeDetailComponent implements OnInit {
 
   onEtablissementChange(etablissementId: number): void {
     this.caisseService.findByEtablissementId(etablissementId).subscribe({
-      next: res => {
-        this.caisses = res;
-      },
+      next: res => (this.caisses = res),
       error: () => alert('Erreur lors de la récupération des caisses'),
     });
   }
@@ -157,14 +205,11 @@ export class DemandeDetailComponent implements OnInit {
     });
   }
 
-  // Ajoute dans DemandeDetailComponent
-
+  // Modal refus
   showModal = false;
-
   ouvrirModalRefusDepuisTraitement(): void {
     this.showModal = true;
   }
-
   fermerModal(): void {
     this.showModal = false;
   }

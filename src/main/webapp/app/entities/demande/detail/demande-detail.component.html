@@ -11,17 +11,17 @@
     <jhi-alert></jhi-alert>
 
     <dl class="details-grid">
-      <dt>Objet</dt>
+      <dt>Type</dt>
       <dd>
-        <span jhiTranslate="{{ 'caissavance2App.Objet.' + demande.objet }}">{{ demande.objet }}</span>
+        <span jhiTranslate="{{ 'caissavance2App.Type.' + demande.type }}">{{ demande.type }}</span>
       </dd>
 
-      <ng-container *ngIf="demande?.objet === 'CREATION_CAISSE'">
-        <dt>Libellé de la caisse</dt>
-        <dd>{{ demande.libelle }}</dd>
+      <ng-container *ngIf="demande?.type === 'CREATION_CAISSE'">
+        <dt>l'intitulé de la caisse</dt>
+        <dd>{{ demande.intitule }}</dd>
       </ng-container>
 
-      <ng-container *ngIf="demande?.objet === 'ALIMENTATION_CAISSE'">
+      <ng-container *ngIf="demande?.type === 'ALIMENTATION_CAISSE'">
         <dt>Montant</dt>
         <dd>{{ demande.montant }}</dd>
       </ng-container>
@@ -51,35 +51,67 @@
 
       <!-- Boutons Traiter et Modifier à droite -->
       <div class="d-flex gap-2">
-        <button class="btn btn-primary" (click)="ouvrirModalTraitement()"><fa-icon icon="tasks"></fa-icon>&nbsp;Traiter la demande</button>
+        <button class="btn btn-primary" [disabled]="isDemandeTraitee()" (click)="ouvrirModalTraitement()">
+          <fa-icon icon="tasks"></fa-icon>&nbsp;Traiter la demande
+        </button>
         <button type="button" [routerLink]="['/demande', demande.id, 'edit']" class="btn btn-outline-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
         </button>
 
-        <div *ngIf="demande?.etat === 'TRAITEE'" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div>
+        <!-- <div *ngIf="demande?.etat === 'TRAITEE'" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div> -->
       </div>
     </div>
   </div>
 
+  <div *ngIf="demande?.etat === 'TRAITEE'" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div>
   <!-- Modal Traitement -->
   <div class="modal" tabindex="-1" [ngClass]="{ show: showModalTraitement }" *ngIf="showModalTraitement" style="display: block">
     <div class="modal-dialog">
       <div class="modal-content shadow-lg">
         <div class="modal-header">
-          <h5 class="modal-title">Choisir une action</h5>
+          <h5 class="modal-title">Traitement de la demande</h5>
           <button type="button" class="btn-close" (click)="fermerModalTraitement()"></button>
         </div>
+
         <div class="modal-body">
-          <div *ngIf="demande?.objet === 'ALIMENTATION_CAISSE'" class="alert alert-info d-flex align-items-center gap-2">
-            <fa-icon icon="exchange-alt"></fa-icon>
-            <span>Mode d’opération : <b>VIREMENT</b></span>
+          <div *ngIf="demande?.type === 'ALIMENTATION_CAISSE'">
+            <div class="mb-3">
+              <label for="modeOperation">Mode d’opération</label>
+              <select id="modeOperation" class="form-control" [(ngModel)]="operationDTO.modeOperation">
+                <option [ngValue]="null">-- Sélectionner --</option>
+                <option *ngFor="let mode of modeOperations" [ngValue]="mode">{{ mode.libelle }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="montant">Montant accepté</label>
+              <input id="montant" type="number" class="form-control" [(ngModel)]="operationDTO.montant" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="banque">Banque</label>
+              <input id="banque" type="text" class="form-control" [(ngModel)]="operationDTO.banque" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="numeroVC">Numéro virement/chèque</label>
+              <input id="numeroVC" type="text" class="form-control" [(ngModel)]="operationDTO.numeroVC" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="beneficiaire">Bénéficiaire</label>
+              <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="operationDTO.beneficiaire" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="crediteur">Créditeur</label>
+              <input id="crediteur" type="text" class="form-control" [(ngModel)]="operationDTO.crediteur" required />
+            </div>
           </div>
 
           <div class="d-flex justify-content-around mt-3">
-            <button class="btn btn-success" (click)="traiter(true)"><fa-icon icon="check"></fa-icon>&nbsp;Accepter</button>
-            <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">
-              <fa-icon icon="times"></fa-icon>&nbsp;Refuser
-            </button>
+            <button class="btn btn-success" (click)="traiter(true)">Accepter</button>
+            <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">Refuser</button>
           </div>
         </div>
       </div>

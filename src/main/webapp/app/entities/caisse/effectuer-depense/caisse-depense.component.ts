@@ -6,6 +6,8 @@ import { OperationService } from 'app/entities/operation/service/operation.servi
 import { ICaisse } from '../caisse.model';
 import { CommonModule } from '@angular/common';
 import { IOperation } from 'app/entities/operation/operation.model';
+import { EtatCaisse } from 'app/entities/enumerations/etat-caisse.model';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -24,10 +26,15 @@ export class CaisseDepenseComponent {
   beneficiaire: string = '';
   crediteur: string = '';
 
+  erreurMessage: string | null = null;
+
+  EtatCaisse = EtatCaisse;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private operationService: OperationService,
     private caisseService: CaisseService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +49,11 @@ export class CaisseDepenseComponent {
       alert('Aucune caisse sélectionnée');
       return;
     }
+
+    if (this.caisse.etat === EtatCaisse.CLOTURE) {
+      this.erreurMessage = 'Impossible : la caisse est clôturée.';
+      return;
+    }
     const operation: IOperation = {
       id: 0,
       caisse: { id: this.caisse.id },
@@ -53,14 +65,34 @@ export class CaisseDepenseComponent {
       crediteur: this.crediteur,
       numeroVC: this.numeroVC,
     };
+    // this.operationService.effectuerDepense(operation).subscribe({
+    //   next: res => {
+    //     alert('Dépense effectuée avec succès ! ✅');
+    //     console.log(res);
+    //   },
+    //   error: err => {
+    //     alert("Erreur lors de l'enregistrement de la dépense ❌");
+    //     console.error(err);
+    //   },
+    // });
+
     this.operationService.effectuerDepense(operation).subscribe({
       next: res => {
+        this.erreurMessage = null; // reset
         alert('Dépense effectuée avec succès ! ✅');
+        if (this.caisse?.id) {
+          this.router.navigate(['/caisse', this.caisse.id, 'view']);
+        }
         console.log(res);
       },
       error: err => {
-        alert("Erreur lors de l'enregistrement de la dépense ❌");
         console.error(err);
+
+        if (err.status === 400 || err.status === 403) {
+          this.erreurMessage = err.error?.message || "Impossible d'effectuer la dépense : la caisse est fermée.";
+        } else {
+          this.erreurMessage = 'Une erreur inattendue est survenue.';
+        }
       },
     });
   }

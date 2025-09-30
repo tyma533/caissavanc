@@ -4,7 +4,7 @@ import { ITypeOperation } from 'app/entities/type-operation/type-operation.model
 import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model';
 
 export interface IOperation {
-  id: number;
+  id?: number;
   numero?: string | null;
   commentaire?: string | null;
   montant?: number | null;

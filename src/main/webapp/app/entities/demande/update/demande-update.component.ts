@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IEtablissement } from 'app/entities/etablissement/etablissement.model';
 import { EtablissementService } from 'app/entities/etablissement/service/etablissement.service';
-import { Objet } from 'app/entities/enumerations/objet.model';
+import { Type } from 'app/entities/enumerations/type.model';
 import { DemandeService } from '../service/demande.service';
 import { IDemande } from '../demande.model';
 import { DemandeFormService, DemandeFormGroup } from './demande-form.service';
@@ -29,7 +29,7 @@ import { Router } from '@angular/router';
 export class DemandeUpdateComponent implements OnInit {
   isSaving = false;
   demande: IDemande | null = null;
-  objetValues = Object.keys(Objet);
+  typeValues = Object.keys(Type);
 
   etablissementsSharedCollection: IEtablissement[] = [];
   caissesSharedCollection: ICaisse[] = [];
@@ -54,44 +54,71 @@ export class DemandeUpdateComponent implements OnInit {
     this.etablissementService.compareEtablissement(o1, o2);
 
   ngOnInit(): void {
-    // Charger la demande si modification
-    this.activatedRoute.data.subscribe(({ demande }) => {
-      this.demande = demande;
-      if (demande) {
-        this.updateForm(demande);
-      }
-    });
+    this.activatedRoute.queryParams.subscribe(params => {
+      const origine = params['origine'];
+      const typeParam = params['type'] as Type;
+      const caisseId = params['caisseId'] ? +params['caisseId'] : null;
+      const etablissementId = params['etablissementId'] ? +params['etablissementId'] : null;
 
-    // Charger tous les établissements
-    this.etablissementService.query().subscribe({
-      next: (res: HttpResponse<IEtablissement[]>) => {
-        this.etablissementsSharedCollection = res.body ?? [];
-      },
-      error: () => alert('Erreur lors du chargement des établissements'),
+      // Charger tous les établissements pour le select
+      this.etablissementService.query().subscribe({
+        next: (res: HttpResponse<IEtablissement[]>) => {
+          this.etablissementsSharedCollection = res.body ?? [];
+
+          // Si un etablissementId est fourni, charger l'objet complet
+          if (etablissementId) {
+            this.etablissementService.find(etablissementId).subscribe({
+              next: (res: HttpResponse<IEtablissement>) => {
+                if (res.body) {
+                  // Préremplir le formulaire avec l'objet complet
+                  this.editForm.get('etablissement')?.setValue(res.body, { emitEvent: false });
+
+                  // Charger les caisses filtrées pour cet établissement
+                  this.updateFilteredCaisses();
+
+                  // Si un caisseId est fourni, le préremplir
+                  if (caisseId) {
+                    this.editForm.get('caisseId')?.setValue(caisseId);
+                  }
+
+                  // Définir le type si fourni
+                  if (typeParam) {
+                    this.editForm.get('type')?.setValue(typeParam);
+                  }
+                }
+              },
+              error: () => alert('Erreur lors du chargement de l’établissement'),
+            });
+          } else if (typeParam) {
+            // Pas d'établissement mais type fourni
+            this.editForm.get('type')?.setValue(typeParam);
+          }
+        },
+        error: () => alert('Erreur lors du chargement des établissements'),
+      });
+
+      // Si on modifie une demande existante
+      this.activatedRoute.data.subscribe(({ demande }) => {
+        if (demande) {
+          this.updateForm(demande);
+        }
+      });
     });
 
     // Réagir au changement de l'établissement pour filtrer les caisses
     this.editForm.get('etablissement')?.valueChanges.subscribe(etablissement => {
-      const objet = this.editForm.get('objet')?.value as Objet | undefined;
+      const type = (this.editForm.get('type')?.value as Type | undefined) || '';
       if (!etablissement?.id) {
-        this.filteredCaisses = [];
-        this.caissesOuvertes = [];
-        this.caissesFermees = [];
-        this.editForm.get('caisseId')?.setValue(null);
+        this.clearCaisses();
         return;
       }
 
-      if (objet === Objet.ALIMENTATION_CAISSE) {
-        this.loadCaissesOuvertes(etablissement.id); // si tu veux que l’alimentation se fasse seulement sur caisses ouvertes
-      } else if (objet === Objet.CLOTURE_CAISSE) {
-        this.loadCaissesOuvertes(etablissement.id); // uniquement les caisses ouvertes
-      } else if (objet === Objet.REOUVERTURE_CAISSE) {
-        this.loadCaissesFermees(etablissement.id); // uniquement les caisses fermées
+      if (type === Type.ALIMENTATION_CAISSE || type === Type.CLOTURE_CAISSE) {
+        this.loadCaissesOuvertes(etablissement.id);
+      } else if (type === Type.REOUVERTURE_CAISSE) {
+        this.loadCaissesFermees(etablissement.id);
       } else {
-        this.filteredCaisses = [];
-        this.caissesOuvertes = [];
-        this.caissesFermees = [];
-        this.editForm.get('caisseId')?.setValue(null);
+        this.clearCaisses();
       }
     });
 
@@ -103,8 +130,8 @@ export class DemandeUpdateComponent implements OnInit {
       error: () => alert('Erreur lors du chargement des modes d’opération'),
     });
 
-    // Réagir au changement d'objet pour filtrer les caisses
-    this.editForm.get('objet')?.valueChanges.subscribe(() => {
+    // Réagir au changement de type pour filtrer les caisses
+    this.editForm.get('type')?.valueChanges.subscribe(() => {
       this.updateFilteredCaisses();
     });
   }
@@ -118,7 +145,7 @@ export class DemandeUpdateComponent implements OnInit {
     const demande = this.demandeFormService.getDemande(this.editForm);
 
     // Validation pour l'alimentation
-    if (demande.objet === Objet.ALIMENTATION_CAISSE) {
+    if (demande.type === Type.ALIMENTATION_CAISSE) {
       if (!demande.caisseId) {
         alert('Veuillez sélectionner une caisse');
         this.isSaving = false;
@@ -131,7 +158,7 @@ export class DemandeUpdateComponent implements OnInit {
       }
     }
 
-    if (demande.objet === Objet.CLOTURE_CAISSE && !demande.caisseId) {
+    if (demande.type === Type.CLOTURE_CAISSE && !demande.caisseId) {
       alert('Veuillez sélectionner une caisse à clôturer');
       this.isSaving = false;
       return;
@@ -187,7 +214,7 @@ export class DemandeUpdateComponent implements OnInit {
 
   protected updateFilteredCaisses(): void {
     const etab = this.editForm.get('etablissement')?.value;
-    const objet = this.editForm.get('objet')?.value as Objet | undefined;
+    const type = this.editForm.get('type')?.value as Type | undefined;
 
     if (!etab?.id) {
       this.clearCaisses();
@@ -196,12 +223,16 @@ export class DemandeUpdateComponent implements OnInit {
 
     const etabId = etab.id;
 
-    if (objet === Objet.ALIMENTATION_CAISSE || objet === Objet.CLOTURE_CAISSE) {
-      this.loadCaissesOuvertes(etabId);
-    } else if (objet === Objet.REOUVERTURE_CAISSE) {
-      this.loadCaissesFermees(etabId);
-    } else {
-      this.clearCaisses();
+    switch (type) {
+      case Type.ALIMENTATION_CAISSE:
+      case Type.CLOTURE_CAISSE:
+        this.loadCaissesOuvertes(etabId); // alimentation et clôture → caisses ouvertes
+        break;
+      case Type.REOUVERTURE_CAISSE:
+        this.loadCaissesFermees(etabId); // réouverture → caisses fermées
+        break;
+      default:
+        this.clearCaisses();
     }
   }
 
@@ -234,8 +265,10 @@ export class DemandeUpdateComponent implements OnInit {
   protected loadCaissesFermees(etablissementId: number): void {
     this.caisseService.getCaissesFermees(etablissementId).subscribe({
       next: (caisses: ICaisse[]) => {
+        console.log('Caisses fermées reçues:', caisses);
         this.caissesFermees = caisses;
-        if (!this.caissesFermees.some(c => c.id === this.editForm.get('caisseId')?.value)) {
+        this.filteredCaisses = caisses; // ← indispensable pour que le <select> affiche
+        if (!this.filteredCaisses.some(c => c.id === this.editForm.get('caisseId')?.value)) {
           this.editForm.get('caisseId')?.setValue(null);
         }
       },

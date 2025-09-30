@@ -18,7 +18,7 @@
         "title": "Demande"
       },
       "id": "ID",
-      "objet": "Objet",
+      "type": "Type",
       "dateDemande": "Date Demande",
       "motif": "Motif",
       "dateHeureModification": "Date Heure Modification",
@@ -28,7 +28,8 @@
       "etablissement": "Etablissement",
       "libelle": "Libelle",
       "montant": "Montant",
-      "action": "Action"
+      "action": "Action",
+      "etat": "Etat"
     }
   }
 }

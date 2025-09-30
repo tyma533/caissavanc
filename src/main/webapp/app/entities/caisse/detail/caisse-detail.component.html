@@ -48,6 +48,56 @@
       <button type="button" [routerLink]="['/caisse', caisse.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Edit
       </button>
+
+      <button
+        type="button"
+        [routerLink]="['/caisse', caisse.id, 'affectation']"
+        [disabled]="isCaisseFermee"
+        class="btn btn-secondary btn-sm mx-1"
+        data-cy="entityAffectationButton"
+      >
+        <fa-icon icon="tasks"></fa-icon>
+        <span class="d-none d-md-inline">Affectation</span>
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/caisse', caisse.id, 'depense']"
+        [disabled]="isCaisseFermee"
+        class="btn btn-warning btn-sm mx-1"
+        data-cy="entityDepenseButton"
+      >
+        <fa-icon icon="tasks"></fa-icon>
+        <span class="d-none d-md-inline">Dépense</span>
+      </button>
+
+      <button
+        type="button"
+        [disabled]="caisse.etat?.toString() === 'CLOTURE'"
+        class="btn btn-warning me-2"
+        [routerLink]="['/demande', 'new']"
+        [queryParams]="{
+          type: 'ALIMENTATION_CAISSE',
+          caisseId: caisse.id,
+          etablissementId: caisse.etablissement?.id
+        }"
+      >
+        Alimenter la caisse
+      </button>
+
+      <!-- Bouton clôture ou réouverture -->
+      <button
+        type="button"
+        class="btn btn-danger me-2"
+        [routerLink]="['/demande', 'new']"
+        [queryParams]="{
+          type: caisse.etat?.toString() === 'OUVERTE' ? 'CLOTURE_CAISSE' : 'REOUVERTURE_CAISSE',
+          caisseId: caisse.id,
+          etablissementId: caisse.etablissement?.id
+        }"
+      >
+        {{ caisse.etat?.toString() === 'OUVERTE' ? 'Demande de clôture' : 'Demande de réouverture' }}
+      </button>
     </div>
   </div>
 </div>

@@ -7,12 +7,12 @@
 
   <form class="demande-form" [formGroup]="editForm" (ngSubmit)="save()">
     <div class="form-grid">
-      <!-- Objet -->
+      <!-- Type -->
       <div class="form-group">
-        <label>Objet</label>
-        <select formControlName="objet">
-          <option [ngValue]="null">Sélectionner un objet</option>
-          <option *ngFor="let objet of objetValues" [ngValue]="objet">{{ objet }}</option>
+        <label>Type</label>
+        <select formControlName="type">
+          <option [ngValue]="null">Sélectionner un type</option>
+          <option *ngFor="let type of typeValues" [ngValue]="type">{{ type }}</option>
         </select>
       </div>
 
@@ -25,15 +25,22 @@
         </select>
       </div>
 
-      <!-- Libellé de la caisse pour CREATION_CAISSE -->
-      <div class="form-group" *ngIf="editForm.get('objet')?.value === 'CREATION_CAISSE'">
-        <label>Libellé de la caisse</label>
-        <input type="text" formControlName="libelle" placeholder="Libellé de la caisse" />
+      <!-- L'intitulé de la caisse pour CREATION_CAISSE -->
+      <div class="form-group" *ngIf="editForm.get('type')?.value === 'CREATION_CAISSE'">
+        <label>L'intitulé de la caisse</label>
+        <input type="text" formControlName="intitule" placeholder="L'intitulé de la caisse" />
       </div>
 
-      <!-- Sélection de la caisse pour ALIMENTATION_CAISSE -->
-      <div class="form-group" *ngIf="editForm.get('objet')?.value === 'ALIMENTATION_CAISSE'">
-        <label>Caisse à alimenter</label>
+      <div
+        class="form-group"
+        *ngIf="['ALIMENTATION_CAISSE', 'CLOTURE_CAISSE', 'REOUVERTURE_CAISSE'].includes(editForm.get('type')?.value || '')"
+      >
+        <label>
+          Caisse
+          <span *ngIf="editForm.get('type')?.value === 'ALIMENTATION_CAISSE'">à alimenter</span>
+          <span *ngIf="editForm.get('type')?.value === 'CLOTURE_CAISSE'">à clôturer</span>
+          <span *ngIf="editForm.get('type')?.value === 'REOUVERTURE_CAISSE'">à rouvrir</span>
+        </label>
         <select formControlName="caisseId">
           <option [ngValue]="null">Sélectionner une caisse</option>
           <option *ngFor="let caisse of filteredCaisses" [ngValue]="caisse.id">
@@ -41,14 +48,17 @@
           </option>
         </select>
 
-        <label>Montant à alimenter</label>
-        <input type="number" formControlName="montant" placeholder="Montant" min="0" required />
+        <!-- Montant uniquement pour alimentation -->
+        <div *ngIf="editForm.get('type')?.value === 'ALIMENTATION_CAISSE'">
+          <label>Montant à alimenter</label>
+          <input type="number" formControlName="montant" placeholder="Montant" min="0" required />
+        </div>
       </div>
 
-      <!-- Commentaire -->
+      <!-- Objet -->
       <div class="form-group">
-        <label>Commentaire</label>
-        <textarea formControlName="commentaire" placeholder="Entrez un commentaire"></textarea>
+        <label>Objet</label>
+        <textarea formControlName="objet" placeholder="Entrez un objet" required></textarea>
       </div>
     </div>
 

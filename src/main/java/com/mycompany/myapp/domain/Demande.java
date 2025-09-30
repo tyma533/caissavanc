@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.mycompany.myapp.domain.enumeration.EtatDemande;
-import com.mycompany.myapp.domain.enumeration.Objet;
+import com.mycompany.myapp.domain.enumeration.Type;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -28,8 +28,8 @@ public class Demande implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "objet", nullable = false)
-    private Objet objet;
+    @Column(name = "type", nullable = false)
+    private Type type;
 
     @Column(name = "date_demande")
     private Instant dateDemande;
@@ -49,14 +49,14 @@ public class Demande implements Serializable {
     @Column(name = "uti_modifie")
     private Long utiModifie;
 
-    @Column(name = "libelle")
-    private String libelle;
+    @Column(name = "intitule")
+    private String intitule;
 
     @Column(name = "montant")
     private Long montant;
 
-    @Column(name = "commentaire")
-    private String commentaire;
+    @Column(name = "objet")
+    private String objet;
 
     @Column(name = "caisse_id")
     private Long caisseId;
@@ -98,12 +98,12 @@ public class Demande implements Serializable {
         this.id = id;
     }
 
-    public Objet getObjet() {
-        return this.objet;
+    public Type getType() {
+        return this.type;
     }
 
-    public void setObjet(Objet objet) {
-        this.objet = objet;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public Instant getDateDemande() {
@@ -122,12 +122,12 @@ public class Demande implements Serializable {
         this.motif = motif;
     }
 
-    public String getLibelle() {
-        return this.libelle;
+    public String getIntitule() {
+        return this.intitule;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setIntitule(String intitule) {
+        this.intitule = intitule;
     }
 
     public Long getMontant() {
@@ -202,12 +202,12 @@ public class Demande implements Serializable {
         this.typeOperation = typeOperation;
     }
 
-    public String getCommentaire() {
-        return commentaire;
+    public String getObjet() {
+        return objet;
     }
 
-    public void setCommentaire(String commentaire) {
-        this.commentaire = commentaire;
+    public void setObjet(String objet) {
+        this.objet = objet;
     }
 
     public EtatDemande getEtat() {
@@ -242,8 +242,8 @@ public class Demande implements Serializable {
             "Demande{" +
             "id=" +
             getId() +
-            ", objet='" +
-            getObjet() +
+            ", type='" +
+            getType() +
             "'" +
             ", dateDemande='" +
             getDateDemande() +
@@ -261,11 +261,14 @@ public class Demande implements Serializable {
             getUtiCree() +
             ", utiModifie=" +
             getUtiModifie() +
-            ", libelle='" +
-            getLibelle() +
+            ", intitule='" +
+            getIntitule() +
             "'" +
             ", montant=" +
             getMontant() +
+            ", caisseId=" +
+            getCaisseId() +
+            "}" +
             ", caisseId=" +
             getCaisseId() +
             "}"

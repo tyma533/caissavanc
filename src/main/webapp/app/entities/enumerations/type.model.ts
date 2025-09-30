@@ -1,4 +1,4 @@
-export enum Objet {
+export enum Type {
   CREATION_CAISSE = 'CREATION_CAISSE',
 
   ALIMENTATION_CAISSE = 'ALIMENTATION_CAISSE',

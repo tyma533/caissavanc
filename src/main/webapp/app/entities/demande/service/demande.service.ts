@@ -11,6 +11,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { IDemande, NewDemande } from '../demande.model';
 import { ICaisse } from 'app/entities/caisse/caisse.model';
+import { IOperation } from 'app/entities/operation/operation.model';
 
 export type PartialUpdateDemande = Partial<IDemande> & Pick<IDemande, 'id'>;
 
@@ -171,12 +172,12 @@ export class DemandeService {
   //   // Appel POST vers le backend avec body JSON
   //   return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, body);
   // }
-  traiterDemande(demandeId: number, accepte: boolean, motifRefus?: string, modeOperationId?: number | null): Observable<IDemande> {
+  traiterDemande(demandeId: number, accepte: boolean, motifRefus?: string, operationDTO?: IOperation): Observable<IDemande> {
     // Construire le JSON du body
-    const body = {
+    const body: any = {
       accepte,
       motifRefus: motifRefus ?? null,
-      modeOperationId: modeOperationId ?? null,
+      operationDTO: operationDTO ?? null, // <- envoyer l'objet complet
     };
 
     // POST vers le backend avec le body JSON

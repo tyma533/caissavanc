@@ -76,7 +76,7 @@ export class OperationService {
   }
 
   getOperationIdentifier(operation: Pick<IOperation, 'id'>): number {
-    return operation.id;
+    return operation.id!;
   }
 
   compareOperation(o1: Pick<IOperation, 'id'> | null, o2: Pick<IOperation, 'id'> | null): boolean {

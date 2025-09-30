@@ -9,8 +9,8 @@ export interface IGerantCaisse {
   dateHeureCreation?: dayjs.Dayjs | null;
   utiCree?: number | null;
   utiModifie?: number | null;
-  caisse?: Pick<ICaisse, 'id'> | null;
-  gerant?: Pick<IGerant, 'id'> | null;
+  caisse?: Pick<ICaisse, 'id' | 'libelle'> | null;
+  gerant?: Pick<IGerant, 'id' | 'nom'> | null;
 }
 
 export type NewGerantCaisse = Omit<IGerantCaisse, 'id'> & { id: null };
