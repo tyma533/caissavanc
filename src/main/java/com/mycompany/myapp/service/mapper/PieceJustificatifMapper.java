@@ -17,5 +17,6 @@ public interface PieceJustificatifMapper extends EntityMapper<PieceJustificatifD
     @Named("operationId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "numero", source = "numero")
     OperationDTO toDtoOperationId(Operation operation);
 }

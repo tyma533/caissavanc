@@ -36,6 +36,17 @@ public class GerantCaisseServiceImpl implements GerantCaisseService {
     public GerantCaisseDTO save(GerantCaisseDTO gerantCaisseDTO) {
         log.debug("Request to save GerantCaisse : {}", gerantCaisseDTO);
         GerantCaisse gerantCaisse = gerantCaisseMapper.toEntity(gerantCaisseDTO);
+
+        // Vérifier si on essaye d'activer un gérant
+        if (Boolean.TRUE.equals(gerantCaisse.getActif())) {
+            Optional<GerantCaisse> existingActive = gerantCaisseRepository.findFirstByCaisseIdAndActifTrue(
+                gerantCaisse.getCaisse().getId()
+            );
+
+            if (existingActive.isPresent()) {
+                throw new RuntimeException("Cette caisse a déjà un gérant actif !");
+            }
+        }
         gerantCaisse = gerantCaisseRepository.save(gerantCaisse);
         return gerantCaisseMapper.toDto(gerantCaisse);
     }
@@ -44,6 +55,17 @@ public class GerantCaisseServiceImpl implements GerantCaisseService {
     public GerantCaisseDTO update(GerantCaisseDTO gerantCaisseDTO) {
         log.debug("Request to update GerantCaisse : {}", gerantCaisseDTO);
         GerantCaisse gerantCaisse = gerantCaisseMapper.toEntity(gerantCaisseDTO);
+        // Vérifier si on essaye d’activer un gérant
+        if (Boolean.TRUE.equals(gerantCaisse.getActif())) {
+            Optional<GerantCaisse> existingActive = gerantCaisseRepository.findFirstByCaisseIdAndActifTrue(
+                gerantCaisse.getCaisse().getId()
+            );
+
+            if (existingActive.isPresent() && !existingActive.get().getId().equals(gerantCaisse.getId())) {
+                throw new RuntimeException("Cette caisse a déjà un gérant actif !");
+            }
+        }
+
         gerantCaisse = gerantCaisseRepository.save(gerantCaisse);
         return gerantCaisseMapper.toDto(gerantCaisse);
     }

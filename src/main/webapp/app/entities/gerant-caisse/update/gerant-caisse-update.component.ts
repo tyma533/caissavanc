@@ -48,6 +48,21 @@ export class GerantCaisseUpdateComponent implements OnInit {
       if (gerantCaisse) {
         this.updateForm(gerantCaisse);
       }
+      // récupération du caisseId depuis l’URL
+      this.activatedRoute.queryParams.subscribe(params => {
+        const caisseId = params['caisseId'];
+        if (caisseId) {
+          this.caisseService.find(caisseId).subscribe(res => {
+            const caisse = res.body;
+            if (caisse) {
+              // pré-remplir le champ "caisse"
+              this.editForm.patchValue({ caisse });
+              // ajouter à la collection si manquant
+              this.caissesSharedCollection = this.caisseService.addCaisseToCollectionIfMissing(this.caissesSharedCollection, caisse);
+            }
+          });
+        }
+      });
 
       this.loadRelationshipsOptions();
     });

@@ -86,12 +86,12 @@
 
           <td>
             <div *ngIf="gerantCaisse.caisse">
-              <a [routerLink]="['/caisse', gerantCaisse.caisse.id, 'view']">{{ gerantCaisse.caisse.id }}</a>
+              <a [routerLink]="['/caisse', gerantCaisse.caisse.id, 'view']">{{ gerantCaisse.caisse.libelle }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="gerantCaisse.gerant">
-              <a [routerLink]="['/gerant', gerantCaisse.gerant.id, 'view']">{{ gerantCaisse.gerant.id }}</a>
+              <a [routerLink]="['/gerant', gerantCaisse.gerant.id, 'view']">{{ gerantCaisse.gerant.nom }}</a>
             </div>
           </td>
           <td class="text-end">

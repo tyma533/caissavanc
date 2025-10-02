@@ -19,7 +19,7 @@
       <!-- Établissement -->
       <div class="form-group">
         <label>Établissement demandeur</label>
-        <select formControlName="etablissement">
+        <select formControlName="etablissement" [compareWith]="compareEtab">
           <option [ngValue]="null">Sélectionner un établissement</option>
           <option *ngFor="let etab of etablissementsSharedCollection" [ngValue]="etab">{{ etab.libelle }}</option>
         </select>

@@ -2,10 +2,12 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.Caisse;
 import com.mycompany.myapp.domain.CaisseRubrique;
+import com.mycompany.myapp.domain.GerantCaisse;
 import com.mycompany.myapp.domain.Rubrique;
 import com.mycompany.myapp.domain.enumeration.EtatCaisse;
 import com.mycompany.myapp.repository.CaisseRepository;
 import com.mycompany.myapp.repository.CaisseRubriqueRepository;
+import com.mycompany.myapp.repository.GerantCaisseRepository;
 import com.mycompany.myapp.repository.RubriqueRepository;
 import com.mycompany.myapp.service.CaisseService;
 import com.mycompany.myapp.service.dto.CaisseDTO;
@@ -41,6 +43,7 @@ public class CaisseServiceImpl implements CaisseService {
 
     private final CaisseRubriqueRepository caisseRubriqueRepository;
     private final CaisseRubriqueMapper caisseRubriqueMapper;
+    private final GerantCaisseRepository gerantCaisseRepository;
 
     private final RubriqueMapper rubriqueMapper;
 
@@ -50,7 +53,8 @@ public class CaisseServiceImpl implements CaisseService {
         RubriqueRepository rubriqueRepository,
         RubriqueMapper rubriqueMapper,
         CaisseRubriqueRepository caisseRubriqueRepository,
-        CaisseRubriqueMapper caisseRubriqueMapper
+        CaisseRubriqueMapper caisseRubriqueMapper,
+        GerantCaisseRepository gerantCaisseRepository
     ) {
         this.caisseRepository = caisseRepository;
         this.caisseMapper = caisseMapper;
@@ -58,6 +62,7 @@ public class CaisseServiceImpl implements CaisseService {
         this.rubriqueMapper = rubriqueMapper;
         this.caisseRubriqueRepository = caisseRubriqueRepository;
         this.caisseRubriqueMapper = caisseRubriqueMapper;
+        this.gerantCaisseRepository = gerantCaisseRepository;
     }
 
     @Override
@@ -156,7 +161,17 @@ public class CaisseServiceImpl implements CaisseService {
     @Transactional(readOnly = true)
     public Optional<CaisseDTO> findOne(Long id) {
         log.debug("Request to get Caisse : {}", id);
-        return caisseRepository.findById(id).map(caisseMapper::toDto);
+        Optional<CaisseDTO> optionalCaisseDTO = caisseRepository.findById(id).map(caisseMapper::toDto);
+        if (optionalCaisseDTO.isPresent()) {
+            CaisseDTO caisseDTO = optionalCaisseDTO.get();
+            List<GerantCaisse> listGerantCaisses = gerantCaisseRepository.findByCaisseIdAndActifTrue(caisseDTO.getId());
+            if (listGerantCaisses.isEmpty() == false) {
+                caisseDTO.setGerantActif(listGerantCaisses.get(0).getGerant().getNom());
+            }
+            return Optional.of(caisseDTO);
+        } else {
+            return optionalCaisseDTO;
+        }
     }
 
     @Override

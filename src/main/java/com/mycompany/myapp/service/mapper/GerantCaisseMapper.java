@@ -20,10 +20,12 @@ public interface GerantCaisseMapper extends EntityMapper<GerantCaisseDTO, Gerant
     @Named("caisseId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "libelle", source = "libelle")
     CaisseDTO toDtoCaisseId(Caisse caisse);
 
     @Named("gerantId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nom", source = "nom")
     GerantDTO toDtoGerantId(Gerant gerant);
 }

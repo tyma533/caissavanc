@@ -10,7 +10,7 @@ export interface IPieceJustificatif {
   dateHeureCreation?: dayjs.Dayjs | null;
   utiCree?: number | null;
   utiModifie?: number | null;
-  operation?: Pick<IOperation, 'id'> | null;
+  operation?: Pick<IOperation, 'id' | 'numero'> | null;
 }
 
 export type NewPieceJustificatif = Omit<IPieceJustificatif, 'id'> & { id: null };

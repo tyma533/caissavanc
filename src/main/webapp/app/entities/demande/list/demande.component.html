@@ -90,7 +90,8 @@
       </thead>
       <tbody>
         <tr *ngFor="let demande of demandes; trackBy: trackId" data-cy="entityTable">
-          <td jhiTranslate="{{ 'caissavance2App.Type.' + demande.type }}">{{ demande.type }}</td>
+          <!-- <td jhiTranslate="{{ 'caissavance2App.Type.' + demande.type }}">{{ demande.type }}</td> -->
+          <td>{{ demande.type }}</td>
           <td>{{ demande.motif }}</td>
           <td>
             <div *ngIf="demande.etablissement">

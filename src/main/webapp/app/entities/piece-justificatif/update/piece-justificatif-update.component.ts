@@ -46,6 +46,21 @@ export class PieceJustificatifUpdateComponent implements OnInit {
       this.pieceJustificatif = pieceJustificatif;
       if (pieceJustificatif) {
         this.updateForm(pieceJustificatif);
+      } else {
+        // 👇 Si on crée un nouveau justificatif
+        this.activatedRoute.queryParams.subscribe(params => {
+          const operationId = params['operationId'];
+          if (operationId) {
+            this.operationService.find(operationId).subscribe(opRes => {
+              const operation = opRes.body;
+              if (operation) {
+                // Pré-remplir le formulaire avec l'opération
+                this.editForm.patchValue({ operation });
+                this.operationsSharedCollection = [operation];
+              }
+            });
+          }
+        });
       }
 
       this.loadRelationshipsOptions();

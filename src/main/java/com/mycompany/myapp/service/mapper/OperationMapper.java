@@ -34,6 +34,7 @@ public interface OperationMapper extends EntityMapper<OperationDTO, Operation> {
     @Named("caisseId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "libelle", source = "libelle")
     CaisseDTO toDtoCaisseId(Caisse caisse);
 
     @Named("typeOperationId")

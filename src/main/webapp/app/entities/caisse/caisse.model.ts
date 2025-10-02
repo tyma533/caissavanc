@@ -14,6 +14,7 @@ export interface ICaisse {
   utiCree?: number | null;
   utiModifie?: number | null;
   etablissement?: Pick<IEtablissement, 'id' | 'libelle'> | null;
+  gerantActif?: string | null;
 }
 
 export type NewCaisse = Omit<ICaisse, 'id'> & { id: null };

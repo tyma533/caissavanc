@@ -38,6 +38,8 @@ public class CaisseDTO implements Serializable {
 
     private Etablissement etablissement;
 
+    private String gerantActif;
+
     public Long getId() {
         return id;
     }
@@ -140,6 +142,14 @@ public class CaisseDTO implements Serializable {
             return false;
         }
         return Objects.equals(this.id, caisseDTO.id);
+    }
+
+    public String getGerantActif() {
+        return gerantActif;
+    }
+
+    public void setGerantActif(String gerantActif) {
+        this.gerantActif = gerantActif;
     }
 
     @Override

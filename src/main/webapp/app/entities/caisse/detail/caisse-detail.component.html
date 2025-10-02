@@ -11,6 +11,10 @@
         <div class="label">ID</div>
         <div class="value">{{ caisse.id }}</div>
       </div>
+      <div class="detail-row">
+        <div class="label">Gérant</div>
+        <div class="value">{{ caisse.gerantActif }}</div>
+      </div>
 
       <div class="detail-row">
         <div class="label">Libelle</div>
@@ -85,6 +89,17 @@
         Alimenter la caisse
       </button>
 
+      <button
+        type="button"
+        [disabled]="caisse.etat?.toString() === 'CLOTURE'"
+        class="btn btn-success me-2"
+        [routerLink]="['/gerant-caisse', 'new']"
+        [queryParams]="{ caisseId: caisse.id }"
+      >
+        <fa-icon icon="user-plus"></fa-icon>
+        Affecter un gérant
+      </button>
+
       <!-- Bouton clôture ou réouverture -->
       <button
         type="button"
@@ -107,21 +122,57 @@
   <h3>Opérations de cette caisse</h3>
 
   <div *ngIf="operations && operations.length > 0; else noOperation">
-    <div *ngFor="let op of operations" class="operation-card">
-      <p><strong>Numéro d'Opération :</strong> {{ op.numero }}</p>
-      <p><strong>Montant de l'opération :</strong> {{ op.montant | number: '1.0-0' }} CFA</p>
-      <p><strong>Date d'opération :</strong> {{ op.dateOperation?.toDate() | date: 'dd-MM-yyyy à HH:mm:ss' }}</p>
-      <p><strong>Mode :</strong> {{ op.modeOperation?.libelle }}</p>
-      <p>
-        <strong>Type Opération :</strong>
-        <span [ngClass]="{ credit: op.typeOperation?.libelle === 'CREDIT', debit: op.typeOperation?.libelle === 'DEBIT' }">
-          {{ op.typeOperation?.libelle }}
-        </span>
-      </p>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-primary">
+          <tr>
+            <th>Numéro d'Opération</th>
+            <th>Montant (CFA)</th>
+            <th>Date d'Opération</th>
+            <th>Mode Opération</th>
+            <th>Type Opération</th>
+            <th>Pièce Justificative</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let op of operations">
+            <td>{{ op.numero }}</td>
+            <td>{{ op.montant | number: '1.0-0' }}</td>
+            <td>{{ op.dateOperation?.toDate() | date: 'dd-MM-yyyy à HH:mm:ss' }}</td>
+            <td>{{ op.modeOperation?.libelle }}</td>
+            <td>
+              <span
+                [ngClass]="{
+                  'text-success': op.typeOperation?.libelle === 'CREDIT',
+                  'text-danger': op.typeOperation?.libelle === 'DEBIT'
+                }"
+              >
+                {{ op.typeOperation?.libelle }}
+              </span>
+            </td>
+            <!-- <td>
+        <a *ngIf="op.pieceJustificatifs" [href]="op.justificatifUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+          Voir
+        </a>
+        <span *ngIf="!op.pieceJustificatifs" class="text-muted">Aucun</span>
+      </td> -->
+            <td>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                [routerLink]="['/piece-justificatif/new']"
+                [queryParams]="{ operationId: op.id }"
+                class="btn btn-sm btn-outline-primary"
+              >
+                Ajouter pièce
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-</div>
 
-<ng-template #noOperation>
-  <p>Aucune opération enregistrée pour cette caisse.</p>
-</ng-template>
+  <ng-template #noOperation>
+    <div class="alert alert-warning">Aucune opération trouvée.</div>
+  </ng-template>
+</div>

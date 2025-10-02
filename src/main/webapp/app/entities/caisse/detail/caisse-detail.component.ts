@@ -52,6 +52,7 @@ export class CaisseDetailComponent {
     this.caisseService.getCaisse(caisseId).subscribe(
       caisse => {
         this.caisse = caisse;
+        console.log(this.caisse);
 
         // Vérifier si la caisse est clôturée
         this.isCaisseFermee = this.caisse?.etat === 'CLOTURE';

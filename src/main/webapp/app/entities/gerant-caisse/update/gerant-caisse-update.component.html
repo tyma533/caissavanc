@@ -26,7 +26,11 @@
             <label class="form-label fw-bold" for="field_caisse">Caisse</label>
             <select class="form-select" id="field_caisse" formControlName="caisse" [compareWith]="compareCaisse">
               <option [ngValue]="null">-- Sélectionnez une caisse --</option>
-              <option *ngFor="let caisseOption of caissesSharedCollection" [ngValue]="caisseOption">
+              <option
+                *ngFor="let caisseOption of caissesSharedCollection"
+                [ngValue]="caisseOption"
+                [disabled]="caisseOption.id !== editForm.get('caisse')?.value?.id"
+              >
                 {{ caisseOption.libelle }}
               </option>
             </select>

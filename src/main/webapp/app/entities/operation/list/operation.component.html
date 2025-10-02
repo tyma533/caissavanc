@@ -108,17 +108,17 @@
 
           <td>
             <div *ngIf="operation.caisse">
-              <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.id }}</a>
+              <a [routerLink]="['/caisse', operation.caisse.id, 'view']">{{ operation.caisse.libelle }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="operation.typeOperation">
-              <a [routerLink]="['/type-operation', operation.typeOperation.id, 'view']">{{ operation.typeOperation.id }}</a>
+              <a [routerLink]="['/type-operation', operation.typeOperation.id, 'view']">{{ operation.typeOperation.libelle }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="operation.modeOperation">
-              <a [routerLink]="['/mode-operation', operation.modeOperation.id, 'view']">{{ operation.modeOperation.id }}</a>
+              <a [routerLink]="['/mode-operation', operation.modeOperation.id, 'view']">{{ operation.modeOperation.libelle }}</a>
             </div>
           </td>
           <td class="text-end">

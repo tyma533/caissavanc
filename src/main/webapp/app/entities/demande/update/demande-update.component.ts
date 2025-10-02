@@ -282,4 +282,7 @@ export class DemandeUpdateComponent implements OnInit {
     this.caissesFermees = [];
     this.editForm.get('caisseId')?.setValue(null);
   }
+  protected compareEtab(a: any, b: any) {
+    return a && b && a.id === b.id;
+  }
 }
