@@ -7,10 +7,10 @@
 
       <hr />
 
-      <div class="detail-row">
+      <!-- <div class="detail-row">
         <div class="label">ID</div>
         <div class="value">{{ caisse.id }}</div>
-      </div>
+      </div> -->
       <div class="detail-row">
         <div class="label">Gérant</div>
         <div class="value">{{ caisse.gerantActif }}</div>
@@ -22,7 +22,7 @@
       </div>
 
       <div class="detail-row">
-        <div class="label">Date Creation Caisse</div>
+        <div class="label">Date Creation</div>
         <div class="value">{{ caisse.dateCreationCaisse | formatMediumDatetime }}</div>
       </div>
 
@@ -42,7 +42,7 @@
         <div class="label">Etablissement</div>
         <div class="value">
           <div *ngIf="caisse.etablissement">
-            <a [routerLink]="['/etablissement', caisse.etablissement.id, 'view']">{{ caisse.etablissement.id }}</a>
+            <a [routerLink]="['/etablissement', caisse.etablissement.id, 'view']">{{ caisse.etablissement.libelle }}</a>
           </div>
         </div>
       </div>
@@ -83,7 +83,8 @@
         [queryParams]="{
           type: 'ALIMENTATION_CAISSE',
           caisseId: caisse.id,
-          etablissementId: caisse.etablissement?.id
+          etablissementId: caisse.etablissement?.id,
+          origine: 'caisse'
         }"
       >
         Alimenter la caisse
@@ -108,7 +109,8 @@
         [queryParams]="{
           type: caisse.etat?.toString() === 'OUVERTE' ? 'CLOTURE_CAISSE' : 'REOUVERTURE_CAISSE',
           caisseId: caisse.id,
-          etablissementId: caisse.etablissement?.id
+          etablissementId: caisse.etablissement?.id,
+          origine: 'caisse'
         }"
       >
         {{ caisse.etat?.toString() === 'OUVERTE' ? 'Demande de clôture' : 'Demande de réouverture' }}

@@ -2,6 +2,7 @@ package com.mycompany.myapp.service.dto;
 
 import com.mycompany.myapp.domain.enumeration.EtatDemande;
 import com.mycompany.myapp.domain.enumeration.Type;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -43,6 +44,16 @@ public class DemandeDTO implements Serializable {
     private Long modeOperationId;
 
     private EtatDemande etat = EtatDemande.EN_ATTENTE;
+
+    private Long montantAccorde;
+
+    public Long getMontantAccorde() {
+        return montantAccorde;
+    }
+
+    public void setMontantAccorde(Long montantAccorde) {
+        this.montantAccorde = montantAccorde;
+    }
 
     public Long getId() {
         return id;
@@ -199,6 +210,7 @@ public class DemandeDTO implements Serializable {
             ", utiCree=" + getUtiCree() +
             ", utiModifie=" + getUtiModifie() +
             ", etablissement=" + getEtablissement() +
+            
             
             "}";
     }

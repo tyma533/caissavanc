@@ -77,9 +77,9 @@ public class DemandeServiceImpl implements DemandeService {
         Demande demande = demandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Demande non trouvée pour l'ID : " + id));
 
         // Bloquer retraitement
-        if (demande.getEtat() == EtatDemande.TRAITEE) {
-            throw new BadRequestAlertException("Demande déjà traitée", "demande", "alreadyProcessed");
-        }
+        // if (demande.getEtat() == EtatDemande.TRAITEE) {
+        //     throw new BadRequestAlertException("Demande déjà traitée", "demande", "alreadyProcessed");
+        // }
         if (!accepte) {
             // Cas de refus
             demande.setMotif(motifRefus);
@@ -125,49 +125,14 @@ public class DemandeServiceImpl implements DemandeService {
                         throw new RuntimeException("Caisse manquante pour l'alimentation");
                     }
 
-                    // Vérifier que le DTO contient bien le mode choisi
-                    if (operationDTO == null || operationDTO.getModeOperation() == null || operationDTO.getMontant() == null) {
-                        throw new RuntimeException("Données d'alimentation manquantes");
+                    // Le DFC valide la demande et fixe le montant accordé
+                    if (demande.getMontantAccorde() == null || demande.getMontantAccorde() <= 0) {
+                        throw new RuntimeException("Le montant accordé par le DFC est obligatoire et doit être positif");
                     }
 
-                    // Récupérer le mode d'opération depuis le repository pour s'assurer qu'il existe
-                    ModeOperation mode = modeOperationRepository
-                        .findById(operationDTO.getModeOperation().getId())
-                        .orElseThrow(() -> new RuntimeException("Mode d'opération introuvable"));
-
-                    // Récupérer le montant accepté (celui saisi par l’utilisateur dans le formulaire)
-                    Long montant = operationDTO.getMontant();
-                    if (montant <= 0) {
-                        throw new RuntimeException("Montant accepté invalide");
-                    }
-
-                    // Mettre à jour le solde de la caisse
-                    CaisseDTO caisse = caisseService
-                        .findOne(demande.getCaisse().getId())
-                        .orElseThrow(() -> new RuntimeException("Caisse non trouvée"));
-                    caisse.setSolde(caisse.getSolde() + montant);
-                    caisseService.update(caisse);
-
-                    // Assigner le type d'opération fixe à CREDIT
-                    TypeOperation credit = typeOperationRepository
-                        .findByLibelle("CREDIT")
-                        .orElseThrow(() -> new RuntimeException("Type CREDIT non trouvé"));
-
-                    // Créer une opération correspondant à cette alimentation
-                    Operation operation = new Operation();
-                    operation.setCaisse(demande.getCaisse());
-                    operation.setTypeOperation(credit);
-                    operation.setModeOperation(mode);
-                    operation.setMontant(montant);
-                    operation.setBanque(operationDTO.getBanque());
-                    operation.setNumeroVC(operationDTO.getNumeroVC());
-                    operation.setBeneficiaire(operationDTO.getBeneficiaire());
-                    operation.setCrediteur(operationDTO.getCrediteur());
-                    operation.setDateOperation(Instant.now());
-                    operation.setNumero(generateNumeroOperation());
-                    operation.setCommentaire("Alimentation de la caisse via " + mode.getLibelle());
-
-                    operationRepository.save(operation);
+                    // À ce stade, aucune opération d'alimentation n'est encore créée.
+                    // L'agent comptable le fera plus tard lors du traitement effectif.
+                    demande.setMotif("Demande d'alimentation validée par le DFC");
                 }
                 case CLOTURE_CAISSE -> {
                     if (demande.getCaisse() == null) {
@@ -217,6 +182,79 @@ public class DemandeServiceImpl implements DemandeService {
         // Sauvegarder la demande et retourner le DTO
         demande.setEtat(EtatDemande.TRAITEE);
         demandeRepository.save(demande);
+        return demandeMapper.toDto(demande);
+    }
+
+    @Override
+    public DemandeDTO executerAlimentation(Long id, OperationDTO operationDTO) {
+        log.debug("Exécution de l'alimentation pour la demande {}", id);
+
+        // 1️⃣ Charger la demande
+        Demande demande = demandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Demande non trouvée pour l'ID : " + id));
+
+        // 2️⃣ Vérifier que c'est bien une demande d'alimentation
+        if (demande.getType() != Type.ALIMENTATION_CAISSE) {
+            throw new RuntimeException("Cette demande n'est pas une demande d'alimentation");
+        }
+
+        // 3️⃣ Vérifier que la demande a été validée par le DFC
+        if (demande.getEtat() != EtatDemande.VALIDEE_DFC) {
+            throw new RuntimeException("La demande doit être validée par le DFC avant d'être exécutée");
+        }
+
+        // 4️⃣ Vérifier que le montant accordé par le DFC est présent
+        if (demande.getMontantAccorde() == null || demande.getMontantAccorde() <= 0) {
+            throw new RuntimeException("Le montant accordé par le DFC doit être défini avant l'exécution");
+        }
+
+        // 5️⃣ Vérifier que la caisse existe
+        if (demande.getCaisse() == null) {
+            throw new RuntimeException("Aucune caisse associée à la demande");
+        }
+
+        // 6️⃣ Vérifier les infos saisies par l'agent comptable
+        if (operationDTO == null || operationDTO.getModeOperation() == null) {
+            throw new RuntimeException("Le mode d'opération est obligatoire");
+        }
+
+        ModeOperation mode = modeOperationRepository
+            .findById(operationDTO.getModeOperation().getId())
+            .orElseThrow(() -> new RuntimeException("Mode d'opération introuvable"));
+
+        // 7️⃣ Charger la caisse
+        CaisseDTO caisse = caisseService.findOne(demande.getCaisse().getId()).orElseThrow(() -> new RuntimeException("Caisse introuvable"));
+
+        // 8️⃣ Créer l’opération correspondante
+        TypeOperation credit = typeOperationRepository
+            .findByLibelle("CREDIT")
+            .orElseThrow(() -> new RuntimeException("Type CREDIT non trouvé"));
+
+        Operation operation = new Operation();
+        operation.setCaisse(demande.getCaisse());
+        operation.setTypeOperation(credit);
+        operation.setModeOperation(mode);
+        operation.setMontant(demande.getMontantAccorde()); // Montant validé par le DFC
+        operation.setBanque(operationDTO.getBanque());
+        operation.setNumeroVC(operationDTO.getNumeroVC());
+        operation.setBeneficiaire(operationDTO.getBeneficiaire());
+        operation.setCrediteur(operationDTO.getCrediteur());
+        operation.setDateOperation(Instant.now());
+        operation.setNumero(generateNumeroOperation());
+        operation.setCommentaire("Alimentation exécutée par l'agent comptable");
+
+        operationRepository.save(operation);
+
+        // 9️⃣ Mettre à jour le solde de la caisse
+        caisse.setSolde(caisse.getSolde() + demande.getMontantAccorde());
+        caisseService.update(caisse);
+
+        // 🔟 Mettre à jour la demande
+        demande.setEtat(EtatDemande.TRAITEE);
+        demande.setMotif("Alimentation exécutée et enregistrée par l'agent comptable");
+        demandeRepository.save(demande);
+
+        log.info("Alimentation de la caisse '{}' exécutée avec succès", caisse.getLibelle());
+
         return demandeMapper.toDto(demande);
     }
 

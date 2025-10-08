@@ -191,6 +191,9 @@ a:hover {
 
 .btn-primary,
 .btn-info,
-.btn-success {
+.btn-success,
+.btn-primary:hover,
+.btn-info:hover,
+.btn-success:hover {
   color: white;
 }

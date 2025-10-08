@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
 import { OperationService } from 'app/entities/operation/service/operation.service';
 import { IOperation } from 'app/entities/operation/operation.model';
+import { TYPEALIMENTATIONCAISSEEXECUTION } from 'app/app.constants';
 @Component({
   standalone: true,
   selector: 'jhi-caisse-detail',
@@ -26,6 +27,7 @@ export class CaisseDetailComponent {
   commentaire: string = '';
   operations: IOperation[] = [];
   isCaisseFermee = false;
+  TYPEALIMENTATIONCAISSEEXECUTION = TYPEALIMENTATIONCAISSEEXECUTION;
 
   constructor(
     protected activatedRoute: ActivatedRoute,

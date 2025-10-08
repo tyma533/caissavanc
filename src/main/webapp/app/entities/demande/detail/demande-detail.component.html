@@ -13,7 +13,7 @@
     <dl class="details-grid">
       <dt>Type</dt>
       <dd>
-        <span jhiTranslate="{{ 'caissavance2App.Type.' + demande.type }}">{{ demande.type }}</span>
+        <span *ngIf="demande?.type">{{ EnumTypeLabels[demande.type!] }}</span>
       </dd>
 
       <ng-container *ngIf="demande?.type === 'CREATION_CAISSE'">
@@ -49,70 +49,122 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour
       </button>
 
-      <!-- Boutons Traiter et Modifier à droite -->
+      <!-- Boutons Traiter / Alimenter à droite -->
       <div class="d-flex gap-2">
-        <button class="btn btn-primary" [disabled]="isDemandeTraitee()" (click)="ouvrirModalTraitement()">
+        <!-- ✅ CAS 1 : Demande d'alimentation -->
+        <ng-container *ngIf="demande?.type === 'ALIMENTATION_CAISSE'">
+          <!-- Bouton DFC -->
+          <button class="btn btn-primary" [disabled]="isDemandeTraitee()" (click)="ouvrirModalTraitement(TYPEALIMENTATIONCAISSEVALIDATION)">
+            <fa-icon icon="tasks"></fa-icon>&nbsp;Traiter la demande (DFC)
+          </button>
+
+          <!-- Bouton Agent Comptable -->
+          <button
+            class="btn btn-success"
+            [disabled]="demande.etat !== ETATVALIDEE"
+            (click)="ouvrirModalTraitement(TYPEALIMENTATIONCAISSEEXECUTION)"
+          >
+            <fa-icon icon="wallet"></fa-icon>&nbsp;Alimenter la caisse
+          </button>
+        </ng-container>
+
+        <button
+          *ngIf="demande?.type !== TYPEALIMENTATIONCAISSE && demande?.etat === 'EN_ATTENTE'"
+          class="btn btn-primary"
+          (click)="ouvrirModalTraitement(demande.type!)"
+        >
           <fa-icon icon="tasks"></fa-icon>&nbsp;Traiter la demande
         </button>
+
+        <!-- Bouton Modifier toujours présent -->
         <button type="button" [routerLink]="['/demande', demande.id, 'edit']" class="btn btn-outline-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;Modifier
         </button>
+      </div>
 
-        <!-- <div *ngIf="demande?.etat === 'TRAITEE'" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div> -->
+      <!-- Modal traitement création / clôture / réouverture -->
+      <div class="modal" *ngIf="showModalTraitement" style="display: block">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Traiter la demande</h5>
+              <button type="button" class="btn-close" (click)="fermerModalTraitement()"></button>
+            </div>
+            <div class="modal-body">
+              <p>Voulez-vous accepter ou refuser cette demande ?</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-success" (click)="traiter(true)">Accepter</button>
+              <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement(); fermerModalTraitement()">Refuser</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <div *ngIf="demande?.etat === 'TRAITEE'" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div>
-  <!-- Modal Traitement -->
-  <div class="modal" tabindex="-1" [ngClass]="{ show: showModalTraitement }" *ngIf="showModalTraitement" style="display: block">
+  <!-- Modal DFC : saisie du montant accordé -->
+  <div class="modal" *ngIf="showModalDFC" style="display: block">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Valider le montant accordé</h5>
+          <button type="button" class="btn-close" (click)="fermerModalDFC()"></button>
+        </div>
+        <div class="mb-3">
+          <label for="montantAccorde">Montant Accordé</label>
+          <input id="montantAccorde" type="text" class="form-control" [(ngModel)]="demande.montantAccorde" required />
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-success" (click)="validerMontantAccorde()">Valider</button>
+          <button class="btn btn-secondary" (click)="fermerModalDFC()">Annuler</button>
+          <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">Refuser</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Agent Comptable : exécution alimentation -->
+  <div class="modal" tabindex="-1" [ngClass]="{ show: showModalComptable }" *ngIf="showModalComptable" style="display: block">
     <div class="modal-dialog">
       <div class="modal-content shadow-lg">
         <div class="modal-header">
-          <h5 class="modal-title">Traitement de la demande</h5>
-          <button type="button" class="btn-close" (click)="fermerModalTraitement()"></button>
+          <h5 class="modal-title">Alimentation de la caisse</h5>
+          <button type="button" class="btn-close" (click)="fermerModalComptable()"></button>
         </div>
-
         <div class="modal-body">
-          <div *ngIf="demande?.type === 'ALIMENTATION_CAISSE'">
-            <div class="mb-3">
-              <label for="modeOperation">Mode d’opération</label>
-              <select id="modeOperation" class="form-control" [(ngModel)]="operationDTO.modeOperation">
-                <option [ngValue]="null">-- Sélectionner --</option>
-                <option *ngFor="let mode of modeOperations" [ngValue]="mode">{{ mode.libelle }}</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label for="montant">Montant accepté</label>
-              <input id="montant" type="number" class="form-control" [(ngModel)]="operationDTO.montant" required />
-            </div>
-
-            <div class="mb-3">
-              <label for="banque">Banque</label>
-              <input id="banque" type="text" class="form-control" [(ngModel)]="operationDTO.banque" required />
-            </div>
-
-            <div class="mb-3">
-              <label for="numeroVC">Numéro virement/chèque</label>
-              <input id="numeroVC" type="text" class="form-control" [(ngModel)]="operationDTO.numeroVC" required />
-            </div>
-
-            <div class="mb-3">
-              <label for="beneficiaire">Bénéficiaire</label>
-              <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="operationDTO.beneficiaire" required />
-            </div>
-
-            <div class="mb-3">
-              <label for="crediteur">Créditeur</label>
-              <input id="crediteur" type="text" class="form-control" [(ngModel)]="operationDTO.crediteur" required />
-            </div>
+          <div class="mb-3">
+            <label for="modeOperation">Mode d’opération</label>
+            <select id="modeOperation" class="form-control" [(ngModel)]="operationDTO.modeOperation">
+              <option [ngValue]="null">-- Sélectionner --</option>
+              <option *ngFor="let mode of modeOperations" [ngValue]="mode">{{ mode.libelle }}</option>
+            </select>
           </div>
 
-          <div class="d-flex justify-content-around mt-3">
-            <button class="btn btn-success" (click)="traiter(true)">Accepter</button>
-            <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">Refuser</button>
+          <div class="mb-3">
+            <label for="banque">Banque</label>
+            <input id="banque" type="text" class="form-control" [(ngModel)]="operationDTO.banque" required />
           </div>
+
+          <div class="mb-3">
+            <label for="numeroVC">Numéro virement/chèque</label>
+            <input id="numeroVC" type="text" class="form-control" [(ngModel)]="operationDTO.numeroVC" required />
+          </div>
+
+          <div class="mb-3">
+            <label for="beneficiaire">Bénéficiaire</label>
+            <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="operationDTO.beneficiaire" required />
+          </div>
+
+          <!-- <div class="mb-3">
+          <label for="crediteur">Créditeur</label>
+          <input id="crediteur" type="text" class="form-control" [(ngModel)]="operationDTO.crediteur" required />
+        </div> -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="fermerModalComptable()">Annuler</button>
+          <button class="btn btn-success" (click)="executerAlimentation()">Alimenter la caisse</button>
         </div>
       </div>
     </div>

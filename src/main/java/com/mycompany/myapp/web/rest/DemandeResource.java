@@ -130,6 +130,13 @@ public class DemandeResource {
             .body(result);
     }
 
+    @PutMapping("/{id}/executer-alimentation")
+    public ResponseEntity<DemandeDTO> executerAlimentation(@PathVariable Long id, @RequestBody OperationDTO operationDTO) {
+        log.debug("REST request to exécuter alimentation : {}", id);
+        DemandeDTO result = demandeService.executerAlimentation(id, operationDTO);
+        return ResponseEntity.ok(result);
+    }
+
     /**
      * {@code PATCH  /demandes/:id} : Partial updates given fields of an existing demande, field will ignore if it is null
      *

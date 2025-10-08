@@ -12,6 +12,9 @@ import { SortService } from 'app/shared/sort/sort.service';
 import { IDemande } from '../demande.model';
 import { EntityArrayResponseType, DemandeService } from '../service/demande.service';
 import { DemandeDeleteDialogComponent } from '../delete/demande-delete-dialog.component';
+import { EnumTypeLabels } from 'app/entities/enumerations/type.model';
+import { DemandeMotifComponent } from '../demande-motif/demande-motif.component';
+import { ETATEN_ATTENTE, ETATREFUSEE, ETATTRAITEE, ETATVALIDEE } from 'app/app.constants';
 
 @Component({
   standalone: true,
@@ -36,6 +39,11 @@ export class DemandeComponent implements OnInit {
   tranchesSharedCollection: IDemande[] = [];
   predicate = 'id';
   ascending = true;
+  EnumTypeLabels = EnumTypeLabels;
+  ETATVALIDEE = ETATVALIDEE;
+  ETATREFUSEE = ETATREFUSEE;
+  ETATTRAITEE = ETATTRAITEE;
+  ETATEN_ATTENTE = ETATEN_ATTENTE;
 
   filter = new FormControl('', { nonNullable: true });
 
@@ -121,6 +129,7 @@ export class DemandeComponent implements OnInit {
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
     this.tranchesSharedCollection = this.fillComponentAttributesFromResponseBody(response.body);
+    console.log(this.tranchesSharedCollection);
     this.applyFilterAndSort();
   }
 
@@ -158,5 +167,9 @@ export class DemandeComponent implements OnInit {
     } else {
       return [predicate + ',' + ascendingQueryParam];
     }
+  }
+  protected openMotif(motif: string) {
+    const modalRef = this.modalService.open(DemandeMotifComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.motif = motif;
   }
 }

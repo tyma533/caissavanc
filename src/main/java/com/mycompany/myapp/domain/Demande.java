@@ -79,6 +79,17 @@ public class Demande implements Serializable {
     @Enumerated(EnumType.STRING)
     private EtatDemande etat;
 
+    @Column(name = "montantAccorde")
+    private Long montantAccorde;
+
+    public Long getMontantAccorde() {
+        return montantAccorde;
+    }
+
+    public void setMontantAccorde(Long montantAccorde) {
+        this.montantAccorde = montantAccorde;
+    }
+
     // Getter et Setter
     public Caisse getCaisse() {
         return caisse;

@@ -7,3 +7,11 @@ declare const __VERSION__: string;
 
 export const VERSION = __VERSION__;
 export const DEBUG_INFO_ENABLED = __DEBUG_INFO_ENABLED__;
+
+export const TYPEALIMENTATIONCAISSEVALIDATION = 'VALIDATION';
+export const TYPEALIMENTATIONCAISSEEXECUTION = 'EXECUTION';
+
+export const ETATVALIDEE = 'VALIDEE_DFC';
+export const ETATREFUSEE = 'REFUSEE_DFC';
+export const ETATTRAITEE = 'TRAITEE';
+export const ETATEN_ATTENTE = 'EN_ATTENTE';

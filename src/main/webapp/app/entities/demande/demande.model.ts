@@ -2,6 +2,7 @@ import dayjs from 'dayjs/esm';
 import { IEtablissement } from 'app/entities/etablissement/etablissement.model';
 import { Type } from 'app/entities/enumerations/type.model';
 import { IModeOperation } from '../mode-operation/mode-operation.model';
+import { EtatDemande } from '../enumerations/etat-demande';
 
 export interface IDemande {
   id: number;
@@ -18,7 +19,8 @@ export interface IDemande {
   caisseId?: number | null;
   modeOperationId?: IModeOperation | null;
   objet?: string | null;
-  etat?: 'EN_ATTENTE' | 'TRAITEE';
+  etat?: keyof typeof EtatDemande | null;
+  montantAccorde?: number | null;
 }
 
 export type NewDemande = Omit<IDemande, 'id'> & { id: null };

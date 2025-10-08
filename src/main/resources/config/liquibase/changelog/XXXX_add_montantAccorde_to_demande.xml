@@ -1,0 +1,5 @@
+<changeSet id="20251006-add-montantAccorde" author="maty">
+    <addColumn tableName="demande">
+        <column name="montant_accorde" type="decimal(21,2)"/>
+    </addColumn>
+</changeSet>

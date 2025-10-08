@@ -29,7 +29,8 @@
       "libelle": "Libelle",
       "montant": "Montant",
       "action": "Action",
-      "etat": "Etat"
+      "etat": "Etat",
+      "intitule": "Intitule"
     }
   }
 }

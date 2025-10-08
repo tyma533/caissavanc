@@ -58,10 +58,17 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-
+          <!-- 
           <th scope="col" jhiSortBy="motif">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.demande.motif">Motif</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th> -->
+
+          <th scope="col" jhiSortBy="intitule">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.demande.intitule">Intituté</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -79,9 +86,9 @@
             </div>
           </th>
 
-          <th scope="col" jhiSortBy="action">
-            <div class="d-flex">
-              <span jhiTranslate="caissavance2App.demande.action">Action</span>
+          <th scope="col" jhiSortBy="action" class="text-end">
+            <div class="d-flex justify-content-end">
+              <span> Actions</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -91,8 +98,11 @@
       <tbody>
         <tr *ngFor="let demande of demandes; trackBy: trackId" data-cy="entityTable">
           <!-- <td jhiTranslate="{{ 'caissavance2App.Type.' + demande.type }}">{{ demande.type }}</td> -->
-          <td>{{ demande.type }}</td>
-          <td>{{ demande.motif }}</td>
+          <td>
+            <span *ngIf="demande?.type">{{ EnumTypeLabels[demande.type!] }}</span>
+          </td>
+          <!-- <td>{{ demande.motif }}</td> -->
+          <td>{{ demande.intitule }}</td>
           <td>
             <div *ngIf="demande.etablissement">
               <a [routerLink]="['/etablissement', demande.etablissement.id, 'view']">{{ demande.etablissement.libelle }}</a>
@@ -102,13 +112,32 @@
           <td>
             <span
               [ngClass]="{
-                'badge bg-warning': demande.etat !== 'TRAITEE',
-                'badge bg-success': demande.etat === 'TRAITEE'
+                'badge bg-warning': demande.etat === ETATEN_ATTENTE,
+                'badge bg-success': demande.etat === ETATVALIDEE,
+                'badge bg-danger': demande.etat === ETATREFUSEE,
+                'badge bg-primary': demande.etat === ETATTRAITEE
               }"
             >
-              {{ demande.etat === 'TRAITEE' ? 'Traité' : 'En attente' }}
+              {{
+                demande.etat === ETATEN_ATTENTE
+                  ? 'En attente'
+                  : demande.etat === ETATVALIDEE
+                  ? 'Validée'
+                  : demande.etat === ETATREFUSEE
+                  ? 'Refusée'
+                  : 'Traitée'
+              }}
             </span>
+
+            <button
+              *ngIf="demande.etat === 'REFUSEE_DFC' && demande?.motif"
+              class="btn btn-info btn-sm ms-1"
+              (click)="openMotif(demande.motif!)"
+            >
+              Motif
+            </button>
           </td>
+
           <td class="text-end">
             <div class="btn-group">
               <a [routerLink]="['/demande', demande.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

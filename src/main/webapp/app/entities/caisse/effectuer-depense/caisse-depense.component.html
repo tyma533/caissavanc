@@ -1,7 +1,8 @@
 <div *ngIf="caisse" class="caisse-details">
+  <button type="submit" (click)="previousState()" class="btn btn-primary"><fa-icon icon="arrow-left"></fa-icon>&nbsp;</button>
   <h2 class="caisse-title">Détails de la caisse : {{ caisse.libelle }}</h2>
   <p class="caisse-solde">
-    Solde actuel : <span>{{ caisse.solde | currency: 'EUR' }}</span>
+    Solde actuel : <span>{{ caisse.solde | number: '1.0-0' }} FCFA</span>
   </p>
 
   <hr />
@@ -29,7 +30,6 @@
         <label>Mode d'opération :</label>
         <select [(ngModel)]="modeOperationId" name="modeOperationId">
           <option [value]="1">VIREMENT</option>
-          <option [value]="2">CASH</option>
           <option [value]="3">CHEQUE</option>
           <option [value]="4">ESPECE</option>
         </select>
@@ -39,11 +39,6 @@
       <div class="mb-3">
         <label for="beneficiaire">Bénéficiaire</label>
         <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="beneficiaire" name="beneficiaire" />
-      </div>
-
-      <div class="mb-3">
-        <label for="crediteur">Créditeur</label>
-        <input id="crediteur" type="text" class="form-control" [(ngModel)]="crediteur" name="crediteur" />
       </div>
 
       <!-- Champs spécifiques VIREMENT / CHEQUE -->
@@ -57,6 +52,21 @@
         <input id="banque" type="text" class="form-control" [(ngModel)]="banque" name="banque" />
       </div>
 
+      <!-- Champ Pièce justificative -->
+      <div class="mb-3">
+        <label for="piece">Pièce justificative :</label>
+
+        <div *ngIf="piece" class="form-text text-danger clearfix">
+          <a (click)="openFile(piece, pieceContentType)" class="btn btn-link p-0">📎 Ouvrir</a>
+          <span>{{ pieceContentType }}, {{ byteSize(piece) }}</span>
+          <button type="button" (click)="removePiece()" class="btn btn-secondary btn-sm float-end">
+            <fa-icon icon="times"></fa-icon> Supprimer
+          </button>
+        </div>
+
+        <input type="file" id="piece" (change)="setFileData($event)" />
+      </div>
+
       <div class="form-group"></div>
     </div>
 
@@ -64,13 +74,6 @@
     <div *ngIf="erreurMessage" class="alert alert-danger">
       {{ erreurMessage }}
     </div>
-
-    <!-- <button
-      type="submit"
-      class="btn-depense"
-      [disabled]="caisse.etat === EtatCaisse.CLOTURE">
-      Effectuer la dépense
-    </button> -->
 
     <button type="submit" class="btn-depense" [disabled]="caisse.etat?.toString() === 'CLOTURE'">Effectuer la dépense</button>
   </form>

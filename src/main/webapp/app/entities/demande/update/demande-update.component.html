@@ -1,6 +1,13 @@
 <div class="demande-details">
+  <button type="submit" (click)="previousState()" class="btn btn-primary"><fa-icon icon="arrow-left"></fa-icon>&nbsp;</button>
   <h2 class="demande-title">
-    {{ demande?.id ? 'Modifier la Demande' : 'Créer une Demande' }}
+    <ng-container *ngIf="titreDemande; else defaultTitle">
+      {{ titreDemande }}
+    </ng-container>
+
+    <ng-template #defaultTitle>
+      {{ demande?.id ? 'Modifier la Demande' : 'Créer une Demande' }}
+    </ng-template>
   </h2>
 
   <hr />
@@ -8,7 +15,7 @@
   <form class="demande-form" [formGroup]="editForm" (ngSubmit)="save()">
     <div class="form-grid">
       <!-- Type -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="!fromCaisse">
         <label>Type</label>
         <select formControlName="type">
           <option [ngValue]="null">Sélectionner un type</option>
@@ -17,11 +24,13 @@
       </div>
 
       <!-- Établissement -->
-      <div class="form-group">
+      <div class="form-group" *ngIf="!fromCaisse">
         <label>Établissement demandeur</label>
         <select formControlName="etablissement" [compareWith]="compareEtab">
           <option [ngValue]="null">Sélectionner un établissement</option>
-          <option *ngFor="let etab of etablissementsSharedCollection" [ngValue]="etab">{{ etab.libelle }}</option>
+          <option *ngFor="let etab of etablissementsSharedCollection" [ngValue]="etab">
+            {{ etab.libelle }}
+          </option>
         </select>
       </div>
 
@@ -31,15 +40,16 @@
         <input type="text" formControlName="intitule" placeholder="L'intitulé de la caisse" />
       </div>
 
+      <!-- Caisse -->
       <div
         class="form-group"
-        *ngIf="['ALIMENTATION_CAISSE', 'CLOTURE_CAISSE', 'REOUVERTURE_CAISSE'].includes(editForm.get('type')?.value || '')"
+        *ngIf="!fromCaisse && ['ALIMENTATION_CAISSE', 'CLOTURE_CAISSE', 'REOUVERTURE_CAISSE'].includes(editForm.get('type')?.value || '')"
       >
         <label>
           Caisse
-          <span *ngIf="editForm.get('type')?.value === 'ALIMENTATION_CAISSE'">à alimenter</span>
-          <span *ngIf="editForm.get('type')?.value === 'CLOTURE_CAISSE'">à clôturer</span>
-          <span *ngIf="editForm.get('type')?.value === 'REOUVERTURE_CAISSE'">à rouvrir</span>
+          <span *ngIf="editForm.get('type')?.value === TYPEALIMENTATIONCAISSE">à alimenter</span>
+          <span *ngIf="editForm.get('type')?.value === TYPECLOTURECAISSE">à clôturer</span>
+          <span *ngIf="editForm.get('type')?.value === TYPEREOUVERTURECAISSE">à rouvrir</span>
         </label>
         <select formControlName="caisseId">
           <option [ngValue]="null">Sélectionner une caisse</option>
@@ -47,12 +57,12 @@
             {{ caisse.libelle }} (Solde: {{ caisse.solde || 0 }})
           </option>
         </select>
+      </div>
 
-        <!-- Montant uniquement pour alimentation -->
-        <div *ngIf="editForm.get('type')?.value === 'ALIMENTATION_CAISSE'">
-          <label>Montant à alimenter</label>
-          <input type="number" formControlName="montant" placeholder="Montant" min="0" required />
-        </div>
+      <!-- Montant uniquement pour alimentation -->
+      <div class="form-group" *ngIf="editForm.get('type')?.value === 'ALIMENTATION_CAISSE'">
+        <label>Montant à alimenter</label>
+        <input type="number" formControlName="montant" placeholder="Montant" min="0" required />
       </div>
 
       <!-- Objet -->

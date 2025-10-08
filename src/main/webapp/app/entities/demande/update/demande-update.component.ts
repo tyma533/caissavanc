@@ -18,6 +18,7 @@ import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model';
 import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
 import { Router } from '@angular/router';
+import { TYPEALIMENTATIONCAISSEEXECUTION, TYPEALIMENTATIONCAISSEVALIDATION } from 'app/app.constants';
 
 @Component({
   standalone: true,
@@ -37,6 +38,23 @@ export class DemandeUpdateComponent implements OnInit {
   modeOperationsSharedCollection: IModeOperation[] = [];
   caissesOuvertes: ICaisse[] = [];
   caissesFermees: ICaisse[] = [];
+  isFromCaisse = false;
+  typeAlimentationCaisse?: string;
+  TYPEALIMENTATIONCAISSEVALIDATION = TYPEALIMENTATIONCAISSEVALIDATION;
+  TYPEALIMENTATIONCAISSEEXECUTION = TYPEALIMENTATIONCAISSEEXECUTION;
+
+  TYPEALIMENTATIONCAISSE = Type.ALIMENTATION_CAISSE;
+  TYPECLOTURECAISSE = Type.CLOTURE_CAISSE;
+  TYPEREOUVERTURECAISSE = Type.REOUVERTURE_CAISSE;
+  fromCaisse = false;
+
+  // id préremplis (utiles si disabled)
+  prefilledCaisseId: number | null = null;
+  prefilledEtablissementId: number | null = null;
+
+  caisseInfo?: ICaisse | null;
+  etablissementInfo?: IEtablissement | null;
+  titreDemande: string = '';
 
   editForm: DemandeFormGroup = this.demandeFormService.createDemandeFormGroup();
 
@@ -55,10 +73,37 @@ export class DemandeUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
-      const origine = params['origine'];
-      const typeParam = params['type'] as Type;
+      // const origine = params['origine'];
+      const typeParam = params['type'] ? (params['type'] as keyof typeof Type) : null;
       const caisseId = params['caisseId'] ? +params['caisseId'] : null;
       const etablissementId = params['etablissementId'] ? +params['etablissementId'] : null;
+
+      const origine = params['origine'];
+      if (origine === 'caisse') {
+        this.fromCaisse = true;
+      }
+
+      if (typeParam && caisseId && etablissementId) {
+        // Charger les infos de la caisse
+        this.caisseService.find(caisseId).subscribe({
+          next: (res: HttpResponse<ICaisse>) => {
+            this.caisseInfo = res.body;
+            this.updateTitre(); // Met à jour le titre
+          },
+        });
+
+        this.editForm.get('type')?.valueChanges.subscribe(() => {
+          this.updateTitre();
+        });
+
+        // Charger les infos de l'établissement
+        this.etablissementService.find(etablissementId).subscribe({
+          next: (res: HttpResponse<IEtablissement>) => {
+            this.etablissementInfo = res.body;
+            this.updateTitre();
+          },
+        });
+      }
 
       // Charger tous les établissements pour le select
       this.etablissementService.query().subscribe({
@@ -85,13 +130,17 @@ export class DemandeUpdateComponent implements OnInit {
                   if (typeParam) {
                     this.editForm.get('type')?.setValue(typeParam);
                   }
+
+                  if (origine === 'caisse') {
+                    this.isFromCaisse = true;
+                    this.disablePrefilledFields();
+                  }
                 }
               },
               error: () => alert('Erreur lors du chargement de l’établissement'),
             });
           } else if (typeParam) {
-            // Pas d'établissement mais type fourni
-            this.editForm.get('type')?.setValue(typeParam);
+            this.editForm.get('type')?.setValue(Type[typeParam]);
           }
         },
         error: () => alert('Erreur lors du chargement des établissements'),
@@ -210,6 +259,10 @@ export class DemandeUpdateComponent implements OnInit {
         demande.modeOperationId,
       );
     }
+
+    // si on a un demande (édition) : on ne masque rien par défaut
+    this.isFromCaisse = false;
+    this.enablePrefilledFields();
   }
 
   protected updateFilteredCaisses(): void {
@@ -284,5 +337,51 @@ export class DemandeUpdateComponent implements OnInit {
   }
   protected compareEtab(a: any, b: any) {
     return a && b && a.id === b.id;
+  }
+
+  // Désactive les champs préremplis (appeler quand isFromCaisse)
+  protected disablePrefilledFields(): void {
+    // note: disable ne supprime pas la valeur, elle devient simplement non modifiable
+    try {
+      this.editForm.get('type')?.disable({ emitEvent: false });
+      this.editForm.get('etablissement')?.disable({ emitEvent: false });
+      this.editForm.get('caisseId')?.disable({ emitEvent: false });
+    } catch (e) {
+      // ignore si control manquant
+    }
+  }
+
+  // Si nécessaire pour réactiver
+  protected enablePrefilledFields(): void {
+    try {
+      this.editForm.get('type')?.enable({ emitEvent: false });
+      this.editForm.get('etablissement')?.enable({ emitEvent: false });
+      this.editForm.get('caisseId')?.enable({ emitEvent: false });
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  updateTitre(): void {
+    if (!this.caisseInfo || !this.etablissementInfo) return;
+
+    const type = this.editForm.get('type')?.value;
+    let typeLabel = '';
+
+    switch (type) {
+      case 'ALIMENTATION_CAISSE':
+        typeLabel = 'd’alimentation';
+        break;
+      case 'CLOTURE_CAISSE':
+        typeLabel = 'de clôture';
+        break;
+      case 'REOUVERTURE_CAISSE':
+        typeLabel = 'de réouverture';
+        break;
+    }
+
+    this.titreDemande = `Demande ${typeLabel} : ${this.caisseInfo.libelle} {${
+      this.etablissementInfo.sigle || this.etablissementInfo.libelle
+    }}`;
   }
 }

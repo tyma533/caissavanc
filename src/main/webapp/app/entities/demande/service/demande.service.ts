@@ -183,4 +183,15 @@ export class DemandeService {
     // POST vers le backend avec le body JSON
     return this.http.post<IDemande>(`${this.resourceUrl}/${demandeId}/traiter`, body);
   }
+  // service/demande.service.ts
+  miseAJourMontantAccorde(demandeId: number, montantAccorde: number) {
+    return this.http.put<IDemande>(`api/demandes/${demandeId}`, { id: demandeId, montantAccorde });
+  }
+  updateDemande(id: number, demandeDTO: any) {
+    return this.http.put<IDemande>(`api/demandes/${id}`, demandeDTO);
+  }
+
+  executerAlimentation(id: number, operationDTO: any) {
+    return this.http.put<IDemande>(`/api/demandes/${id}/executer-alimentation`, operationDTO);
+  }
 }

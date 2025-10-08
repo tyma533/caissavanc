@@ -1,0 +1,4 @@
+todo
+update ciblé pour traitement
+utilisation des variables dabs tous les templates
+changement des labels

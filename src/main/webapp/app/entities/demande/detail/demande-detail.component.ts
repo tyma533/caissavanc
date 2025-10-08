@@ -10,11 +10,13 @@ import { IDemande } from '../demande.model';
 import { DemandeService } from '../service/demande.service';
 import { CaisseService } from 'app/entities/caisse/service/caisse.service';
 import { ICaisse } from 'app/entities/caisse/caisse.model';
-import { Type } from 'app/entities/enumerations/type.model';
+import { EnumTypeLabels, Type } from 'app/entities/enumerations/type.model';
 import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model';
 import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
 import { EtatCaisse } from 'app/entities/enumerations/etat-caisse.model';
 import { IOperation } from 'app/entities/operation/operation.model';
+import { TYPEALIMENTATIONCAISSEEXECUTION, TYPEALIMENTATIONCAISSEVALIDATION } from 'app/app.constants';
+import { EtatDemande } from 'app/entities/enumerations/etat-demande';
 
 @Component({
   selector: 'jhi-demande-detail',
@@ -40,6 +42,18 @@ export class DemandeDetailComponent implements OnInit {
   caisses: ICaisse[] = [];
   modeOperations: IModeOperation[] = [];
   selectedModeOperationId: number | null = null;
+  EnumTypeLabels = EnumTypeLabels;
+  typeAlimentationCaisse?: string;
+  showModalDFC: boolean = false;
+  showModalComptable: boolean = false;
+
+  TYPEALIMENTATIONCAISSEVALIDATION = TYPEALIMENTATIONCAISSEVALIDATION;
+  TYPEALIMENTATIONCAISSEEXECUTION = TYPEALIMENTATIONCAISSEEXECUTION;
+  ETATVALIDEE = EtatDemande.VALIDEE_DFC;
+
+  TYPEALIMENTATIONCAISSE = Type.ALIMENTATION_CAISSE;
+  TYPECLOTURECAISSE = Type.CLOTURE_CAISSE;
+  TYPEREOUVERTURECAISSE = Type.REOUVERTURE_CAISSE;
 
   operationDTO: IOperation = {
     modeOperation: null,
@@ -69,19 +83,26 @@ export class DemandeDetailComponent implements OnInit {
     }
   }
 
-  ouvrirModalTraitement(): void {
-    if (this.demande?.type === Type.ALIMENTATION_CAISSE) {
-      this.operationDTO = {
-        id: undefined,
-        modeOperation: undefined,
-        montant: Number(this.demande.montant),
-        banque: '',
-        numeroVC: '',
-        beneficiaire: '',
-        crediteur: '',
-      };
+  ouvrirModalTraitement(typeAlimentationCaisse?: string): void {
+    if (!typeAlimentationCaisse) return;
+
+    this.typeAlimentationCaisse = typeAlimentationCaisse;
+
+    switch (typeAlimentationCaisse) {
+      case TYPEALIMENTATIONCAISSEVALIDATION:
+        this.showModalDFC = true;
+        this.operationDTO.montant = this.demande?.montant ?? 0;
+        break;
+
+      case TYPEALIMENTATIONCAISSEEXECUTION:
+        this.showModalComptable = true;
+        this.operationDTO.montant = this.demande?.montantAccorde ?? 0;
+        break;
+
+      default: // Création, clôture, réouverture
+        this.showModalTraitement = true;
+        break;
     }
-    this.showModalTraitement = true;
   }
 
   fermerModalTraitement(): void {
@@ -216,5 +237,68 @@ export class DemandeDetailComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+  // --- méthode pour ouvrir la modale DFC ---
+  ouvrirModalDFC(): void {
+    this.showModalDFC = true;
+  }
+
+  // --- méthode pour fermer la modale DFC ---
+  fermerModalDFC(): void {
+    this.showModalDFC = false;
+  }
+
+  // --- méthode pour valider le montant accordé par le DFC ---
+  validerMontantAccorde(): void {
+    if (!this.demande?.montantAccorde || this.demande.montantAccorde <= 0) {
+      alert('Veuillez saisir un montant valide');
+      return;
+    }
+
+    if (!this.demande) return;
+
+    const updatedDemande: any = {
+      ...this.demande, // copie tous les champs existants
+      montantAccorde: this.demande.montantAccorde,
+      etat: 'VALIDEE_DFC',
+    };
+
+    this.demandeService.updateDemande(this.demande.id!, updatedDemande).subscribe({
+      next: updated => {
+        this.demande = updated;
+        this.showModalDFC = false;
+        alert('Montant accordé enregistré avec succès');
+      },
+      error: () => alert('Erreur lors de l’enregistrement du montant accordé'),
+    });
+  }
+
+  // --- méthode pour ouvrir la modale agent comptable ---
+  ouvrirModalComptable(): void {
+    this.showModalComptable = true;
+  }
+
+  // --- méthode pour fermer la modale agent comptable ---
+  fermerModalComptable(): void {
+    this.showModalComptable = false;
+  }
+
+  // --- méthode pour exécuter l'alimentation de la caisse ---
+  executerAlimentation(): void {
+    if (!this.operationDTO.montant || !this.operationDTO.modeOperation) {
+      alert('Veuillez saisir le montant et le mode d’opération');
+      return;
+    }
+
+    if (!this.demande) return;
+
+    this.demandeService.executerAlimentation(this.demande.id!, this.operationDTO).subscribe({
+      next: res => {
+        this.demande = res;
+        this.showModalComptable = false;
+        alert('Alimentation enregistrée avec succès !');
+      },
+      error: () => alert('Erreur lors de l’alimentation de la caisse'),
+    });
   }
 }
