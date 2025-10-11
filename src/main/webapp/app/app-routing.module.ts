@@ -60,7 +60,7 @@ import { CaisseDepenseComponent } from './entities/caisse/effectuer-depense/cais
         },
         ...errorRoute,
       ],
-      { enableTracing: DEBUG_INFO_ENABLED, bindToComponentInputs: true },
+      { enableTracing: false, bindToComponentInputs: true },
     ),
   ],
   exports: [RouterModule],

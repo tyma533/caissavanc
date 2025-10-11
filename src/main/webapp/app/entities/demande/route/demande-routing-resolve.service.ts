@@ -15,6 +15,7 @@ export const demandeResolve = (route: ActivatedRouteSnapshot): Observable<null |
       .pipe(
         mergeMap((demande: HttpResponse<IDemande>) => {
           if (demande.body) {
+            console.log(demande.body);
             return of(demande.body);
           } else {
             inject(Router).navigate(['404']);

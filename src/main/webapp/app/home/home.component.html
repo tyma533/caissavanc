@@ -26,57 +26,35 @@
   <div *ngSwitchCase="true" style="max-width: 1400px" class="py-5 px-4 mx-auto text-center">
     <div class="row justify-content-center mb-5">
       <div class="card-header">
-        <h5 class="text-center titreFormated">🎉 BIENVENUE SUR LA PLATEFORME DE GESTION DES CAISSES D'AVANCES DE L’UCAD 🎉</h5>
+        <h5 class="text-center titreFormated">BIENVENUE SUR LA PLATEFORME DE GESTION DES CAISSES D'AVANCES DE L’UCAD</h5>
       </div>
     </div>
 
     <!-- Fonctionnalités principales -->
     <div class="mt-3 row row-cols-1 row-cols-md-2 g-4">
-      <!-- Alimentations -->
-      <div class="col">
-        <div class="feature-card shadow-sm">
-          <div class="feature-icon">💰</div>
-          <h5 class="card-title">Gestion des alimentations</h5>
-          <p class="card-text">
-            Enregistrez toutes les alimentations des caisses effectuées par les ordonnateurs et suivez l’évolution des soldes.
-          </p>
-          <a routerLink="/operation" class="btn btn-outline-primary btn-sm">Visiter ➡️</a>
+      <div class="dashboard row g-4">
+        <!-- Gestion des caisses -->
+        <div class="col-sm-6 col-md-4">
+          <div class="card shadow-sm border-0 h-100 text-center p-3 caisse-card">
+            <div class="icon">🏦</div>
+            <h5 class="card-title mt-2">Gestion des caisses</h5>
+            <p class="card-text">Créez, modifiez et suivez l’état des caisses d’avances pour une gestion optimale.</p>
+            <a routerLink="/caisse" class="btn btn-primary btn-sm mt-auto">Visiter ➡️</a>
+          </div>
         </div>
-      </div>
 
-      <!-- Dépenses -->
-      <div class="col">
-        <div class="feature-card shadow-sm">
-          <div class="feature-icon">💸</div>
-          <h5 class="card-title">Suivi des dépenses</h5>
-          <p class="card-text">
-            Contrôlez toutes les dépenses, rattachez-les à leurs rubriques et ajoutez des pièces justificatives pour plus de traçabilité.
-          </p>
-          <a routerLink="/operation" class="btn btn-outline-primary btn-sm">Visiter ➡️</a>
-        </div>
-      </div>
+        <!-- Exemple statistique rapide -->
+        <div class="col-sm-6 col-md-4">
+          <div class="card shadow-sm border-0 h-100 text-center p-3 stats-card">
+            <div class="icon">📊</div>
+            <h5 class="card-title mt-2">Statistiques</h5>
+            <p>
+              Vous avez <strong>{{ caisses.length || 0 }}</strong> caisse(s) enregistrée(s), solde total :
+              <strong>{{ soldeTotal | number: '1.0-0' }} FCFA</strong>
+            </p>
 
-      <!-- Consultation -->
-      <div class="col">
-        <div class="feature-card shadow-sm">
-          <div class="feature-icon">📊</div>
-          <h5 class="card-title">Consultation & bilans</h5>
-          <p class="card-text">
-            Accédez à l’historique des opérations, visualisez vos soldes et générez des bilans financiers détaillés par période.
-          </p>
-          <a routerLink="/controle" class="btn btn-outline-primary btn-sm">Visiter ➡️</a>
-        </div>
-      </div>
-
-      <!-- Contrôle -->
-      <div class="col">
-        <div class="feature-card shadow-sm">
-          <div class="feature-icon">🛡️</div>
-          <h5 class="card-title">Contrôle & audit</h5>
-          <p class="card-text">
-            Donnez accès aux contrôleurs pour vérifier les caisses en temps réel et verrouillez les opérations pendant un audit.
-          </p>
-          <a routerLink="/controle" class="btn btn-outline-primary btn-sm">Visiter ➡️</a>
+            <a routerLink="/statistiques" class="btn btn-primary btn-sm mt-auto">Voir détails ➡️</a>
+          </div>
         </div>
       </div>
     </div>

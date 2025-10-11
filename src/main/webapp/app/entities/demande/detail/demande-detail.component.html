@@ -28,6 +28,18 @@
 
       <dt>Date Demande</dt>
       <dd>{{ demande.dateDemande | formatMediumDatetime }}</dd>
+      <dt>Etat</dt>
+      <dd>
+        <span
+          [ngClass]="{
+            'badge rounded-pill badge bg-secondary': demande.etat === ETATEN_ATTENTE,
+            'badge rounded-pill badge bg-primary': demande.etat === ETATVALIDEE,
+            'badge rounded-pill badge bg-success': demande.etat === ETATEXECUTEE,
+            'badge rounded-pill badge bg-danger': demande.etat === ETATREFUSEE
+          }"
+          >{{ demande.etat }}</span
+        >
+      </dd>
 
       <dt>Motif</dt>
       <dd>{{ demande.motif }}</dd>
@@ -35,8 +47,8 @@
       <dt>Établissement</dt>
       <dd>
         <div *ngIf="demande.etablissement">
-          <a [routerLink]="['/etablissement', demande.etablissement.id, 'view']" class="link-entity">
-            {{ demande.etablissement.id }}
+          <a [routerLink]="['/etablissement', demande.etablissement.libelle, 'view']" class="link-entity">
+            {{ demande.etablissement.libelle }}
           </a>
         </div>
       </dd>
@@ -69,7 +81,7 @@
         </ng-container>
 
         <button
-          *ngIf="demande?.type !== TYPEALIMENTATIONCAISSE && demande?.etat === 'EN_ATTENTE'"
+          *ngIf="demande?.type !== TYPEALIMENTATIONCAISSE && (demande?.etat === ETATEN_ATTENTE || demande?.etat === ETATREFUSEE)"
           class="btn btn-primary"
           (click)="ouvrirModalTraitement(demande.type!)"
         >
@@ -103,7 +115,7 @@
     </div>
   </div>
 
-  <div *ngIf="demande?.etat === 'TRAITEE'" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div>
+  <div *ngIf="demande?.etat === ETATVALIDEE" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div>
   <!-- Modal DFC : saisie du montant accordé -->
   <div class="modal" *ngIf="showModalDFC" style="display: block">
     <div class="modal-dialog">

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import SharedModule from 'app/shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import Swal from 'sweetalert2';
 
 import { IDemande } from '../demande.model';
 import { DemandeService } from '../service/demande.service';
@@ -15,7 +16,14 @@ import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model
 import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
 import { EtatCaisse } from 'app/entities/enumerations/etat-caisse.model';
 import { IOperation } from 'app/entities/operation/operation.model';
-import { TYPEALIMENTATIONCAISSEEXECUTION, TYPEALIMENTATIONCAISSEVALIDATION } from 'app/app.constants';
+import {
+  ETATEN_ATTENTE,
+  ETATEXECUTEE,
+  ETATREFUSEE,
+  ETATVALIDEE,
+  TYPEALIMENTATIONCAISSEEXECUTION,
+  TYPEALIMENTATIONCAISSEVALIDATION,
+} from 'app/app.constants';
 import { EtatDemande } from 'app/entities/enumerations/etat-demande';
 
 @Component({
@@ -54,6 +62,10 @@ export class DemandeDetailComponent implements OnInit {
   TYPEALIMENTATIONCAISSE = Type.ALIMENTATION_CAISSE;
   TYPECLOTURECAISSE = Type.CLOTURE_CAISSE;
   TYPEREOUVERTURECAISSE = Type.REOUVERTURE_CAISSE;
+  // ETATVALIDEE = ETATVALIDEE; // Removed duplicate/conflicting declaration
+  ETATREFUSEE = ETATREFUSEE;
+  ETATEXECUTEE = ETATEXECUTEE;
+  ETATEN_ATTENTE = ETATEN_ATTENTE;
 
   operationDTO: IOperation = {
     modeOperation: null,
@@ -75,7 +87,9 @@ export class DemandeDetailComponent implements OnInit {
   ngOnInit(): void {
     this.modeOperationService.query().subscribe({
       next: res => (this.modeOperations = res.body ?? []),
-      error: () => alert('Erreur lors de la récupération des modes d’opération'),
+      error: err =>
+        //  alert('Erreur lors de la récupération des modes d’opération'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
 
     if (this.demande?.etablissement?.id) {
@@ -158,18 +172,21 @@ export class DemandeDetailComponent implements OnInit {
 
     // Vérifier le motif en cas de refus
     if (!accepte && !this.motifRefus) {
-      alert('Le motif est obligatoire pour refuser.');
+      // alert('Le motif est obligatoire pour refuser.');
+      Swal.fire('Erreur', 'Le motif est obligatoire pour refuser.', 'error');
       return;
     }
 
     // Vérifier le mode d'opération si c'est une alimentation
     if (accepte && this.demande.type === 'ALIMENTATION_CAISSE') {
       if (!this.operationDTO.modeOperation) {
-        alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation');
+        // alert('Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation');
+        Swal.fire('Erreur', 'Veuillez sélectionner un mode d’opération avant d’accepter cette alimentation', 'error');
         return;
       }
       if (!this.operationDTO.montant || this.operationDTO.montant <= 0) {
-        alert('Veuillez saisir un montant valide.');
+        // alert('Veuillez saisir un montant valide.');
+        Swal.fire('Succès', 'Le traitement de la demande a été effectué avec succès.', 'success');
         return;
       }
     }
@@ -177,18 +194,27 @@ export class DemandeDetailComponent implements OnInit {
     // Appel du service pour traiter la demande
     this.demandeService.traiterDemande(this.demande.id!, accepte, this.motifRefus, this.operationDTO).subscribe({
       next: res => {
-        alert('Traitement effectué !');
-        this.demande = { ...res, etat: 'TRAITEE' };
+        // alert('Traitement effectué !');
+        Swal.fire('Succès', 'Le traitement de la demande a été effectué avec succès.', 'success');
+        this.demande = { ...res, etat: 'VALIDEE_DFC' };
         this.fermerModalTraitement();
+        // 🔹 Redirection vers la liste des demandes
+        this.router.navigate(['/demande']);
       },
-      error: () => alert('Erreur lors du traitement de la demande'),
+      error: err => {
+        console.error(err);
+        // alert('Erreur lors du traitement de la demande');
+        Swal.fire('Erreur', err.error.detail, 'error');
+      },
     });
   }
 
   onEtablissementChange(etablissementId: number): void {
     this.caisseService.findByEtablissementId(etablissementId).subscribe({
       next: res => (this.caisses = res),
-      error: () => alert('Erreur lors de la récupération des caisses'),
+      error: err =>
+        //  alert('Erreur lors de la récupération des caisses'),
+        Swal.fire('Erreur', err.error, 'error'),
     });
   }
 
@@ -201,12 +227,18 @@ export class DemandeDetailComponent implements OnInit {
         if (caisse) {
           const updatedCaisse = { ...caisse, solde: (caisse.solde || 0) + montant };
           this.caisseService.update(updatedCaisse).subscribe({
-            next: () => alert('Caisse alimentée automatiquement !'),
-            error: () => alert("Erreur lors de l'alimentation de la caisse"),
+            next: () =>
+              // alert('Caisse alimentée automatiquement !'),
+              Swal.fire('Succès', 'Caisse alimentée automatiquement !', 'success'),
+            error: err =>
+              //  alert("Erreur lors de l'alimentation de la caisse"),
+              Swal.fire('Erreur', err.error.detail, 'error'),
           });
         }
       },
-      error: () => alert('Erreur lors de la récupération de la caisse pour alimentation'),
+      error: err =>
+        //  alert('Erreur lors de la récupération de la caisse pour alimentation'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 
@@ -217,12 +249,19 @@ export class DemandeDetailComponent implements OnInit {
         if (caisse) {
           const updatedCaisse = { ...caisse, etat: EtatCaisse.CLOTURE };
           this.caisseService.update(updatedCaisse).subscribe({
-            next: () => alert('Caisse clôturée automatiquement !'),
-            error: () => alert('Erreur lors de la clôture de la caisse'),
+            next: () =>
+              // alert('Caisse clôturée automatiquement !'),
+              Swal.fire('Succès', 'Caisse clôturée automatiquement !', 'success'),
+            error: err =>
+              //  alert("Erreur lors de la clôture de la caisse"),
+              Swal.fire('Erreur', err.error.detail, 'error'),
+            //
           });
         }
       },
-      error: () => alert('Erreur lors de la récupération de la caisse pour clôture'),
+      error: err =>
+        //  alert('Erreur lors de la récupération de la caisse pour clôture'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 
@@ -251,7 +290,8 @@ export class DemandeDetailComponent implements OnInit {
   // --- méthode pour valider le montant accordé par le DFC ---
   validerMontantAccorde(): void {
     if (!this.demande?.montantAccorde || this.demande.montantAccorde <= 0) {
-      alert('Veuillez saisir un montant valide');
+      // alert('Veuillez saisir un montant valide');
+      Swal.fire('Erreur', 'Veuillez saisir un montant valide', 'error');
       return;
     }
 
@@ -267,9 +307,12 @@ export class DemandeDetailComponent implements OnInit {
       next: updated => {
         this.demande = updated;
         this.showModalDFC = false;
-        alert('Montant accordé enregistré avec succès');
+        // alert('Montant accordé enregistré avec succès');
+        Swal.fire('Succès', 'Montant accordé enregistré avec succès.', 'success');
       },
-      error: () => alert('Erreur lors de l’enregistrement du montant accordé'),
+      error: err =>
+        // alert('Erreur lors de l’enregistrement du montant accordé'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 
@@ -286,7 +329,8 @@ export class DemandeDetailComponent implements OnInit {
   // --- méthode pour exécuter l'alimentation de la caisse ---
   executerAlimentation(): void {
     if (!this.operationDTO.montant || !this.operationDTO.modeOperation) {
-      alert('Veuillez saisir le montant et le mode d’opération');
+      // alert('Veuillez saisir le montant et le mode d’opération');
+      Swal.fire('Erreur', 'Veuillez saisir le montant et le mode d’opération', 'error');
       return;
     }
 
@@ -296,9 +340,12 @@ export class DemandeDetailComponent implements OnInit {
       next: res => {
         this.demande = res;
         this.showModalComptable = false;
-        alert('Alimentation enregistrée avec succès !');
+        // alert('Alimentation enregistrée avec succès !');
+        Swal.fire('Succès', 'Alimentation enregistrée avec succès !', 'success');
       },
-      error: () => alert('Erreur lors de l’alimentation de la caisse'),
+      error: err =>
+        // alert('Erreur lors de l’alimentation de la caisse'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 }

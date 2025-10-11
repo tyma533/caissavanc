@@ -19,6 +19,7 @@ import { IModeOperation } from 'app/entities/mode-operation/mode-operation.model
 import { ModeOperationService } from 'app/entities/mode-operation/service/mode-operation.service';
 import { Router } from '@angular/router';
 import { TYPEALIMENTATIONCAISSEEXECUTION, TYPEALIMENTATIONCAISSEVALIDATION } from 'app/app.constants';
+import Swal from 'sweetalert2';
 
 @Component({
   standalone: true,
@@ -72,6 +73,7 @@ export class DemandeUpdateComponent implements OnInit {
     this.etablissementService.compareEtablissement(o1, o2);
 
   ngOnInit(): void {
+    console.log('DemandeUpdateComponent initialized');
     this.activatedRoute.queryParams.subscribe(params => {
       // const origine = params['origine'];
       const typeParam = params['type'] ? (params['type'] as keyof typeof Type) : null;
@@ -137,18 +139,24 @@ export class DemandeUpdateComponent implements OnInit {
                   }
                 }
               },
-              error: () => alert('Erreur lors du chargement de l’établissement'),
+              error: err =>
+                // alert('Erreur lors du chargement de l’établissement'),
+                Swal.fire('Erreur', err.error.detail, 'error'),
             });
           } else if (typeParam) {
             this.editForm.get('type')?.setValue(Type[typeParam]);
           }
         },
-        error: () => alert('Erreur lors du chargement des établissements'),
+        error: err =>
+          //  alert('Erreur lors du chargement des établissements'),
+          Swal.fire('Erreur', err.error.detail, 'error'),
       });
-
+      console.log(this.demande);
       // Si on modifie une demande existante
       this.activatedRoute.data.subscribe(({ demande }) => {
         if (demande) {
+          console.log(demande);
+
           this.updateForm(demande);
         }
       });
@@ -176,7 +184,9 @@ export class DemandeUpdateComponent implements OnInit {
       next: (res: HttpResponse<IModeOperation[]>) => {
         this.modeOperationsSharedCollection = res.body ?? [];
       },
-      error: () => alert('Erreur lors du chargement des modes d’opération'),
+      error: err =>
+        // alert('Erreur lors du chargement des modes d’opération'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
 
     // Réagir au changement de type pour filtrer les caisses
@@ -196,19 +206,22 @@ export class DemandeUpdateComponent implements OnInit {
     // Validation pour l'alimentation
     if (demande.type === Type.ALIMENTATION_CAISSE) {
       if (!demande.caisseId) {
-        alert('Veuillez sélectionner une caisse');
+        // alert('Veuillez sélectionner une caisse');
+        Swal.fire('Erreur', 'Veuillez sélectionner une caisse', 'error');
         this.isSaving = false;
         return;
       }
       if (!demande.montant || demande.montant <= 0) {
-        alert('Veuillez saisir un montant valide');
+        // alert('Veuillez saisir un montant valide');
+        Swal.fire('Erreur', 'Veuillez saisir un montant valide', 'error');
         this.isSaving = false;
         return;
       }
     }
 
     if (demande.type === Type.CLOTURE_CAISSE && !demande.caisseId) {
-      alert('Veuillez sélectionner une caisse à clôturer');
+      // alert('Veuillez sélectionner une caisse à clôturer');
+      Swal.fire('Erreur', 'Veuillez sélectionner une caisse à clôturer', 'error');
       this.isSaving = false;
       return;
     }
@@ -240,6 +253,7 @@ export class DemandeUpdateComponent implements OnInit {
 
   protected updateForm(demande: IDemande): void {
     this.demande = demande;
+    console.log(demande);
     this.demandeFormService.resetForm(this.editForm, demande);
 
     this.etablissementsSharedCollection = this.etablissementService.addEtablissementToCollectionIfMissing(
@@ -298,7 +312,9 @@ export class DemandeUpdateComponent implements OnInit {
           this.editForm.get('caisseId')?.setValue(null);
         }
       },
-      error: () => alert('Erreur lors du chargement des caisses pour cet établissement'),
+      error: err =>
+        //  alert('Erreur lors du chargement des caisses pour cet établissement'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 
@@ -311,7 +327,10 @@ export class DemandeUpdateComponent implements OnInit {
           this.editForm.get('caisseId')?.setValue(null);
         }
       },
-      error: () => alert('Erreur lors du chargement des caisses ouvertes pour cet établissement'),
+      // error: () => alert('Erreur lors du chargement des caisses ouvertes pour cet établissement'),
+      error: err =>
+        //  alert('Erreur lors du chargement des caisses ouvertes pour cet établissement'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 
@@ -325,7 +344,9 @@ export class DemandeUpdateComponent implements OnInit {
           this.editForm.get('caisseId')?.setValue(null);
         }
       },
-      error: () => alert('Erreur lors du chargement des caisses fermées pour cet établissement'),
+      error: err =>
+        // alert('Erreur lors du chargement des caisses fermées pour cet établissement'),
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 
@@ -380,8 +401,8 @@ export class DemandeUpdateComponent implements OnInit {
         break;
     }
 
-    this.titreDemande = `Demande ${typeLabel} : ${this.caisseInfo.libelle} {${
+    this.titreDemande = `Demande ${typeLabel} : ${this.caisseInfo.libelle} [${
       this.etablissementInfo.sigle || this.etablissementInfo.libelle
-    }}`;
+    }]`;
   }
 }

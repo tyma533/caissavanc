@@ -14,7 +14,7 @@ import { EntityArrayResponseType, DemandeService } from '../service/demande.serv
 import { DemandeDeleteDialogComponent } from '../delete/demande-delete-dialog.component';
 import { EnumTypeLabels } from 'app/entities/enumerations/type.model';
 import { DemandeMotifComponent } from '../demande-motif/demande-motif.component';
-import { ETATEN_ATTENTE, ETATREFUSEE, ETATTRAITEE, ETATVALIDEE } from 'app/app.constants';
+import { ETATEN_ATTENTE, ETATEXECUTEE, ETATREFUSEE, ETATVALIDEE } from 'app/app.constants';
 
 @Component({
   standalone: true,
@@ -42,7 +42,7 @@ export class DemandeComponent implements OnInit {
   EnumTypeLabels = EnumTypeLabels;
   ETATVALIDEE = ETATVALIDEE;
   ETATREFUSEE = ETATREFUSEE;
-  ETATTRAITEE = ETATTRAITEE;
+  ETATEXECUTEE = ETATEXECUTEE;
   ETATEN_ATTENTE = ETATEN_ATTENTE;
 
   filter = new FormControl('', { nonNullable: true });
@@ -71,7 +71,7 @@ export class DemandeComponent implements OnInit {
 
     const term = this.filter.value.toLowerCase();
     if (term) {
-      filteredDemandes = this.tranchesSharedCollection.filter(t => t.objet?.toLowerCase().includes(term));
+      filteredDemandes = this.tranchesSharedCollection.filter(t => t.etablissement?.libelle?.toLowerCase().includes(term));
     } else {
       filteredDemandes = [...this.tranchesSharedCollection];
     }

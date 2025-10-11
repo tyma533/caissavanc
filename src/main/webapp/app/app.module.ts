@@ -22,6 +22,9 @@ import MainModule from './layouts/main/main.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 import { DemandeMotifComponent } from './entities/demande/demande-motif/demande-motif.component';
 
+import { CaisseDepenseComponent } from './entities/caisse/effectuer-depense/caisse-depense.component';
+import { EffectuerDepenseComponent } from './entities/caisse/depense-caisse/effectuer-depense/effectuer-depense.component';
+
 @NgModule({
   imports: [
     BrowserModule,

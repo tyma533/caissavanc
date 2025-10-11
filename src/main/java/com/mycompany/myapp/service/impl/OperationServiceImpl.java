@@ -120,6 +120,11 @@ public class OperationServiceImpl implements OperationService {
         return operationRepository.findByCaisseId(caisseId).stream().map(operationMapper::toDto).toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<OperationDTO> findDepensesByCaisse(Long caisseId) {
+        return operationRepository.findByCaisseIdAndTypeOperationLibelle(caisseId, "DEBIT").stream().map(operationMapper::toDto).toList();
+    }
+
     @Override
     public OperationDTO save(OperationDTO operationDTO) {
         log.debug("Request to save Operation : {}", operationDTO);

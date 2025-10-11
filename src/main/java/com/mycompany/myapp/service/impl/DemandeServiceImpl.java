@@ -76,22 +76,17 @@ public class DemandeServiceImpl implements DemandeService {
         // Récupérer la demande
         Demande demande = demandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Demande non trouvée pour l'ID : " + id));
 
-        // Bloquer retraitement
-        // if (demande.getEtat() == EtatDemande.TRAITEE) {
-        //     throw new BadRequestAlertException("Demande déjà traitée", "demande", "alreadyProcessed");
-        // }
         if (!accepte) {
-            // Cas de refus
+            // ----- CAS REFUS -----
             demande.setMotif(motifRefus);
-            // TODO : ajouter d'autres champs spécifiques au refus si nécessaire
+            demande.setEtat(EtatDemande.REFUSEE_DFC); // Etat correct pour refus
         } else {
-            // Cas d'acceptation
+            // ----- CAS ACCEPTATION -----
             switch (demande.getType()) {
                 case CREATION_CAISSE -> {
                     if (demande.getEtablissement() == null) {
                         throw new RuntimeException("Etablissement manquant pour la création de caisse");
                     }
-
                     if (demande.getIntitule() == null || demande.getIntitule().isBlank()) {
                         throw new RuntimeException("Intitulé de la demande manquant pour la création de caisse");
                     }
@@ -119,19 +114,16 @@ public class DemandeServiceImpl implements DemandeService {
                     caisse.setEtat(EtatCaisse.OUVERTE);
                     caisse.setEtablissement(demande.getEtablissement());
                     caisseService.save(caisse);
+
+                    demande.setMotif("Création de caisse validée");
                 }
                 case ALIMENTATION_CAISSE -> {
                     if (demande.getCaisse() == null) {
                         throw new RuntimeException("Caisse manquante pour l'alimentation");
                     }
-
-                    // Le DFC valide la demande et fixe le montant accordé
                     if (demande.getMontantAccorde() == null || demande.getMontantAccorde() <= 0) {
                         throw new RuntimeException("Le montant accordé par le DFC est obligatoire et doit être positif");
                     }
-
-                    // À ce stade, aucune opération d'alimentation n'est encore créée.
-                    // L'agent comptable le fera plus tard lors du traitement effectif.
                     demande.setMotif("Demande d'alimentation validée par le DFC");
                 }
                 case CLOTURE_CAISSE -> {
@@ -139,17 +131,14 @@ public class DemandeServiceImpl implements DemandeService {
                         throw new RuntimeException("Caisse manquante pour la clôture");
                     }
 
-                    // Charger la caisse
                     CaisseDTO caisse = caisseService
                         .findOne(demande.getCaisse().getId())
                         .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + demande.getCaisse().getId()));
 
-                    // Vérifier si elle est déjà clôturée
                     if (caisse.getEtat() == EtatCaisse.CLOTURE) {
                         throw new RuntimeException("La caisse sélectionnée est déjà clôturée");
                     }
 
-                    // Clôturer la caisse
                     caisse.setEtat(EtatCaisse.CLOTURE);
                     caisseService.update(caisse);
 
@@ -160,7 +149,6 @@ public class DemandeServiceImpl implements DemandeService {
                         throw new RuntimeException("Caisse manquante pour la réouverture");
                     }
 
-                    // Charger la caisse
                     CaisseDTO caisse = caisseService
                         .findOne(demande.getCaisse().getId())
                         .orElseThrow(() -> new RuntimeException("Caisse non trouvée pour l'ID : " + demande.getCaisse().getId()));
@@ -169,7 +157,6 @@ public class DemandeServiceImpl implements DemandeService {
                         throw new RuntimeException("La caisse sélectionnée est déjà ouverte");
                     }
 
-                    // Réouvrir la caisse
                     caisse.setEtat(EtatCaisse.OUVERTE);
                     caisseService.update(caisse);
 
@@ -177,11 +164,15 @@ public class DemandeServiceImpl implements DemandeService {
                 }
                 default -> throw new RuntimeException("Objet de demande non géré : " + demande.getType());
             }
+
+            // Etat correct pour acceptation
+            demande.setEtat(EtatDemande.VALIDEE_DFC);
         }
 
-        // Sauvegarder la demande et retourner le DTO
-        demande.setEtat(EtatDemande.TRAITEE);
+        // Sauvegarder la demande avec l'état correct
         demandeRepository.save(demande);
+
+        // Retourner le DTO
         return demandeMapper.toDto(demande);
     }
 
@@ -249,13 +240,28 @@ public class DemandeServiceImpl implements DemandeService {
         caisseService.update(caisse);
 
         // 🔟 Mettre à jour la demande
-        demande.setEtat(EtatDemande.TRAITEE);
+        demande.setEtat(EtatDemande.EXECUTEE);
         demande.setMotif("Alimentation exécutée et enregistrée par l'agent comptable");
         demandeRepository.save(demande);
 
         log.info("Alimentation de la caisse '{}' exécutée avec succès", caisse.getLibelle());
 
         return demandeMapper.toDto(demande);
+    }
+
+    // ✅ Méthode pour récupérer toutes les demandes d’une caisse
+    @Override
+    @Transactional(readOnly = true)
+    public List<DemandeDTO> findByCaisse(Long caisseId) {
+        return demandeRepository.findByCaisseId(caisseId).stream().map(demandeMapper::toDto).toList();
+    }
+
+    // ✅ Méthode pour récupérer les demandes d’un type précis (ex: ALIMENTATION)
+    @Override
+    @Transactional(readOnly = true)
+    public List<DemandeDTO> findByCaisseAndTypeDemande(Long caisseId, String typeDemande) {
+        com.mycompany.myapp.domain.enumeration.Type typeEnum = com.mycompany.myapp.domain.enumeration.Type.valueOf(typeDemande);
+        return demandeRepository.findByCaisseIdAndType(caisseId, typeEnum).stream().map(demandeMapper::toDto).toList();
     }
 
     @Override

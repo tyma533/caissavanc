@@ -8,8 +8,8 @@ export interface ICaisseRubrique {
   dateHeureCreation?: dayjs.Dayjs | null;
   utiCree?: number | null;
   utiModifie?: number | null;
-  caisse?: Pick<ICaisse, 'id'> | null;
-  rubrique?: Pick<IRubrique, 'id'> | null;
+  caisse?: Pick<ICaisse, 'id' | 'libelle'> | null;
+  rubrique?: Pick<IRubrique, 'id' | 'libelle'> | null;
 }
 
 export type NewCaisseRubrique = Omit<ICaisseRubrique, 'id'> & { id: null };

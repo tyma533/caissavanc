@@ -78,12 +78,12 @@
         <tr *ngFor="let caisseRubrique of caisseRubriques; trackBy: trackId" data-cy="entityTable">
           <td>
             <div *ngIf="caisseRubrique.caisse">
-              <a [routerLink]="['/caisse', caisseRubrique.caisse.id, 'view']">{{ caisseRubrique.caisse.id }}</a>
+              <a [routerLink]="['/caisse', caisseRubrique.caisse.id, 'view']">{{ caisseRubrique.caisse.libelle }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="caisseRubrique.rubrique">
-              <a [routerLink]="['/rubrique', caisseRubrique.rubrique.id, 'view']">{{ caisseRubrique.rubrique.id }}</a>
+              <a [routerLink]="['/rubrique', caisseRubrique.rubrique.id, 'view']">{{ caisseRubrique.rubrique.libelle }}</a>
             </div>
           </td>
           <td class="text-end">

@@ -57,4 +57,6 @@ public interface DemandeService {
 
     DemandeDTO traiterDemande(Long id, boolean accepte, String motifRefus, OperationDTO operationDTO);
     DemandeDTO executerAlimentation(Long id, OperationDTO operationDTO);
+    List<DemandeDTO> findByCaisse(Long caisseId);
+    List<DemandeDTO> findByCaisseAndTypeDemande(Long caisseId, String typeDemande);
 }

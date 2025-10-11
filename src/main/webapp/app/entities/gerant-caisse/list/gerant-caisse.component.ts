@@ -65,7 +65,11 @@ export class GerantCaisseComponent implements OnInit {
 
     const term = this.filter.value.toLowerCase();
     if (term) {
-      filteredGerantCaisses = this.tranchesSharedCollection.filter(t => String(t.actif).toLowerCase().includes(term));
+      filteredGerantCaisses = this.tranchesSharedCollection.filter(t =>
+        String(t.caisse?.libelle)
+          .toLowerCase()
+          .includes(term),
+      );
     } else {
       filteredGerantCaisses = [...this.tranchesSharedCollection];
     }

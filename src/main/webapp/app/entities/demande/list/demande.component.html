@@ -112,10 +112,10 @@
           <td>
             <span
               [ngClass]="{
-                'badge bg-warning': demande.etat === ETATEN_ATTENTE,
-                'badge bg-success': demande.etat === ETATVALIDEE,
-                'badge bg-danger': demande.etat === ETATREFUSEE,
-                'badge bg-primary': demande.etat === ETATTRAITEE
+                'badge rounded-pill bg-warning': demande.etat === ETATEN_ATTENTE,
+                'badge rounded-pill bg-success': demande.etat === ETATVALIDEE,
+                'badge rounded-pill bg-danger': demande.etat === ETATREFUSEE,
+                'badge rounded-pill bg-primary': demande.etat === ETATEXECUTEE
               }"
             >
               {{
@@ -125,7 +125,7 @@
                   ? 'Validée'
                   : demande.etat === ETATREFUSEE
                   ? 'Refusée'
-                  : 'Traitée'
+                  : 'Exécutée'
               }}
             </span>
 

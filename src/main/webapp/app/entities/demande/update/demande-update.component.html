@@ -1,5 +1,6 @@
 <div class="demande-details">
   <button type="submit" (click)="previousState()" class="btn btn-primary"><fa-icon icon="arrow-left"></fa-icon>&nbsp;</button>
+
   <h2 class="demande-title">
     <ng-container *ngIf="titreDemande; else defaultTitle">
       {{ titreDemande }}
@@ -8,6 +9,8 @@
     <ng-template #defaultTitle>
       {{ demande?.id ? 'Modifier la Demande' : 'Créer une Demande' }}
     </ng-template>
+
+    <span *ngIf="demande?.etablissement?.libelle"> [{{ demande!.etablissement!.libelle }}] </span>
   </h2>
 
   <hr />

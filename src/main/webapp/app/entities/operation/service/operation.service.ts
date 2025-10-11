@@ -144,4 +144,9 @@ export class OperationService {
       .get<RestOperation[]>(`api/caisses/${caisseId}/operations`, { observe: 'response' })
       .pipe(map(res => this.convertResponseArrayFromServer(res).body ?? []));
   }
+  findDepensesByCaisse(caisseId: number): Observable<IOperation[]> {
+    return this.http
+      .get<RestOperation[]>(`api/caisses/${caisseId}/depenses`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res).body ?? []));
+  }
 }

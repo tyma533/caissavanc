@@ -3,9 +3,11 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.repository.CaisseRepository;
 import com.mycompany.myapp.service.CaisseRubriqueService;
 import com.mycompany.myapp.service.CaisseService;
+import com.mycompany.myapp.service.DemandeService;
 import com.mycompany.myapp.service.OperationService;
 import com.mycompany.myapp.service.dto.CaisseDTO;
 import com.mycompany.myapp.service.dto.CaisseRubriqueDTO;
+import com.mycompany.myapp.service.dto.DemandeDTO;
 import com.mycompany.myapp.service.dto.OperationDTO;
 import com.mycompany.myapp.service.dto.RubriqueDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -46,16 +48,20 @@ public class CaisseResource {
 
     private final OperationService operationService;
 
+    private final DemandeService DemandeService;
+
     public CaisseResource(
         CaisseService caisseService,
         CaisseRepository caisseRepository,
         CaisseRubriqueService caisseRubriqueService,
-        OperationService operationService
+        OperationService operationService,
+        DemandeService DemandeService
     ) {
         this.caisseService = caisseService;
         this.caisseRepository = caisseRepository;
         this.caisseRubriqueService = caisseRubriqueService;
         this.operationService = operationService;
+        this.DemandeService = DemandeService;
     }
 
     /**
@@ -224,6 +230,21 @@ public class CaisseResource {
     @GetMapping("/{id}/operations")
     public List<OperationDTO> getOperationsByCaisse(@PathVariable Long id) {
         return operationService.findByCaisse(id);
+    }
+
+    @GetMapping("/{id}/depenses")
+    public List<OperationDTO> getDepensesByCaisse(@PathVariable Long id) {
+        return operationService.findDepensesByCaisse(id);
+    }
+
+    // @GetMapping("/{id}/demandes")
+    // public List<DemandeDTO> getDemandesByCaisse(@PathVariable Long id) {
+    //     return DemandeService.findByCaisse(id);
+    // }
+
+    @GetMapping("/{id}/demandes/alimentations")
+    public List<DemandeDTO> getDemandesAlimentations(@PathVariable Long id) {
+        return DemandeService.findByCaisseAndTypeDemande(id, "ALIMENTATION_CAISSE");
     }
 
     /**

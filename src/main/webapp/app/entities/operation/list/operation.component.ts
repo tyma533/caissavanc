@@ -65,7 +65,7 @@ export class OperationComponent implements OnInit {
 
     const term = this.filter.value.toLowerCase();
     if (term) {
-      filteredOperations = this.tranchesSharedCollection.filter(t => t.numero?.toLowerCase().includes(term));
+      filteredOperations = this.tranchesSharedCollection.filter(t => t.caisse?.libelle?.toLowerCase().includes(term));
     } else {
       filteredOperations = [...this.tranchesSharedCollection];
     }

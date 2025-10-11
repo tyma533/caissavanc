@@ -57,4 +57,5 @@ public interface OperationService {
 
     Operation effectuerDepense(OperationDTO operation);
     List<OperationDTO> findByCaisse(Long caisseId);
+    List<OperationDTO> findDepensesByCaisse(Long caisseId);
 }
