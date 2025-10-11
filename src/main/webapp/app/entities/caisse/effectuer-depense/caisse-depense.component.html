@@ -1,80 +1,69 @@
-<div *ngIf="caisse" class="caisse-details">
-  <button type="submit" (click)="previousState()" class="btn btn-primary"><fa-icon icon="arrow-left"></fa-icon>&nbsp;</button>
-  <h2 class="caisse-title">Détails de la caisse : {{ caisse.libelle }}</h2>
-  <p class="caisse-solde">
-    Solde actuel : <span>{{ caisse.solde | number: '1.0-0' }} FCFA</span>
-  </p>
+<div class="container py-4">
+  <!-- Bouton retour -->
+  <button type="button" (click)="previousState()" class="btn btn-outline-primary mb-3"><fa-icon icon="arrow-left"></fa-icon> Retour</button>
 
-  <hr />
+  <!-- En-tête -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">
+      💸 Dépenses de la caisse : <span class="text-dark">{{ caisse?.libelle }}</span>
+    </h2>
 
-  <h3 class="depense-title">Effectuer une dépense</h3>
-
-  <!-- Message si la caisse est clôturée -->
-  <div *ngIf="caisse.etat === 'CLOTURE'" class="alert alert-warning mb-3">
-    ⚠️ Cette caisse est clôturée, vous ne pouvez pas effectuer de dépense.
+    <button class="btn btn-success shadow-sm" [routerLink]="['/caisse', caisse?.id, 'effectuer-depense']">
+      <fa-icon icon="plus"></fa-icon> Ajouter une dépense
+    </button>
   </div>
 
-  <form *ngIf="caisse.etat !== 'CLOTURE'" class="depense-form" (ngSubmit)="effectuerDepense()">
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Montant :</label>
-        <input type="number" [(ngModel)]="montant" name="montant" required />
+  <!-- Chargement -->
+  <div *ngIf="isLoading" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- Tableau des dépenses -->
+  <div *ngIf="!isLoading">
+    <div *ngIf="operations && operations.length > 0; else noOperation">
+      <div class="table-responsive d-flex justify-content-center">
+        <table class="table table-striped table-hover shadow-lg rounded-3 w-75">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>Numéro</th>
+              <th>Montant (CFA)</th>
+              <th>Date</th>
+              <th>Mode</th>
+              <th>Type</th>
+              <th>Pièce Justificative</th>
+            </tr>
+          </thead>
+          <tbody class="text-center align-middle">
+            <tr *ngFor="let op of operations" class="table-light">
+              <td>{{ op.numero }}</td>
+              <td class="fw-bold text-danger">{{ op.montant | number: '1.0-0' }}</td>
+              <td>
+                {{ op.dateOperation ? (op.dateOperation.toDate() | date: 'dd-MM-yyyy à HH:mm:ss') : '' }}
+              </td>
+              <td>{{ op.modeOperation?.libelle }}</td>
+              <td>
+                <span class="badge bg-danger">
+                  {{ op.typeOperation?.libelle }}
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  [routerLink]="['/piece-justificatif/new']"
+                  [queryParams]="{ operationId: op.id }"
+                >
+                  Ajouter
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <div class="form-group">
-        <label>Commentaire :</label>
-        <input type="text" [(ngModel)]="commentaire" name="commentaire" required />
-      </div>
-
-      <div class="form-group">
-        <label>Mode d'opération :</label>
-        <select [(ngModel)]="modeOperationId" name="modeOperationId">
-          <option [value]="1">VIREMENT</option>
-          <option [value]="3">CHEQUE</option>
-          <option [value]="4">ESPECE</option>
-        </select>
-      </div>
-
-      <!-- Champs toujours requis -->
-      <div class="mb-3">
-        <label for="beneficiaire">Bénéficiaire</label>
-        <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="beneficiaire" name="beneficiaire" />
-      </div>
-
-      <!-- Champs spécifiques VIREMENT / CHEQUE -->
-      <div class="mb-3">
-        <label for="numeroVC">Numéro Virement/Chèque</label>
-        <input id="numeroVC" type="text" class="form-control" [(ngModel)]="numeroVC" name="numeroVC" />
-      </div>
-
-      <div class="mb-3">
-        <label for="banque">Banque</label>
-        <input id="banque" type="text" class="form-control" [(ngModel)]="banque" name="banque" />
-      </div>
-
-      <!-- Champ Pièce justificative -->
-      <div class="mb-3">
-        <label for="piece">Pièce justificative :</label>
-
-        <div *ngIf="piece" class="form-text text-danger clearfix">
-          <a (click)="openFile(piece, pieceContentType)" class="btn btn-link p-0">📎 Ouvrir</a>
-          <span>{{ pieceContentType }}, {{ byteSize(piece) }}</span>
-          <button type="button" (click)="removePiece()" class="btn btn-secondary btn-sm float-end">
-            <fa-icon icon="times"></fa-icon> Supprimer
-          </button>
-        </div>
-
-        <input type="file" id="piece" (change)="setFileData($event)" />
-      </div>
-
-      <div class="form-group"></div>
     </div>
 
-    <!-- Erreur renvoyée par le backend -->
-    <div *ngIf="erreurMessage" class="alert alert-danger">
-      {{ erreurMessage }}
-    </div>
-
-    <button type="submit" class="btn-depense" [disabled]="caisse.etat?.toString() === 'CLOTURE'">Effectuer la dépense</button>
-  </form>
+    <!-- Message si aucune dépense -->
+    <ng-template #noOperation>
+      <div class="alert alert-warning text-center mt-4 shadow-sm w-75 mx-auto">Aucune dépense trouvée pour cette caisse.</div>
+    </ng-template>
+  </div>
 </div>

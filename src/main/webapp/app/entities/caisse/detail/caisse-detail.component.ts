@@ -11,6 +11,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { OperationService } from 'app/entities/operation/service/operation.service';
 import { IOperation } from 'app/entities/operation/operation.model';
 import { TYPEALIMENTATIONCAISSEEXECUTION } from 'app/app.constants';
+import Swal from 'sweetalert2';
 @Component({
   standalone: true,
   selector: 'jhi-caisse-detail',
@@ -65,7 +66,8 @@ export class CaisseDetailComponent {
         }
       },
       error => {
-        alert('Erreur lors du chargement de la caisse');
+        // alert('Erreur lors du chargement de la caisse');
+        Swal.fire('Erreur', error.error.detail, 'error');
       },
     );
   }
@@ -73,7 +75,9 @@ export class CaisseDetailComponent {
   loadOperations(caisseId: number): void {
     this.operationService.findByCaisse(caisseId).subscribe({
       next: res => (this.operations = res),
-      error: () => alert('Erreur lors du chargement des opérations'),
+      error: err =>
+        // alert('Erreur lors du chargement des opérations pour cette caisse')
+        Swal.fire('Erreur', err.error.detail, 'error'),
     });
   }
 

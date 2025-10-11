@@ -7,6 +7,9 @@ import { CaisseDetailComponent } from './detail/caisse-detail.component';
 import { CaisseUpdateComponent } from './update/caisse-update.component';
 import CaisseResolve from './route/caisse-routing-resolve.service';
 
+import { CaisseDepenseComponent } from './effectuer-depense/caisse-depense.component';
+import { EffectuerDepenseComponent } from './depense-caisse/effectuer-depense/effectuer-depense.component';
+
 const caisseRoute: Routes = [
   {
     path: '',
@@ -35,6 +38,22 @@ const caisseRoute: Routes = [
   {
     path: ':id/edit',
     component: CaisseUpdateComponent,
+    resolve: {
+      caisse: CaisseResolve,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/depense',
+    component: CaisseDepenseComponent,
+    resolve: {
+      caisse: CaisseResolve,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/effectuer-depense',
+    component: EffectuerDepenseComponent,
     resolve: {
       caisse: CaisseResolve,
     },
