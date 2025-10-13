@@ -79,7 +79,7 @@
         type="button"
         [disabled]="caisse.etat?.toString() === 'CLOTURE'"
         class="btn btn-warning me-2"
-        [routerLink]="['/demande', 'new']"
+        [routerLink]="['/caisse', caisse.id, 'alimentations']"
         [queryParams]="{
           type: 'ALIMENTATION_CAISSE',
           caisseId: caisse.id,

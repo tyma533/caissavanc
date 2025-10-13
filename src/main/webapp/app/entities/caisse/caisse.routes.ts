@@ -9,6 +9,7 @@ import CaisseResolve from './route/caisse-routing-resolve.service';
 
 import { CaisseDepenseComponent } from './effectuer-depense/caisse-depense.component';
 import { EffectuerDepenseComponent } from './depense-caisse/effectuer-depense/effectuer-depense.component';
+import { DemandeCaisseComponent } from './demande-caisse/demande-caisse.component';
 
 const caisseRoute: Routes = [
   {
@@ -51,6 +52,14 @@ const caisseRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
   },
+  {
+    path: ':id/alimentations',
+    component: DemandeCaisseComponent,
+    data: {
+      pageTitle: 'Demandes d’alimentation',
+    },
+  },
+
   {
     path: ':id/effectuer-depense',
     component: EffectuerDepenseComponent,

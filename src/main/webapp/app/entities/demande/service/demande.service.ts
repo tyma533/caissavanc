@@ -194,4 +194,9 @@ export class DemandeService {
   executerAlimentation(id: number, operationDTO: any) {
     return this.http.put<IDemande>(`/api/demandes/${id}/executer-alimentation`, operationDTO);
   }
+  findByCaisseAlimentations(caisseId: number): Observable<HttpResponse<IDemande[]>> {
+    return this.http.get<IDemande[]>(this.applicationConfigService.getEndpointFor(`api/caisses/${caisseId}/demandes/alimentations`), {
+      observe: 'response',
+    });
+  }
 }

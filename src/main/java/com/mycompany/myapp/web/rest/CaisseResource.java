@@ -48,20 +48,20 @@ public class CaisseResource {
 
     private final OperationService operationService;
 
-    private final DemandeService DemandeService;
+    private final DemandeService demandeService;
 
     public CaisseResource(
         CaisseService caisseService,
         CaisseRepository caisseRepository,
         CaisseRubriqueService caisseRubriqueService,
         OperationService operationService,
-        DemandeService DemandeService
+        DemandeService demandeService
     ) {
         this.caisseService = caisseService;
         this.caisseRepository = caisseRepository;
         this.caisseRubriqueService = caisseRubriqueService;
         this.operationService = operationService;
-        this.DemandeService = DemandeService;
+        this.demandeService = demandeService;
     }
 
     /**
@@ -244,7 +244,7 @@ public class CaisseResource {
 
     @GetMapping("/{id}/demandes/alimentations")
     public List<DemandeDTO> getDemandesAlimentations(@PathVariable Long id) {
-        return DemandeService.findByCaisseAndTypeDemande(id, "ALIMENTATION_CAISSE");
+        return demandeService.findByCaisseAndTypeDemande(id, "ALIMENTATION_CAISSE");
     }
 
     /**
