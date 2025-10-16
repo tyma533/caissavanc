@@ -60,4 +60,8 @@
   </table>
 
   <div *ngIf="!isLoading && demandes.length === 0" class="alert alert-info mt-4">Aucune demande d’alimentation pour cette caisse.</div>
+  <!-- Bouton Retour à gauche -->
+  <button type="submit" (click)="previousState()" class="btn btn-outline-secondary">
+    <fa-icon icon="arrow-left"></fa-icon>&nbsp;Retour
+  </button>
 </div>

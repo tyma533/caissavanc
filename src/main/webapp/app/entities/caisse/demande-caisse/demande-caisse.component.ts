@@ -86,4 +86,8 @@ export class DemandeCaisseComponent {
   trackId(index: number, item: IDemande): number {
     return item.id!;
   }
+
+  previousState(): void {
+    window.history.back();
+  }
 }

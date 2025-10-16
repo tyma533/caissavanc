@@ -6,11 +6,6 @@
       </h2>
 
       <hr />
-
-      <!-- <div class="detail-row">
-        <div class="label">ID</div>
-        <div class="value">{{ caisse.id }}</div>
-      </div> -->
       <div class="detail-row">
         <div class="label">Gérant</div>
         <div class="value">{{ caisse.gerantActif }}</div>
@@ -72,7 +67,7 @@
         data-cy="entityDepenseButton"
       >
         <fa-icon icon="tasks"></fa-icon>
-        <span class="d-none d-md-inline">Dépense</span>
+        <span class="d-none d-md-inline">Dépenses</span>
       </button>
 
       <button
@@ -87,7 +82,21 @@
           origine: 'caisse'
         }"
       >
-        Alimenter la caisse
+        Alimentations
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-info me-2"
+        [routerLink]="['/controle', 'new']"
+        [queryParams]="{
+          caisseId: caisse.id,
+          etablissementId: caisse.etablissement?.id,
+          origine: 'caisse'
+        }"
+      >
+        <fa-icon icon="clipboard-check"></fa-icon>
+        <span class="d-none d-md-inline">Contrôle</span>
       </button>
 
       <button

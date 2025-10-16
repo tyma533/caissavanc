@@ -1,59 +1,64 @@
 <div *ngIf="caisse" class="caisse-details">
-  <button type="submit" (click)="previousState()" class="btn btn-primary"><fa-icon icon="arrow-left"></fa-icon>&nbsp;</button>
-  <h2 class="caisse-title">Détails de la caisse : {{ caisse.libelle }}</h2>
-  <p class="caisse-solde">
-    Solde actuel : <span>{{ caisse.solde | number: '1.0-0' }} FCFA</span>
-  </p>
+  <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+    {{ !isLinear ? 'Enable linear mode' : 'Disable linear mode' }}
+  </button>
+  <mat-stepper [linear]="isLinear" #stepper>
+    <mat-step label="effectuerDepense">
+      <button type="submit" (click)="previousState()" class="btn btn-primary"><fa-icon icon="arrow-left"></fa-icon>&nbsp;</button>
+      <h2 class="caisse-title">Détails de la caisse : {{ caisse.libelle }}</h2>
+      <p class="caisse-solde">
+        Solde actuel : <span>{{ caisse.solde | number: '1.0-0' }} FCFA</span>
+      </p>
 
-  <hr />
+      <hr />
 
-  <h3 class="depense-title">Effectuer une dépense</h3>
+      <h3 class="depense-title">Effectuer une dépense</h3>
 
-  <!-- Message si la caisse est clôturée -->
-  <div *ngIf="caisse.etat === 'CLOTURE'" class="alert alert-warning mb-3">
-    ⚠️ Cette caisse est clôturée, vous ne pouvez pas effectuer de dépense.
-  </div>
-
-  <form *ngIf="caisse.etat !== 'CLOTURE'" class="depense-form" (ngSubmit)="effectuerDepense()">
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Montant :</label>
-        <input type="number" [(ngModel)]="montant" name="montant" required />
+      <!-- Message si la caisse est clôturée -->
+      <div *ngIf="caisse.etat === 'CLOTURE'" class="alert alert-warning mb-3">
+        ⚠️ Cette caisse est clôturée, vous ne pouvez pas effectuer de dépense.
       </div>
 
-      <div class="form-group">
-        <label>Commentaire :</label>
-        <input type="text" [(ngModel)]="commentaire" name="commentaire" required />
-      </div>
+      <form *ngIf="caisse.etat !== 'CLOTURE'" class="depense-form" (ngSubmit)="effectuerDepense()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Montant :</label>
+            <input matInput type="number" [(ngModel)]="montant" name="montant" required />
+          </div>
 
-      <div class="form-group">
-        <label>Mode d'opération :</label>
-        <select [(ngModel)]="modeOperationId" name="modeOperationId">
-          <option [value]="1">VIREMENT</option>
-          <option [value]="3">CHEQUE</option>
-          <option [value]="4">ESPECE</option>
-        </select>
-      </div>
+          <div class="form-group">
+            <label>Commentaire :</label>
+            <input matInput type="text" [(ngModel)]="commentaire" name="commentaire" required />
+          </div>
 
-      <!-- Champs toujours requis -->
-      <div class="mb-3">
-        <label for="beneficiaire">Bénéficiaire</label>
-        <input id="beneficiaire" type="text" class="form-control" [(ngModel)]="beneficiaire" name="beneficiaire" />
-      </div>
+          <div class="form-group">
+            <label>Mode d'opération :</label>
+            <select [(ngModel)]="modeOperationId" name="modeOperationId">
+              <option [value]="1">VIREMENT</option>
+              <option [value]="3">CHEQUE</option>
+              <option [value]="4">ESPECE</option>
+            </select>
+          </div>
 
-      <!-- Champs spécifiques VIREMENT / CHEQUE -->
-      <div class="mb-3">
-        <label for="numeroVC">Numéro Virement/Chèque</label>
-        <input id="numeroVC" type="text" class="form-control" [(ngModel)]="numeroVC" name="numeroVC" />
-      </div>
+          <!-- Champs toujours requis -->
+          <div class="mb-3">
+            <label for="beneficiaire">Bénéficiaire</label>
+            <input matInput id="beneficiaire" type="text" class="form-control" [(ngModel)]="beneficiaire" name="beneficiaire" />
+          </div>
 
-      <div class="mb-3">
-        <label for="banque">Banque</label>
-        <input id="banque" type="text" class="form-control" [(ngModel)]="banque" name="banque" />
-      </div>
+          <!-- Champs spécifiques VIREMENT / CHEQUE -->
+          <div class="mb-3">
+            <label for="numeroVC">Numéro Virement/Chèque</label>
+            <input matInput id="numeroVC" type="text" class="form-control" [(ngModel)]="numeroVC" name="numeroVC" />
+          </div>
 
-      <!-- Champ Pièce justificative -->
-      <div class="mb-3">
+          <div class="mb-3">
+            <label for="banque">Banque</label>
+            <input matInput id="banque" type="text" class="form-control" [(ngModel)]="banque" name="banque" />
+          </div>
+
+          <!-- Champ Pièce justificative -->
+          <!-- <div class="mb-3">
         <label for="piece">Pièce justificative :</label>
 
         <div *ngIf="piece" class="form-text text-danger clearfix">
@@ -64,17 +69,85 @@
           </button>
         </div>
 
-        <input type="file" id="piece" (change)="setFileData($event)" />
+        <input  type="file" id="piece" (change)="setFileData($event)" />
+      </div> -->
+
+          <div class="form-group"></div>
+        </div>
+
+        <!-- Erreur renvoyée par le backend -->
+        <div *ngIf="erreurMessage" class="alert alert-danger">
+          {{ erreurMessage }}
+        </div>
+
+        <!-- <button
+          type="submit"
+          class="btn btn-primary mt-3"
+          [disabled]="caisse.etat?.toString() === 'CLOTURE'"
+        >
+          Suivant
+        </button>  -->
+      </form>
+    </mat-step>
+    <!-- Étape 2 : Pièces justificatives -->
+    <mat-step label="Pièces justificatives">
+      <h3>Liste des pièces</h3>
+      <div class="d-flex justify-content-end">
+        <div class="modal" *ngIf="showModalPiece" style="display: block">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Ajouter une pièce justificative</h5>
+                <button type="button" class="btn-close" (click)="fermerModalPiece()"></button>
+              </div>
+
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="libellePiece" class="form-label">Libellé</label>
+                  <input id="libellePiece" type="text" class="form-control" [(ngModel)]="libellePiece" />
+                </div>
+
+                <div class="mb-3">
+                  <label for="fichierPiece" class="form-label">Fichier</label>
+                  <input id="fichierPiece" type="file" class="form-control" (change)="onFileSelected($event)" />
+                  <small *ngIf="fileName">{{ fileName }}</small>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-success" (click)="ajouterPiece()">Ajouter</button>
+                <button class="btn btn-secondary" (click)="fermerModalPiece()">Annuler</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-info mb-3" (click)="showModalPiece = true"><fa-icon icon="plus"></fa-icon> Ajouter une pièce</button>
       </div>
+      <!-- Tableau des pièces -->
+      <table class="table table-striped" *ngIf="pieces.length > 0">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pieces">
+            <td>{{ p.nom }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" (click)="removePiece(p)"><fa-icon icon="trash"></fa-icon> Supprimer</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <div class="form-group"></div>
-    </div>
+      <div *ngIf="pieces.length === 0" class="text-muted">Aucune pièce ajoutée.</div>
 
-    <!-- Erreur renvoyée par le backend -->
-    <div *ngIf="erreurMessage" class="alert alert-danger">
-      {{ erreurMessage }}
-    </div>
-
-    <button type="submit" class="btn-depense" [disabled]="caisse.etat?.toString() === 'CLOTURE'">Effectuer la dépense</button>
-  </form>
+      <div class="d-flex justify-content-between mt-4">
+        <button mat-button matStepperPrevious class="btn btn-primary">Retour</button>
+        <button class="btn btn-success" (click)="effectuerDepense()">Valider la dépense</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
 </div>

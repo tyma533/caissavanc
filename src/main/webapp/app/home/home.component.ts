@@ -13,7 +13,7 @@ import { CaisseService } from 'app/entities/caisse/service/caisse.service';
   standalone: true,
   selector: 'jhi-home',
   templateUrl: './home.component.html',
-  // styleUrls: ['./home.component.scss'],
+  styleUrls: ['./home.component.scss'],
   imports: [SharedModule, RouterModule],
 })
 export default class HomeComponent implements OnInit, OnDestroy {

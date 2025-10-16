@@ -24,6 +24,7 @@ import { DemandeMotifComponent } from './entities/demande/demande-motif/demande-
 
 import { CaisseDepenseComponent } from './entities/caisse/effectuer-depense/caisse-depense.component';
 import { EffectuerDepenseComponent } from './entities/caisse/depense-caisse/effectuer-depense/effectuer-depense.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { EffectuerDepenseComponent } from './entities/caisse/depense-caisse/effe
     HttpClientModule,
     MainModule,
     TranslationModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     Title,

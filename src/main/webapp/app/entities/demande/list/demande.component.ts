@@ -15,6 +15,7 @@ import { DemandeDeleteDialogComponent } from '../delete/demande-delete-dialog.co
 import { EnumTypeLabels } from 'app/entities/enumerations/type.model';
 import { DemandeMotifComponent } from '../demande-motif/demande-motif.component';
 import { ETATEN_ATTENTE, ETATEXECUTEE, ETATREFUSEE, ETATVALIDEE } from 'app/app.constants';
+import { EnumEtatDemandeLabels } from 'app/entities/enumerations/etat-demande';
 
 @Component({
   standalone: true,
@@ -44,6 +45,7 @@ export class DemandeComponent implements OnInit {
   ETATREFUSEE = ETATREFUSEE;
   ETATEXECUTEE = ETATEXECUTEE;
   ETATEN_ATTENTE = ETATEN_ATTENTE;
+  EnumEtatDemandeLabels = EnumEtatDemandeLabels;
 
   filter = new FormControl('', { nonNullable: true });
 

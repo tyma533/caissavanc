@@ -72,6 +72,13 @@
             </div>
           </th>
 
+          <th scope="col" jhiSortBy="conforme">
+            <div class="d-flex">
+              <span jhiTranslate="caissavance2App.controle.conforme">Conforme</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+
           <th scope="col" jhiSortBy="action">
             <div class="d-flex">
               <span jhiTranslate="caissavance2App.controle.action">Action</span>
@@ -85,12 +92,20 @@
         <tr *ngFor="let controle of controles; trackBy: trackId" data-cy="entityTable">
           <td>
             <div *ngIf="controle.caisse">
-              <a [routerLink]="['/caisse', controle.caisse.id, 'view']">{{ controle.caisse.id }}</a>
+              <a [routerLink]="['/caisse', controle.caisse.id, 'view']">{{ controle.caisse.libelle }}</a>
             </div>
           </td>
 
           <td>{{ controle.observation }}</td>
           <td>{{ controle.dateControle | formatMediumDatetime }}</td>
+          <td
+            [ngClass]="{
+              'text-success': controle.conforme === true,
+              'text-danger': controle.conforme === false
+            }"
+          >
+            {{ controle.conforme ? 'Oui' : 'Non' }}
+          </td>
 
           <td class="text-end">
             <div class="btn-group">

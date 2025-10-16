@@ -25,6 +25,7 @@ public class ControleDTO implements Serializable {
     private Long utiModifie;
 
     private CaisseDTO caisse;
+    private Boolean conforme;
 
     public Long getId() {
         return id;
@@ -88,6 +89,14 @@ public class ControleDTO implements Serializable {
 
     public void setCaisse(CaisseDTO caisse) {
         this.caisse = caisse;
+    }
+
+    public Boolean getConforme() {
+        return conforme;
+    }
+
+    public void setConforme(Boolean conforme) {
+        this.conforme = conforme;
     }
 
     @Override

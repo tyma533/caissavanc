@@ -42,6 +42,22 @@ public class Controle implements Serializable {
     @Column(name = "uti_modifie")
     private Long utiModifie;
 
+    @Column(name = "conforme")
+    private Boolean conforme;
+
+    public Boolean getConforme() {
+        return this.conforme;
+    }
+
+    public Controle conforme(Boolean conforme) {
+        this.setConforme(conforme);
+        return this;
+    }
+
+    public void setConforme(Boolean conforme) {
+        this.conforme = conforme;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "etablissement" }, allowSetters = true)
     private Caisse caisse;

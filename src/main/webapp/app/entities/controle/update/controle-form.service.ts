@@ -40,6 +40,7 @@ type ControleFormGroupContent = {
   utiCree: FormControl<ControleFormRawValue['utiCree']>;
   utiModifie: FormControl<ControleFormRawValue['utiModifie']>;
   caisse: FormControl<ControleFormRawValue['caisse']>;
+  conforme: FormControl<ControleFormRawValue['conforme']>; // ✅ ajouter le contrôle ici
 };
 
 export type ControleFormGroup = FormGroup<ControleFormGroupContent>;
@@ -66,6 +67,7 @@ export class ControleFormService {
       utiCree: new FormControl(controleRawValue.utiCree),
       utiModifie: new FormControl(controleRawValue.utiModifie),
       caisse: new FormControl(controleRawValue.caisse),
+      conforme: new FormControl(controleRawValue.conforme), // ✅ ajouter le contrôle ici
     });
   }
 
@@ -100,6 +102,7 @@ export class ControleFormService {
       dateControle: dayjs(rawControle.dateControle, DATE_TIME_FORMAT),
       dateHeureModification: dayjs(rawControle.dateHeureModification, DATE_TIME_FORMAT),
       dateHeureCreation: dayjs(rawControle.dateHeureCreation, DATE_TIME_FORMAT),
+      conforme: rawControle.conforme, // ✅ ajouter ici
     };
   }
 
@@ -111,6 +114,7 @@ export class ControleFormService {
       dateControle: controle.dateControle ? controle.dateControle.format(DATE_TIME_FORMAT) : undefined,
       dateHeureModification: controle.dateHeureModification ? controle.dateHeureModification.format(DATE_TIME_FORMAT) : undefined,
       dateHeureCreation: controle.dateHeureCreation ? controle.dateHeureCreation.format(DATE_TIME_FORMAT) : undefined,
+      conforme: controle.conforme ?? false, // ✅ ajouter ici pour pré-remplir
     };
   }
 }

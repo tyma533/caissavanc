@@ -9,7 +9,8 @@ export interface IControle {
   dateHeureCreation?: dayjs.Dayjs | null;
   utiCree?: number | null;
   utiModifie?: number | null;
-  caisse?: Pick<ICaisse, 'id'> | null;
+  caisse?: Pick<ICaisse, 'id' | 'libelle'> | null;
+  conforme?: boolean | null; // ✅ ce champ doit exister ici
 }
 
 export type NewControle = Omit<IControle, 'id'> & { id: null };

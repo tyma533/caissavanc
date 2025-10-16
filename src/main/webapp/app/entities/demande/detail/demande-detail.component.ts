@@ -55,6 +55,8 @@ export class DemandeDetailComponent implements OnInit {
   showModalDFC: boolean = false;
   showModalComptable: boolean = false;
 
+  selectedAction: 'EN_COURS' | 'VALIDER' | 'REFUSER' = 'EN_COURS';
+
   TYPEALIMENTATIONCAISSEVALIDATION = TYPEALIMENTATIONCAISSEVALIDATION;
   TYPEALIMENTATIONCAISSEEXECUTION = TYPEALIMENTATIONCAISSEEXECUTION;
   ETATVALIDEE = EtatDemande.VALIDEE_DFC;
@@ -283,8 +285,46 @@ export class DemandeDetailComponent implements OnInit {
   }
 
   // --- méthode pour fermer la modale DFC ---
-  fermerModalDFC(): void {
+  fermerModalDFC() {
     this.showModalDFC = false;
+    this.selectedAction = 'EN_COURS';
+  }
+  validerAction() {
+    // Validation des champs
+    if (this.selectedAction === 'VALIDER' && (!this.demande || !this.demande.montantAccorde)) {
+      alert('Veuillez saisir le montant accordé');
+      return;
+    }
+    if (this.selectedAction === 'REFUSER' && (!this.demande || !this.demande.motif)) {
+      alert('Veuillez saisir le motif de refus');
+      return;
+    }
+
+    // Mettre à jour l'état de la demande selon le choix
+    if (this.demande) {
+      if (this.selectedAction === 'VALIDER') {
+        this.demande.etat = 'VALIDEE_DFC';
+      } else if (this.selectedAction === 'REFUSER') {
+        this.demande.etat = 'REFUSEE_DFC';
+      } else {
+        this.demande.etat = 'EN_ATTENTE';
+      }
+    }
+
+    // Appel au service pour enregistrer la demande
+    if (this.demande) {
+      this.demandeService.update(this.demande).subscribe({
+        next: res => {
+          // console.log('Demande enregistrée', res);
+          Swal.fire('Succès', 'Demande enregistrée avec succès.', 'success');
+          this.fermerModalDFC();
+        },
+        error: err => {
+          // console.error('Erreur lors de l\'enregistrement', err);
+          Swal.fire('Erreur', err.error.detail, 'error');
+        },
+      });
+    }
   }
 
   // --- méthode pour valider le montant accordé par le DFC ---

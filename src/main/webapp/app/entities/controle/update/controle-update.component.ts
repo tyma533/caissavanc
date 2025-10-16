@@ -22,9 +22,9 @@ import { ControleFormService, ControleFormGroup } from './controle-form.service'
 export class ControleUpdateComponent implements OnInit {
   isSaving = false;
   controle: IControle | null = null;
+  caisse: ICaisse | null = null;
 
   caissesSharedCollection: ICaisse[] = [];
-
   editForm: ControleFormGroup = this.controleFormService.createControleFormGroup();
 
   constructor(
@@ -37,12 +37,26 @@ export class ControleUpdateComponent implements OnInit {
   compareCaisse = (o1: ICaisse | null, o2: ICaisse | null): boolean => this.caisseService.compareCaisse(o1, o2);
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      const caisseId = params['caisseId'];
+      if (caisseId) {
+        this.caisseService.find(caisseId).subscribe({
+          next: (res: HttpResponse<ICaisse>) => {
+            this.caisse = res.body ?? null;
+            if (this.caisse) {
+              // 🔹 Préremplir le champ "caisse" du formulaire
+              this.editForm.patchValue({ caisse: this.caisse });
+            }
+          },
+        });
+      }
+    });
+
     this.activatedRoute.data.subscribe(({ controle }) => {
       this.controle = controle;
       if (controle) {
         this.updateForm(controle);
       }
-
       this.loadRelationshipsOptions();
     });
   }
@@ -73,7 +87,7 @@ export class ControleUpdateComponent implements OnInit {
   }
 
   protected onSaveError(): void {
-    // Api for inheritance.
+    // Custom error handling
   }
 
   protected onSaveFinalize(): void {
@@ -83,7 +97,6 @@ export class ControleUpdateComponent implements OnInit {
   protected updateForm(controle: IControle): void {
     this.controle = controle;
     this.controleFormService.resetForm(this.editForm, controle);
-
     this.caissesSharedCollection = this.caisseService.addCaisseToCollectionIfMissing<ICaisse>(
       this.caissesSharedCollection,
       controle.caisse,

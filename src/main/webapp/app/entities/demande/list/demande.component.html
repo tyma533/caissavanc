@@ -111,22 +111,15 @@
 
           <td>
             <span
+              class="badge rounded-pill"
               [ngClass]="{
-                'badge rounded-pill bg-warning': demande.etat === ETATEN_ATTENTE,
-                'badge rounded-pill bg-success': demande.etat === ETATVALIDEE,
-                'badge rounded-pill bg-danger': demande.etat === ETATREFUSEE,
-                'badge rounded-pill bg-primary': demande.etat === ETATEXECUTEE
+                ' bg-warning': demande.etat == ETATEN_ATTENTE,
+                ' bg-success': demande.etat == ETATVALIDEE,
+                ' bg-danger': demande.etat == ETATREFUSEE,
+                ' bg-primary': demande.etat == ETATEXECUTEE
               }"
             >
-              {{
-                demande.etat === ETATEN_ATTENTE
-                  ? 'En attente'
-                  : demande.etat === ETATVALIDEE
-                  ? 'Validée'
-                  : demande.etat === ETATREFUSEE
-                  ? 'Refusée'
-                  : 'Exécutée'
-              }}
+              {{ EnumEtatDemandeLabels[demande.etat!] }}
             </span>
 
             <button

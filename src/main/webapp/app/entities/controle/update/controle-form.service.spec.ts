@@ -27,6 +27,7 @@ describe('Controle Form Service', () => {
             utiCree: expect.any(Object),
             utiModifie: expect.any(Object),
             caisse: expect.any(Object),
+            conforme: expect.any(Object), // ✅ vérifier que le contrôle existe
           }),
         );
       });
@@ -44,6 +45,7 @@ describe('Controle Form Service', () => {
             utiCree: expect.any(Object),
             utiModifie: expect.any(Object),
             caisse: expect.any(Object),
+            conforme: expect.any(Object), // ✅ vérifier que le contrôle existe
           }),
         );
       });

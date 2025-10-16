@@ -1,125 +1,77 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-controle-heading" data-cy="ControleCreateUpdateHeading" jhiTranslate="caissavance2App.controle.home.createOrEditLabel">
-        Create or edit a Controle
-      </h2>
+<div class="d-flex justify-content-center mt-4">
+  <div class="col-10">
+    <!-- 🔹 Bandeau d'information sur la caisse -->
+    <div *ngIf="caisse" class="alert alert-info shadow-sm mb-4 rounded-3">
+      <h4 class="mb-2 text-primary">
+        <fa-icon icon="briefcase"></fa-icon>
+        &nbsp;Contrôle de la caisse : <strong>{{ caisse.libelle }}</strong>
+      </h4>
+      <p class="mb-1"><strong>Gérant :</strong> {{ caisse.gerantActif }}</p>
+      <p class="mb-1"><strong>Solde actuel :</strong> {{ caisse.solde | number: '1.0-0' }} FCFA</p>
+      <p class="mb-0"><strong>État :</strong> {{ caisse.etat }}</p>
+    </div>
 
-      <div>
-        <jhi-alert-error></jhi-alert-error>
+    <!-- 🔹 Formulaire de création ou d’édition du contrôle -->
+    <form [formGroup]="editForm" (ngSubmit)="save()" novalidate class="card shadow-sm border-0 p-4">
+      <h3 class="text-center mb-4 text-primary">
+        <fa-icon icon="clipboard-check"></fa-icon>&nbsp;
+        {{ editForm.get('id')?.value ? 'Modifier un contrôle' : 'Nouveau contrôle' }}
+      </h3>
 
-        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
+      <jhi-alert-error></jhi-alert-error>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.dateControle" for="field_dateControle">Date Controle</label>
-          <div class="d-flex">
-            <input
-              id="field_dateControle"
-              data-cy="dateControle"
-              type="datetime-local"
-              class="form-control"
-              name="dateControle"
-              formControlName="dateControle"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
+      <!-- Date du contrôle -->
+      <div class="mb-3">
+        <label for="field_dateControle" class="form-label fw-semibold"> Date du contrôle </label>
+        <input
+          id="field_dateControle"
+          type="datetime-local"
+          class="form-control"
+          formControlName="dateControle"
+          placeholder="YYYY-MM-DD HH:mm"
+        />
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.observation" for="field_observation">Observation</label>
-          <input
-            type="text"
-            class="form-control"
-            name="observation"
-            id="field_observation"
-            data-cy="observation"
-            formControlName="observation"
-          />
-        </div>
+      <!-- Observation -->
+      <div class="mb-3">
+        <label for="field_observation" class="form-label fw-semibold"> Observation </label>
+        <textarea
+          id="field_observation"
+          rows="3"
+          class="form-control"
+          formControlName="observation"
+          placeholder="Saisissez vos remarques ici..."
+        ></textarea>
+      </div>
 
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.dateHeureModification" for="field_dateHeureModification"
-            >Date Heure Modification</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateHeureModification"
-              data-cy="dateHeureModification"
-              type="datetime-local"
-              class="form-control"
-              name="dateHeureModification"
-              formControlName="dateHeureModification"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.dateHeureCreation" for="field_dateHeureCreation"
-            >Date Heure Creation</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_dateHeureCreation"
-              data-cy="dateHeureCreation"
-              type="datetime-local"
-              class="form-control"
-              name="dateHeureCreation"
-              formControlName="dateHeureCreation"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.utiCree" for="field_utiCree">Uti Cree</label>
-          <input type="number" class="form-control" name="utiCree" id="field_utiCree" data-cy="utiCree" formControlName="utiCree" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.utiModifie" for="field_utiModifie">Uti Modifie</label>
-          <input
-            type="number"
-            class="form-control"
-            name="utiModifie"
-            id="field_utiModifie"
-            data-cy="utiModifie"
-            formControlName="utiModifie"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" jhiTranslate="caissavance2App.controle.caisse" for="field_caisse">Caisse</label>
-          <select
-            class="form-control"
-            id="field_caisse"
-            data-cy="caisse"
-            name="caisse"
-            formControlName="caisse"
-            [compareWith]="compareCaisse"
-          >
-            <option [ngValue]="null"></option>
-            <option [ngValue]="caisseOption" *ngFor="let caisseOption of caissesSharedCollection">{{ caisseOption.id }}</option>
-          </select>
+      <!-- Résultat du contrôle -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Résultat du contrôle</label>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" formControlName="conforme" id="conforme" />
+          <label class="form-check-label" for="conforme">Conforme</label>
         </div>
       </div>
 
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+      <!-- Caisse liée (lecture seule si déjà connue) -->
+      <div class="mb-3" *ngIf="!caisse">
+        <label class="form-label fw-semibold" for="field_caisse">Caisse</label>
+        <select class="form-select" id="field_caisse" data-cy="caisse" name="caisse" formControlName="caisse" [compareWith]="compareCaisse">
+          <option [ngValue]="null">-- Sélectionner une caisse --</option>
+          <option *ngFor="let caisseOption of caissesSharedCollection" [ngValue]="caisseOption">
+            {{ caisseOption.libelle }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Boutons d’action -->
+      <div class="text-center mt-4">
+        <button type="button" class="btn btn-secondary me-2" (click)="previousState()">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;Annuler
         </button>
 
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        <button type="submit" class="btn btn-success" [disabled]="editForm.invalid || isSaving">
+          <fa-icon icon="save"></fa-icon>&nbsp;{{ isSaving ? 'Enregistrement...' : 'Enregistrer' }}
         </button>
       </div>
     </form>

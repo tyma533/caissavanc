@@ -31,11 +31,12 @@
       <dt>Etat</dt>
       <dd>
         <span
+          class="badge rounded-pill"
           [ngClass]="{
-            'badge rounded-pill badge bg-secondary': demande.etat === ETATEN_ATTENTE,
-            'badge rounded-pill badge bg-primary': demande.etat === ETATVALIDEE,
-            'badge rounded-pill badge bg-success': demande.etat === ETATEXECUTEE,
-            'badge rounded-pill badge bg-danger': demande.etat === ETATREFUSEE
+            ' bg-secondary': demande.etat == ETATEN_ATTENTE,
+            ' badge bg-primary': demande.etat == ETATVALIDEE,
+            ' badge bg-success': demande.etat == ETATEXECUTEE,
+            ' badge bg-danger': demande.etat == ETATREFUSEE
           }"
           >{{ demande.etat }}</span
         >
@@ -43,6 +44,9 @@
 
       <dt>Motif</dt>
       <dd>{{ demande.motif }}</dd>
+
+      <dt>Objet</dt>
+      <dd>{{ demande.objet }}</dd>
 
       <dt>Établissement</dt>
       <dd>
@@ -116,22 +120,80 @@
   </div>
 
   <div *ngIf="demande?.etat === ETATVALIDEE" class="alert alert-success mt-2">Cette demande a déjà été traitée.</div>
-  <!-- Modal DFC : saisie du montant accordé -->
+  <!-- Modal DFC : saisie du montant accordé ou motif -->
   <div class="modal" *ngIf="showModalDFC" style="display: block">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Valider le montant accordé</h5>
+          <h5 class="modal-title">Traitement de la demande</h5>
           <button type="button" class="btn-close" (click)="fermerModalDFC()"></button>
         </div>
-        <div class="mb-3">
-          <label for="montantAccorde">Montant Accordé</label>
-          <input id="montantAccorde" type="text" class="form-control" [(ngModel)]="demande.montantAccorde" required />
+
+        <div class="modal-body">
+          <label>Action :</label>
+          <!-- Radios avec form-check -->
+          <div class="mb-3 d-flex gap-3">
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="actionRadio"
+                id="radioEnCours"
+                [(ngModel)]="selectedAction"
+                value="EN_COURS"
+              />
+              <label class="form-check-label" for="radioEnCours">En cours</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="actionRadio"
+                id="radioValider"
+                [(ngModel)]="selectedAction"
+                value="VALIDER"
+              />
+              <label class="form-check-label" for="radioValider">Valider</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="actionRadio"
+                id="radioRefuser"
+                [(ngModel)]="selectedAction"
+                value="REFUSER"
+              />
+              <label class="form-check-label" for="radioRefuser">Refuser</label>
+            </div>
+          </div>
+
+          <div *ngIf="selectedAction === 'VALIDER'">
+            <!-- Montant demandé (readonly) -->
+            <div class="mb-3">
+              <label for="montantDemande" class="form-label">Montant demandé</label>
+              <input id="montantDemande" type="text" class="form-control" [value]="demande.montant" readonly />
+            </div>
+
+            <!-- Montant accordé -->
+            <div class="mb-3">
+              <label for="montantAccorde" class="form-label">Montant Accordé</label>
+              <input id="montantAccorde" type="text" class="form-control" [(ngModel)]="demande.montantAccorde" />
+            </div>
+          </div>
+
+          <!-- Champ Motif -->
+          <div class="mb-3 mt-3" *ngIf="selectedAction === 'REFUSER'">
+            <label for="motif">Motif de refus</label>
+            <textarea id="motif" class="form-control" [(ngModel)]="demande.motif" required></textarea>
+          </div>
         </div>
+
         <div class="modal-footer">
-          <button class="btn btn-success" (click)="validerMontantAccorde()">Valider</button>
+          <button class="btn btn-success" (click)="validerAction()">Confirmer</button>
           <button class="btn btn-secondary" (click)="fermerModalDFC()">Annuler</button>
-          <button class="btn btn-danger" (click)="ouvrirModalRefusDepuisTraitement()">Refuser</button>
         </div>
       </div>
     </div>

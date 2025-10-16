@@ -1,14 +1,43 @@
+/* 🌟 Style général de la page d'accueil */
+.accueil-container {
+  background: linear-gradient(180deg, #f9fbfc 0%, #eef2f7 100%);
+  min-height: 100vh;
+  padding: 60px 30px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+/* 🎓 Bannière de bienvenue */
+.accueil-container h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a237e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+}
+
+.accueil-container p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* 📊 Tableau de bord principal */
 .dashboard {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
-  justify-content: center; // centré
+  justify-content: center; /* centré */
   align-items: flex-start;
+  margin-top: 50px;
 
   .card {
-    flex: 1 1 300px; // carte responsive
-    max-width: 900px;
-    min-height: 220px;
+    flex: 1 1 300px; /* carte responsive */
+    max-width: 380px;
+    min-height: 260px;
     background: linear-gradient(145deg, #ffffff, #f0f4f8);
     border-radius: 25px;
     padding: 30px 25px;
@@ -18,6 +47,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    cursor: pointer;
 
     .icon {
       font-size: 4rem;
@@ -25,8 +55,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       background: linear-gradient(135deg, #2980b9, #6dd5fa);
       color: white;
       border-radius: 50%;
@@ -45,7 +75,7 @@
 
     .card-title {
       font-weight: 700;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       color: #1c1c1c;
       margin-bottom: 10px;
     }
@@ -53,15 +83,15 @@
     .card-text {
       font-size: 1rem;
       color: #555;
-      margin-bottom: 15px;
-      line-height: 1.4;
+      margin-bottom: 20px;
+      line-height: 1.5;
     }
 
     a.btn {
       background: #2980b9;
       color: #fff;
       border-radius: 15px;
-      padding: 8px 20px;
+      padding: 10px 24px;
       font-weight: 600;
       font-size: 0.95rem;
       text-decoration: none;
@@ -74,6 +104,7 @@
     }
   }
 
+  /* 🎨 Couleurs personnalisées selon la section */
   .caisse-card .icon {
     background: linear-gradient(135deg, #00b09b, #96c93d);
   }
@@ -85,16 +116,31 @@
   .stats-card .icon {
     background: linear-gradient(135deg, #ffafbd, #ffc3a0);
   }
+
+  .controle-card .icon {
+    background: linear-gradient(135deg, #654ea3, #eaafc8);
+  }
 }
 
-// Responsive
+/* 💡 Responsive Design */
+@media (max-width: 992px) {
+  .accueil-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .dashboard .card {
+    max-width: 90%;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard {
     flex-direction: column;
     align-items: center;
 
     .card {
-      width: 90%;
+      width: 95%;
+      margin-bottom: 20px;
     }
   }
 }

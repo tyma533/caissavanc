@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CaisseService } from '../../service/caisse.service';
 import { OperationService } from 'app/entities/operation/service/operation.service';
 import { ICaisse } from '../../caisse.model';
@@ -13,11 +13,25 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NewPieceJustificatif } from 'app/entities/piece-justificatif/piece-justificatif.model';
 import Swal from 'sweetalert2';
+import { MatButtonModule } from '@angular/material/button';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'jhi-effectuer-depense',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, FontAwesomeModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    FontAwesomeModule,
+    MatButtonModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './effectuer-depense.component.html',
   styleUrls: ['./effectuer-depense.component.scss'],
 })
@@ -35,8 +49,22 @@ export class EffectuerDepenseComponent {
   form: FormGroup;
   erreurMessage: string | null = null;
   operations: IOperation[] = [];
-
+  showModalPiece = false;
+  libellePiece: string = '';
+  file: any = null;
+  fileName: string | null = null;
+  pieces: any[] = []; // tableau des pièces ajoutées
   EtatCaisse = EtatCaisse;
+
+  firstFormGroup = this._formBuilder.group({
+    firstCtrl: ['', Validators.required],
+  });
+  secondFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
+  isEditable = false;
+  isLinear = false;
+  dernierOperation?: IOperation; // nouvelle variable
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,6 +74,7 @@ export class EffectuerDepenseComponent {
     private router: Router,
     private dataUtils: DataUtils, // ✅ ajout
     private fb: FormBuilder,
+    private _formBuilder: FormBuilder,
   ) {
     this.form = this.fb.group({
       piece: [],
@@ -85,6 +114,8 @@ export class EffectuerDepenseComponent {
 
     this.operationService.effectuerDepense(operation).subscribe({
       next: res => {
+        this.dernierOperation = res; // stocke l'opération créée
+
         this.erreurMessage = null;
         // alert('Dépense effectuée avec succès ! ✅');
         Swal.fire('Succès', 'Dépense effectuée avec succès !', 'success');
@@ -133,6 +164,19 @@ export class EffectuerDepenseComponent {
     });
   }
 
+  // Ouvrir le modal
+  ouvrirModalPiece() {
+    this.libellePiece = '';
+    this.file = null;
+    this.fileName = null;
+    this.showModalPiece = true;
+  }
+
+  // Fermer le modal
+  fermerModalPiece() {
+    this.showModalPiece = false;
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
@@ -141,11 +185,57 @@ export class EffectuerDepenseComponent {
     this.dataUtils.openFile(base64String, contentType);
   }
 
-  removePiece(): void {
-    this.piece = undefined;
-    this.pieceContentType = undefined;
-  }
   previousState(): void {
     window.history.back();
+  }
+
+  goToPieces(stepper: any) {
+    if (this.depenseFormValid()) {
+      stepper.next();
+    } else {
+      alert('Veuillez remplir tous les champs obligatoires.');
+    }
+  }
+
+  depenseFormValid(): boolean {
+    return !!(this.montant && this.commentaire && this.modeOperationId);
+  }
+
+  ajouterPiece() {
+    if (!this.libellePiece || !this.file) {
+      Swal.fire('Erreur', 'Veuillez saisir le libellé et choisir un fichier.', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64File = (reader.result as string).split(',')[1];
+
+      this.pieces.push({
+        libelle: this.libellePiece,
+        piece: base64File,
+        pieceContentType: this.file.type,
+      });
+
+      this.fermerModalPiece();
+      this.libellePiece = '';
+      this.file = null;
+      this.fileName = '';
+    };
+
+    reader.readAsDataURL(this.file);
+  }
+
+  removePiece(piece: any) {
+    this.pieces = this.pieces.filter(p => p !== piece);
+  }
+
+  // Sélectionner le fichier
+  onFileSelected(event: any) {
+    const f = event.target.files[0];
+    if (f) {
+      this.file = f;
+      this.fileName = f.name;
+    }
   }
 }
